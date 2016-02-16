@@ -1,0 +1,519 @@
+
+
+<!DOCTYPE html>
+<html ng-app="MapLoom" ng-controller="AppCtrl">
+<head>
+  <title ng-bind="pageTitle"></title>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-COMPATIBLE" content="IE-Edge">
+
+  <!-- compiled CSS -->
+  
+  <link rel="stylesheet" type="text/css" href="assets/MapLoom-1.2.0.css"/>
+  
+
+  
+
+  <!-- compiled JavaScript -->
+  
+  <script type="text/javascript" src="vendor/jquery/jquery.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/jquery-sortable/source/js/jquery-sortable-min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/angular/angular.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/bootstrap-filestyl/src/bootstrap-filestyle.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/moment/min/moment.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/bootstrap3-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/bootstrap3-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/x2js/xml2json.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/angular-translate/angular-translate.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/angular-cookies/angular-cookies.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/ol3/ol-debug.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/d3/d3.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/proj4/dist/proj4-src.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/mgrs/dist/mgrs.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/blueimp-gallery/js/jquery.blueimp-gallery.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="vendor/angular-xeditable/dist/js/xeditable.min.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/DiffPanelController.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/HistoryPanelController.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/LoomModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/NotificaationPanelController.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/Proj4Defs.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/PulldownController.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/app.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/locales/en.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/app/locales/es.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/addlayers/AddLayersDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/addlayers/AddLayersModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/addlayers/AddServerDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/addlayers/LayerInfoPopoverDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/addlayers/ServerService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/arrangeable/ArrangeableDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/arrangeable/ArrangeableModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/configuration/ConfigModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/configuration/ConfigService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/DiffCommon.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/DiffListDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/DiffModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/DiffPanelDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/DiffService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/FeatureBlameService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/FeatureDiffController.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/FeatureDiffDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/FeatureDiffService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/FeaturePanelDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/diff/PanelSeparatorDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/AttributeEditDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/DrawSelectDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/ExclusiveModeDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/ExclusiveModeService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/FeatureInfoBoxDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/FeatureManagerModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/featuremanager/FeatureManagerService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/geogig/GeoGigModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/geogig/GeoGigPrototypes.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/geogig/GeoGigService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/history/HistoryDiffDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/history/HistoryModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/history/HistoryPanelDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/history/HistoryPopoverDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/history/HistoryService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/layers/LayerInfoDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/layers/LayersDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/layers/LayersModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/legend/LegendDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/legend/LegendModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/map/MapModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/map/MapSaveDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/map/MapService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/merge/ConflictService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/merge/MergeDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/merge/MergeModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/modal/DialogDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/modal/DialogService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/modal/ModalDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/modal/ModalModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/modal/PasswordDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notificationposter/NotificationPosterDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notificationposter/NotificationPosterModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notifications/GenerateNotificationDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notifications/NotificationBadgeDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notifications/NotificationsDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notifications/NotificationsModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/notifications/NotificationsService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/pulldown/PulldownModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/pulldown/PulldownService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/refresh/RefreshModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/refresh/RefreshService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/search/SearchDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/search/SearchModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/search/SearchService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/statistics/StatisticsDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/statistics/StatisticsModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/statistics/StatisticsService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/AddSynchronizationLinkDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/RemoteService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/SyncModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/SynchronizationConfigurationDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/SynchronizationLinksDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/SynchronizationPrototypes.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/sync/SynchronizationService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/tableview/FilterOptionsDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/tableview/TableViewDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/tableview/TableViewModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/tableview/TableViewService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/test/TestModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/test/TestService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/timeline/TimelineDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/timeline/TimelineModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/timeline/TimelineService.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/updatenotification/UpdateNotificationDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/updatenotification/UpdateNotificationModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/utils/Globals.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/utils/LoadingDirective.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/utils/UtilsModule.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="src/common/utils/wktparser.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="templates-common.js"></script>
+  
+  
+  
+  <script type="text/javascript" src="templates-app.js"></script>
+  
+  
+
+  
+
+</head>
+<body>
+
+<div id="map" class="map">
+  <div class="map-shadow"></div>
+  <div class="loom-timeline"></div>
+</div>
+
+</body>
+</html>

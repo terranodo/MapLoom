@@ -136,7 +136,7 @@
           result.resolve(repo.id);
           return result.promise;
         }
-        if (repo.uuid === newRepo.uuid) {
+        if (repo.uniqueId === newRepo.uniqueId) {
           newRepo.branchs = repo.branches;
           newRepo.remotes = repo.remotes;
           newRepo.unique = false;
@@ -226,13 +226,13 @@
 
     this.removeRepo = function(id) {
       var index = -1, i;
-      var uuid = null;
+      var uniqueId = null;
       var repo = null;
       for (i = 0; i < service_.repos.length; i = i + 1) {
         if (service_.repos[i].id === id) {
           index = i;
           if (service_.repos[i].unique) {
-            uuid = service_.repos[i].uuid;
+            uniqueId = service_.repos[i].uniqueId;
             repo = service_.repos[i];
           }
         }
@@ -240,9 +240,9 @@
       if (index > -1) {
         service_.repos.splice(index, 1);
       }
-      if (goog.isDefAndNotNull(uuid)) {
+      if (goog.isDefAndNotNull(uniqueId)) {
         for (i = 0; i < service_.repos.length; i = i + 1) {
-          if (service_.repos[i].uuid === uuid) {
+          if (service_.repos[i].uniqueId === uniqueId) {
             service_.repos[i].unique = true;
             repo.unique = false;
             break;
@@ -300,12 +300,27 @@
         // TODO: Use the OpenLayers parser once it is done
         var x2js = new X2JS();
         var json = x2js.xml_str2json(response.data);
+        var wps = new storytools.edit.WFSDescribeFeatureType.WFSDescribeFeatureType();
+        var layerInfo = wps.parseResult(response.data);
         var schema = [];
+        var geometryType = null;
         if (goog.isDefAndNotNull(json.schema)) {
           var savedSchema = layer.get('metadata').savedSchema;
           forEachArrayish(json.schema.complexType.complexContent.extension.sequence.element, function(obj) {
             schema[obj._name] = obj;
             schema[obj._name].visible = true;
+
+            if (obj._type.indexOf('gml:') != -1) {
+              var lp = obj._type.substring(4);
+              if (lp.indexOf('Polygon') !== -1 || lp.indexOf('MultiSurfacePropertyType') !== -1) {
+                geometryType = 'polygon';
+              } else if (lp.indexOf('LineString') !== -1) {
+                geometryType = 'line';
+              } else if (lp.indexOf('Point') !== -1) {
+                geometryType = 'point';
+              }
+            }
+
             if (goog.isDefAndNotNull(savedSchema)) {
               for (var index = 0; index < savedSchema.length; index++) {
                 if (obj._name == savedSchema[index].name) {
@@ -321,28 +336,20 @@
           layer.get('metadata').schema = schema;
           layer.get('metadata').editable = true;
           layer.get('metadata').workspaceURL = json.schema._targetNamespace;
+          layer.get('metadata').geomType = geometryType;
+          layer.get('metadata').has_style = goog.isDefAndNotNull(geometryType);
+          layer.get('metadata').attributes = layerInfo.attributes;
+          layer.set('attributes', layerInfo.attributes);
+          layer.set('featureNS', layerInfo.featureNS);
+          layer.set('typeName', layer.get('metadata').name);
+          layer.get('metadata').nativeName = layer.get('metadata').name;
+          layer.set('styleName', 'geonode_' + layer.get('metadata').name);
+          layer.set('path', '/geoserver/');
         }
         deferredResponse.resolve();
       }, function(reject) {
         deferredResponse.reject(reject);
       });
-      return deferredResponse.promise;
-    };
-
-    this.getRepoInfo = function(geogigUrl) {
-      var deferredResponse = q.defer();
-      geogigUrl = urlRemoveTrailingSlash(geogigUrl);
-
-      http.get(geogigUrl + '.json').then(function(response) {
-        if (goog.isDefAndNotNull(response.data.repository)) {
-          deferredResponse.resolve(response.data.repository);
-        } else {
-          deferredResponse.reject();
-        }
-      }, function(error) {
-        deferredResponse.reject();
-      });
-
       return deferredResponse.promise;
     };
 
@@ -398,7 +405,7 @@
       var getFeatureType = function() {
         service_.getFeatureType(layer).then(function() {
           ol.proj.getTransform(metadata.projection, 'EPSG:4326');
-          rootScope.$broadcast('layerInfoLoaded', layer);
+          rootScope.$broadcast('featuretype-added', layer);
           deferredResponse.resolve();
         }, function(rejected) {
           console.log('====[ ', translate_.instant('error'), ': ', translate_.instant('unable_to_get_feature_type'),
@@ -409,7 +416,6 @@
           //dialogService_.error(
           //    translate_.instant('error'), translate_.instant('unable_to_get_feature_type') +
           //        ' (' + rejected.status + ')');
-          deferredResponse.reject();
         });
       };
       if (goog.isDefAndNotNull(layer)) {
@@ -418,7 +424,7 @@
           if (goog.isDefAndNotNull(fullConfig.Identifier) && goog.isDefAndNotNull(fullConfig.Identifier[0])) {
             var splitGeogig = fullConfig.Identifier[0].split(':');
             if (goog.isArray(splitGeogig) && (splitGeogig.length === 3 || splitGeogig.length === 4)) {
-              var repoUUID = splitGeogig[0];
+              var repoName = splitGeogig[0];
               var nativeName = splitGeogig[1];
               var branchName = splitGeogig[2];
               metadata.branchName = branchName;
@@ -426,42 +432,39 @@
               if (splitGeogig.length === 4) {
                 metadata.branchName = splitGeogig[3];
               }
-              var geogigURL = metadata.url + '/geogig/' + repoUUID;
+              var geogigURL = metadata.url + '/geogig/' + repoName;
               if (server.isVirtualService === true) {
-                geogigURL = server.url.replace('wms', 'geogig') + '/' + repoUUID;
+                geogigURL = server.url.replace('wms', 'geogig') + '/' + repoName;
               }
-              service_.getRepoInfo(geogigURL).then(function(info) {
-                http.get(geogigURL + '/repo/manifest').then(function() {
-                  var addRepo = function(admin) {
-                    var promise = service_.addRepo(
-                        new GeoGigRepo(geogigURL, repoUUID, metadata.branchName, info.name), admin);
-                    promise.then(function(repo) {
-                      if (goog.isDef(repo.id)) {
-                        rootScope.$broadcast('repoAdded', repo);
-                        metadata.repoId = repo.id;
-                      } else {
-                        metadata.repoId = repo;
-                      }
-                      getFeatureType();
-                    }, function(reject) {
-                      dialogService_.error(translate_.instant('error'), translate_.instant('unable_to_add_remote') + reject);
-                      getFeatureType();
-                    });
-                    metadata.isGeoGig = true;
-                    metadata.geogigStore = repoUUID;
-                  };
-                  // see if we have admin access
-                  // HACK see if the merge endpoint is available.
-                  http.get(geogigURL + '/merge').then(function() {
-                    metadata.isGeoGigAdmin = true;
-                    addRepo(true);
+              http.get(geogigURL + '/repo/manifest').then(function() {
+                var addRepo = function(admin) {
+                  var promise = service_.addRepo(
+                      new GeoGigRepo(geogigURL,
+                          sha1(metadata.url + ':' + repoName), metadata.branchName, repoName), admin);
+                  promise.then(function(repo) {
+                    if (goog.isDef(repo.id)) {
+                      rootScope.$broadcast('repoAdded', repo);
+                      metadata.repoId = repo.id;
+                    } else {
+                      metadata.repoId = repo;
+                    }
+                    getFeatureType();
                   }, function(reject) {
-                    metadata.isGeoGigAdmin = false;
-                    addRepo(false);
+                    dialogService_.error(translate_.instant('error'),
+                        translate_.instant('unable_to_add_remote') + reject);
+                    getFeatureType();
                   });
-                }, function() {
-                  metadata.isGeoGig = false;
-                  getFeatureType();
+                  metadata.isGeoGig = true;
+                  metadata.geogigStore = repoName;
+                };
+                // see if we have admin access
+                // HACK see if the merge endpoint is available.
+                http.get(geogigURL + '/merge').then(function() {
+                  metadata.isGeoGigAdmin = true;
+                  addRepo(true);
+                }, function(reject) {
+                  metadata.isGeoGigAdmin = false;
+                  addRepo(false);
                 });
               }, function() {
                 metadata.isGeoGig = false;

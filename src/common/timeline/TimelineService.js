@@ -1,8 +1,9 @@
 (function() {
   var module = angular.module('loom_timeline_service', []);
-
+  var stutils = storytools.core.time.utils;
   var service_ = null;
   var mapService_ = null;
+  var boxService_ = null;
   var timelineTicks_ = null;
   var currentTickIndex_ = null;
   var currentTime_ = null;
@@ -12,14 +13,94 @@
   var repeat_ = true;
   var filterByTime_ = true;
   var featureManagerService_ = null;
+  var boxes_ = [];
+  var timelinePointsList = [];
+  var timelineGroupsList_ = [];
+  var range_ = new stutils.Range(null, null);
+
+  function computeTicks(layersWithTime) {
+
+    var ticks = {};
+    var totalRange = null;
+    var intervals = [];
+    function addTick(add) {
+      add = stutils.getTime(add);
+      if (add !== null && ! (add in ticks)) {
+        ticks[add] = 1;
+      }
+    }
+    layersWithTime.forEach(function(l) {
+      var times = service_.getTimeDimension(l);
+      var range;
+      if (angular.isArray(times)) {
+        // an array of instants or extents
+        range = stutils.computeRange(times);
+        if (times.length) {
+          if (stutils.isRangeLike(times[0])) {
+            times.forEach(function(r) {
+              addTick(r.start);
+              if (totalRange === null) {
+                totalRange = stutils.createRange(r);
+              } else {
+                totalRange.extend(r);
+              }
+            });
+          } else {
+            times.forEach(function(r) {
+              addTick(r);
+            });
+          }
+        }
+        // add a tick at the end to ensure we get there
+        /*jshint eqnull:true */
+        if (range.end != null) {
+          addTick(range.end);
+        }
+      } else if (times) {
+        // a interval (range+duration)
+        range = times;
+        intervals.push(times);
+      }
+      if (totalRange === null) {
+        // copy, will be modifying
+        totalRange = stutils.createRange(range);
+      } else {
+        totalRange.extend(range);
+      }
+    });
+    if (intervals.length) {
+      intervals.sort(function(a, b) {
+        return a.interval - b.interval;
+      });
+      var smallest = intervals[0];
+      var start = totalRange.start;
+      while (start <= totalRange.end) {
+        addTick(start);
+        start = smallest.offset(start);
+      }
+    }
+    ticks = Object.getOwnPropertyNames(ticks).map(function(t) {
+      return parseInt(t, 10);
+    });
+    return ticks.sort(function(a, b) {
+      return a - b;
+    });
+  }
+
+  module.service('TimeMachine', function() {
+    return {
+      computeTicks: computeTicks
+    };
+  });
 
   module.provider('timelineService', function() {
     // public variable can be placed on scope
     this.hasLayerWithTime = false;
 
-    this.$get = function(mapService, $interval, $rootScope, featureManagerService) {
+    this.$get = function(mapService, boxService, $interval, $rootScope, featureManagerService) {
       service_ = this;
       mapService_ = mapService;
+      boxService_ = boxService;
       interval_ = $interval;
       rootScope_ = $rootScope;
       featureManagerService_ = featureManagerService;
@@ -36,6 +117,20 @@
         service_.initialize();
       });
 
+      // when a box is added, reinitialize the service.
+      $rootScope.$on('box-added', function(event, box) {
+        console.log('----[ timelineService, box added. initializing', box);
+        boxes_ = boxService_.getBoxes();
+        service_.initialize();
+      });
+
+      // when a box is removed, reinitialize the service.
+      $rootScope.$on('boxRemoved', function(event, box) {
+        console.log('----[ timelineService, box removed. initializing', box);
+        boxes_ = boxService_.getBoxes();
+        service_.initialize();
+      });
+
       return service_;
     };
 
@@ -43,30 +138,94 @@
       // TODO: only re-init if list of layers time enabled layers change.
       var uniqueTicks = {};
       var layersWithTime = 0;
+      var layersWithTimeList = [];
+      timelineGroupsList_ = [];
 
       var layers = mapService_.getLayers(true, true);
+      timelinePointsList = [];
       for (var i = 0; i < layers.length; i++) {
         var layer = layers[i];
         var metadata = layer.get('metadata');
         if (goog.isDefAndNotNull(metadata)) {
-          var timeDimension = service_.getTimeDimension(layers[i]);
+          var timeDimension = service_.getTimeDimension(layer);
           if (goog.isDefAndNotNull(timeDimension)) {
+            timelineGroupsList_.push({id: metadata.uniqueID, content: metadata.title});
+
             layersWithTime++;
             metadata.timeline = true;
             metadata.timelineTicks = timeDimension;
+            layersWithTimeList.push(layer);
 
             for (var j = 0; j < timeDimension.length; j++) {
               if (goog.isDefAndNotNull(uniqueTicks[timeDimension])) {
                 uniqueTicks[timeDimension[j]] += 1;
               } else {
                 uniqueTicks[timeDimension[j]] = 1;
+                var id_ = i + ':' + j;
+                timelinePointsList.push({id: id_,
+                  group: metadata.uniqueID,
+                  content: "<img src='" + metadata.styles[0].legendUrl + "&TRANSPARENT=true' />",
+                  start: timeDimension[j],
+                  type: 'box' });
               }
             }
           }
         }
       }
 
-      if (layersWithTime > 0) {
+
+      var ticks = computeTicks(layersWithTimeList);
+      timelineTicks_ = ticks;
+      var r;
+      var options = { 'data': ticks };
+      // make a default box if none provided
+      if (typeof boxes == 'undefined' || boxes.length === 0) {
+        var interval = 0, data = null;
+        if (Array.isArray(options.data)) {
+          data = options.data;
+          r = stutils.computeRange(options.data);
+          range_ = r;
+          interval = stutils.pickInterval(r);
+        } else {
+          interval = options.data.interval || stutils.pickInterval(options.data);
+          r = options.data;
+        }
+
+        box_ = [{
+          data: data,
+          range: r,
+          speed: {
+            interval: interval,
+            seconds: 3
+          }
+        }];
+      }
+
+
+      var boxes_as_layers = [];
+
+      if (boxes_.length > 0) {
+        for (var c = 0; c < boxes_.length; c++) {
+          var box_range = stutils.createRange(boxes_[c].start_time, boxes_[c].end_time);
+          console.log('----[ Info: Box Range ', box_range.toString());
+          range_.extend(box_range);
+          console.log('----[ Info: Total Range ', range_.toString());
+          timelinePointsList.push({
+            id: 'sb' + c,
+            content: boxes_[c].title,
+            start: (new Date(boxes_[c].start_time)).toISOString(),
+            end: (new Date(boxes_[c].end_time)).toISOString(),
+            type: 'background'
+          });
+
+          boxes_as_layers.push({ 'metadata': { 'dimensions': [{'name': 'time', 'values': [
+                              (new Date(boxes_[c].start_time)).toISOString(),
+                              (new Date(boxes_[c].end_time)).toISOString()
+                            ]}]}});
+        }
+      }
+
+      if (layersWithTime > 0 || boxes_.length > 0) {
         rootScope_.timelineServiceEnabled = true;
         mapService_.showTimeline(true);
       } else {
@@ -74,12 +233,9 @@
         mapService_.showTimeline(false);
       }
 
-      timelineTicks_ = Object.keys(uniqueTicks);
       if (timelineTicks_.length > 0) {
-        timelineTicks_.sort();
         service_.setTimeTickIndex(0);
       }
-
       rootScope_.$broadcast('timeline-initialized');
     };
 
@@ -135,6 +291,27 @@
       }
     };
 
+    this.getTimeLineElements = function() {
+      var elements = {
+        'points': new vis.DataSet(timelinePointsList),
+        'groups': new vis.DataSet(timelineGroupsList_)
+      };
+
+      return elements;
+    };
+
+    this.getTimeLineConfig = function() {
+      var config = {
+        min: range_.start || 0,
+        max: range_.end || 0,
+        start: range_.start || 0,
+        end: range_.end || 0,
+        height: 138,
+        maxHeight: 138
+      };
+      return config;
+    };
+
     this.getTimelineTicks = function() {
       return timelineTicks_;
     };
@@ -185,8 +362,8 @@
             closestDist = tickAfterDist;
           }
         }
-        var min = Date.parse(timelineTicks_[0]);
-        var max = Date.parse(timelineTicks_[timelineTicks_.length - 1]);
+        var min = timelineTicks_[0];
+        var max = timelineTicks_[timelineTicks_.length - 1];
         var maxTimeAway = (maxPercentAway * 0.01) * (max - min);
         if (closestDist < maxTimeAway) {
           index = closestIndex;
@@ -217,14 +394,14 @@
       if (!goog.isDefAndNotNull(timelineTicks_) || timelineTicks_.length === 0) {
         return null;
       }
-      return Date.parse(timelineTicks_[0]);
+      return timelineTicks_[0];
     };
 
     this.getTimeMax = function() {
       if (!goog.isDefAndNotNull(timelineTicks_) || timelineTicks_.length === 0) {
         return null;
       }
-      return Date.parse(timelineTicks_[timelineTicks_.length - 1]);
+      return timelineTicks_[timelineTicks_.length - 1];
     };
 
     this.getTimeFromTick = function(index) {
@@ -232,7 +409,7 @@
         return null;
       }
 
-      return Date.parse(timelineTicks_[index]);
+      return timelineTicks_[index];
     };
 
     this.setTimeTickIndex = function(index, time) {
@@ -264,7 +441,7 @@
         if (goog.isDefAndNotNull(time)) {
           currentTime_ = time;
         } else {
-          currentTime_ = Date.parse(timelineTicks_[currentTickIndex_]);
+          currentTime_ = timelineTicks_[currentTickIndex_];
         }
         service_.updateLayersTimes(currentTickIndex_);
       } else {
@@ -328,7 +505,7 @@
               if (filterByTime_) {
                 if (goog.isDefAndNotNull(timelineTicks_) && tickIndex < timelineTicks_.length && tickIndex >= 0) {
                   source.updateParams({
-                    TIME: timelineTicks_[tickIndex]
+                    TIME: new Date(timelineTicks_[tickIndex]).toISOString()
                   });
                 }
               } else {
@@ -345,7 +522,7 @@
     this.getTimeDimension = function(layer) {
       var timeDimension = null;
       if (goog.isDefAndNotNull(layer)) {
-        var metadata = layer.get('metadata');
+        var metadata = layer.metadata || layer.get('metadata');
         if (goog.isDefAndNotNull(metadata) && goog.isDefAndNotNull(metadata.dimensions)) {
           for (var index = 0; index < metadata.dimensions.length; index++) {
             var dimension = metadata.dimensions[index];
@@ -359,6 +536,9 @@
                 //TODO: generate an entry using start..stop interval etc
                 timeDimension = [];
                 console.log('====[[ time interval not supported yet');
+              } else {// if (typeof(dimensions.values) is []) {
+                timeDimension = dimension.values;
+                console.log(typeof(dimension.values));
               }
               break;
             }
@@ -372,8 +552,8 @@
       if (!goog.isDefAndNotNull(timelineTicks_) || timelineTicks_.length === 0) {
         return null;
       }
-      var min = Date.parse(timelineTicks_[0]);
-      var max = Date.parse(timelineTicks_[timelineTicks_.length - 1]);
+      var min = timelineTicks_[0];
+      var max = timelineTicks_[timelineTicks_.length - 1];
       return Math.round((percent * 0.01) * (max - min) + min);
     };
 
@@ -381,8 +561,8 @@
       if (!goog.isDefAndNotNull(timelineTicks_) || timelineTicks_.length === 0) {
         return null;
       }
-      var min = Date.parse(timelineTicks_[0]);
-      var max = Date.parse(timelineTicks_[timelineTicks_.length - 1]);
+      var min = timelineTicks_[0];
+      var max = timelineTicks_[timelineTicks_.length - 1];
       return ((time - min) / (max - min)) * 100;
     };
   });

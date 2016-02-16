@@ -201,7 +201,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                 server.config.alwaysAnonymous = false;
 
                 // remove the 'wms endpoint'
-                var serverBaseUrl = urlRemoveLastRoute(server.url);
+                var serverBaseUrl = removeUrlLastRoute(server.url);
                 var serverAuthenticationUrl = serverBaseUrl + '/rest/settings.json';
                 serverAuthenticationUrl = serverAuthenticationUrl.replace('http://', 'http://null:null@');
                 ignoreNextScriptError = true;
@@ -314,7 +314,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                   server.config.alwaysAnonymous = false;
 
                   // remove the 'wms endpoint'
-                  var serverBaseUrl = urlRemoveLastRoute(server.url);
+                  var serverBaseUrl = removeUrlLastRoute(server.url);
                   var serverAuthenticationUrl = serverBaseUrl + '/rest/settings.json';
                   serverAuthenticationUrl = serverAuthenticationUrl.replace('http://', 'http://null:null@');
                   ignoreNextScriptError = true;
@@ -538,8 +538,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                 url = server.virtualServiceUrl;
               }
 
-              var iqm = url.indexOf('?');
-              var url_getcaps = url + (iqm >= 0 ? (iqm - 1 == url.length ? '' : '&') : '?') + 'SERVICE=WMS&REQUEST=GetCapabilities';
+              url += '?SERVICE=WMS&REQUEST=GetCapabilities';
 
               server.populatingLayersConfig = true;
               var config = {};
@@ -550,7 +549,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                 config.headers['Authorization'] = '';
               }
               // server hasn't been added yet, so specify the auth headers here
-              http_.get(url_getcaps, config).then(function(xhr) {
+              http_.get(url, config).then(function(xhr) {
                 if (xhr.status === 200) {
                   var response = parser.read(xhr.data);
                   if (goog.isDefAndNotNull(response.Capability) &&

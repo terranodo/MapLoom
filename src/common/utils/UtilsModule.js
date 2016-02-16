@@ -3,40 +3,6 @@
     'loom_loading_directive'
   ]);
 
-  module.directive('customOnChange', [function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        var onChangeHandler = scope.$eval(attrs.customOnChange);
-        element.bind('change', onChangeHandler);
-      }
-    };
-  }]);
-
-  module.service('fileUpload', ['$http', '$q', function($http, $q) {
-    this.uploadFileToUrl = function(file, uploadUrl, csrfToken) {
-      var deferredResponse = $q.defer();
-      var formData = new FormData();
-      formData.append('file', file);
-      $http.post(uploadUrl, formData, {
-        transformRequest: angular.identity,
-        headers: {
-          'Content-Type': undefined,
-          'X-CSRFToken': csrfToken
-        }
-      }).success(function(response) {
-        if (goog.isDefAndNotNull(response.name)) {
-          deferredResponse.resolve(response);
-        } else {
-          deferredResponse.reject(response);
-        }
-      }).error(function() {
-        deferredResponse.reject('There was problem uploading the file. Please check your network connectivity and try again.');
-      });
-      return deferredResponse.promise;
-    };
-  }]);
-
   module.directive('stopEvent', function() {
     return {
       link: function(scope, element, attr) {
@@ -356,9 +322,9 @@
       },
       link: function(scope) {
         if (scope.geom.projection === 'EPSG:4326') {
-          scope.coordinateDisplays = [coordinateDisplays.DMS, coordinateDisplays.DD, coordinateDisplays.MGRS];
+          scope.coordinateDisplays = [coordinateDisplays.DMS, coordinateDisplays.DD];
         } else {
-          scope.coordinateDisplays = [coordinateDisplays.DMS, coordinateDisplays.DD, coordinateDisplays.MGRS, scope.geom.projection];
+          scope.coordinateDisplays = [coordinateDisplays.DMS, coordinateDisplays.DD, scope.geom.projection];
         }
 
         var transformCoords = function(coords, srcPrjName, dstPrjName) {
@@ -380,8 +346,6 @@
             scope.coordinates = ol.coordinate.toStringHDMS(scope.geom.coords4326);
           } else if (scope.coordDisplay.value === coordinateDisplays.DD) {
             scope.coordinates = ol.coordinate.toStringXY(scope.geom.coords4326, settings.DDPrecision);
-          } else if (scope.coordDisplay.value === coordinateDisplays.MGRS) {
-            scope.coordinates = xyToMGRSFormat(scope.geom.coords4326);
           } else {
             // it is the srs of the layer
             scope.coordinates = ol.coordinate.toStringXY(scope.geom.coords, settings.DDPrecision);
@@ -389,16 +353,6 @@
         };
 
         setUpCoordinates();
-
-        // storing original coordinate value on latloneditor directive startup
-        var origCoords = [];
-
-        var storeOrigCoordinates = function() {
-          origCoords[0] = parseFloat(scope.geom.coords[0]);
-          origCoords[1] = parseFloat(scope.geom.coords[1]);
-        };
-
-        storeOrigCoordinates();
 
         scope.selectDisplay = function(display) {
           scope.coordDisplay.value = display;
@@ -468,17 +422,6 @@
           return true;
         };
 
-        var validateMGRS = function(mgrs) {
-          try {
-            mgrs_coords = mgrsToXYFormat(mgrs);
-            scope.geom.coords[0] = parseFloat(mgrs_coords[0].toFixed(settings.DDPrecision));
-            scope.geom.coords[1] = parseFloat(mgrs_coords[1].toFixed(settings.DDPrecision));
-            return true;
-          }
-          catch (ignore) {
-          }
-        };
-
         scope.validate = function() {
           var valid = false;
           var split;
@@ -503,9 +446,6 @@
                 }
               }
             }
-          } else if (scope.coordDisplay.value === coordinateDisplays.MGRS) {
-            var mgrs = scope.coordinates.replace(/\s+/g, '').toUpperCase();
-            valid = /^([0-5]?[0-9]|60)[A-Z]{3}[0-9]+$/.test(mgrs) && validateMGRS(mgrs);
           } else {
             split = scope.coordinates.replace(/[^\d-\.]/g, ' ').split(' ');
             clean(split, '');
@@ -519,13 +459,17 @@
 
           // if the coordinate mode requires 4326 (DD or DMS), if projection is not 4326 already, we need to update the
           // geom's coordinates to reflect any changes
-          if (scope.geom.projection !== 'EPSG:4326') {
+          if ((scope.coordDisplay.value === coordinateDisplays.DD ||
+               scope.coordDisplay.value === coordinateDisplays.DMS) &&
+              scope.geom.projection !== 'EPSG:4326') {
             scope.geom.coords = transformCoords(scope.geom.coords, 'EPSG:4326', scope.geom.projection);
             updateCoords4326(scope.geom);
           }
+
+
           scope.geom.valid = valid;
           scope.geom.changed = true;
-          scope.geom.originalText = origCoords;
+          scope.geom.originalText = scope.coordinates;
         };
       }
     };

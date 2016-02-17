@@ -73,7 +73,7 @@
         },
         sources: [
           {
-            'url': ('http://demo.mapstory.org/geoserver/wms'),
+            'url': ('http://demo.geonode.org/geoserver/wms'),
             'restUrl': '/gs/rest',
             'ptype': 'gxp_wmscsource',
             'name': 'local geoserver'

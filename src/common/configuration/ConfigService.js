@@ -23,7 +23,7 @@
           var configCopy = $.extend(true, {}, config);
           var proxy = service_.configuration.proxy;
           if (goog.isDefAndNotNull(proxy)) {
-            //configCopy.url = proxy + encodeURIComponent(configCopy.url);
+            configCopy.url = proxy + encodeURIComponent(configCopy.url);
           }
           return configCopy;
         }
@@ -69,7 +69,7 @@
         },
         sources: [
           {
-            'url': ('http://demo.geonode.org/geoserver/wms'),
+            'url': ('http://' + $location.host() + '/geoserver/wms'),
             'restUrl': '/gs/rest',
             'ptype': 'gxp_wmscsource',
             'name': 'local geoserver'

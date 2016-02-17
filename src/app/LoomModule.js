@@ -2,7 +2,6 @@
   angular.module('loom', [
     'loom_configuration',
     'loom_map',
-    'loom_story',
     'loom_notifications',
     'loom_notification_poster',
     'loom_notification_controller',
@@ -28,7 +27,6 @@
     'loom_refresh',
     'loom_search',
     'loom_test',
-    'loom_timeline',
-    'loom_storybox'
+    'loom_timeline'
   ]);
 }());

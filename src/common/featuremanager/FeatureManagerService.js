@@ -10,11 +10,43 @@
   var httpService_ = null;
   var exclusiveModeService_ = null;
   var dialogService_ = null;
+  var configService_ = null;
   var q_ = null;
-  var state_ = '';                 // valid values: 'layers', 'layer', 'feature', or ''
+
+  // valid values: 'layers', 'layer', 'feature', or ''
+  var state_ = '';
   var selectedItem_ = null;
-  var selectedItemPics_ = null;
+
+  /*
+    ["sintel-2048-surround_512kb.mp4", "https://pbs.twimg.com/media/CNRXT7XWsAAyxBp.jpg", "082d7eb2a553671d363143f0e140b392f44a6f70.jpg"]
+
+    // example value of this array
+    var selectedItemPics_ = [
+        'mypic.jpg',
+        // this pic is not resoved through the fileservice as it is already a to a pic on the web so map loom will leave it alone
+        'https://pbs.twimg.com/media/CNRXT7XWsAAyxBp.jpg'
+      ];
+  */
+  var selectedItemMedia_ = null;
+  /*
+    // sample structure for a layer that has 2 attributes. one called 'evento', one 'fotos'
+    // value at first index of each is the attribute name, and the second is the attribute value
+    var selectedItemProperties_ = [
+      [
+        "evento",
+        "otro"
+      ],
+      [
+        "fotos",
+        [
+          "7ff194b54ab57a829094dc0afc624c78815ec02c.jpg",
+          "https://pbs.twimg.com/media/CNRXT7XWsAAyxBp.jpg"
+        ]
+      ]
+    ];
+  */
   var selectedItemProperties_ = null;
+
   var selectedLayer_ = null;
   var featureInfoPerLayer_ = [];
   var containerInstance_ = null;
@@ -23,11 +55,12 @@
   var clickPosition_ = null;
   var enabled_ = true;
   var wfsPostTypes_ = { UPDATE: 0, INSERT: 1, DELETE: 2 };
+  var supportedVideoFormats_ = ['mp4', 'ogg', 'webm', 'ogg'];
 
   module.provider('featureManagerService', function() {
 
     this.$get = function($rootScope, $translate, $q, mapService, $compile, $http, exclusiveModeService, dialogService,
-                         historyService) {
+                         historyService, configService) {
       //console.log('---- featureInfoBoxService.get');
       rootScope_ = $rootScope;
       service_ = this;
@@ -37,6 +70,7 @@
       httpService_ = $http;
       exclusiveModeService_ = exclusiveModeService;
       dialogService_ = dialogService;
+      configService_ = configService;
       q_ = $q;
       registerOnMapClick($rootScope, $compile);
 
@@ -79,19 +113,85 @@
       return selectedItem_;
     };
 
-    this.getSelectedItemPics = function() {
-      var picStrings = null;
-      if (goog.isDefAndNotNull(selectedItemPics_)) {
-        picStrings = [];
-        goog.array.forEach(selectedItemPics_.pics, function(item, index) {
-          if (goog.isObject(item)) {
-            picStrings[index] = item.modified;
-          } else {
-            picStrings[index] = item;
+    this.getMediaUrl = function(mediaItem) {
+      var url = mediaItem;
+      // if the item doesn't start with 'http' then assume the item can be found in the fileservice and so convert it to
+      // a url. This means if the item is, say, at https://mysite.com/mypic.jpg, leave it as is
+      if (goog.isString(mediaItem) && mediaItem.indexOf('http') === -1) {
+        url = configService_.configuration.fileserviceUrlTemplate.replace('{}', mediaItem);
+      }
+      return url;
+    };
+
+    this.getSelectedItemMedia = function() {
+      return selectedItemMedia_;
+    };
+
+    // Warning, returns new array objects, not to be 'watched' / bound. use getSelectedItemMedia instead.
+    this.getSelectedItemMediaByProp = function(propName) {
+      var media = null;
+
+      if (getItemType(selectedItem_) === 'feature' && goog.isDefAndNotNull(selectedItem_) &&
+          goog.isDefAndNotNull(selectedItemProperties_)) {
+
+        goog.object.forEach(selectedItemProperties_, function(prop, index) {
+          if (service_.isMediaPropertyName(prop[0])) {
+            if (!goog.isDefAndNotNull(propName) || propName === prop[0]) {
+              if (!goog.isDefAndNotNull(media)) {
+                //TODO: media should no longer be objects
+                media = [];
+              }
+
+              goog.object.forEach(prop[1], function(mediaItem) {
+                media.push(mediaItem);
+              });
+            }
           }
         });
       }
-      return picStrings;
+
+      return media;
+    };
+
+    this.isMediaPropertyName = function(name) {
+      var lower = name.toLowerCase();
+      return lower.indexOf('fotos') === 0 || lower.indexOf('photos') === 0 ||
+          lower.indexOf('audios') === 0 || lower.indexOf('videos') === 0;
+    };
+
+    this.getMediaTypeFromPropertyName = function(name) {
+      var lower = name.toLowerCase();
+      var type = null;
+      if (lower.indexOf('fotos') === 0 || lower.indexOf('photos') === 0) {
+        type = 'photos';
+      } else if (lower.indexOf('audios') === 0) {
+        type = 'audios';
+      } else if (lower.indexOf('videos') === 0) {
+        type = 'videos';
+      }
+      return type;
+    };
+
+    this.getMediaUrlThumbnail = function(mediaItem) {
+      var url = mediaItem;
+      if (goog.isDefAndNotNull(mediaItem) && (typeof mediaItem === 'string')) {
+        var ext = mediaItem.split('.').pop().split('/')[0]; // handle cases; /file.ext or /file.ext/endpoint
+        if (supportedVideoFormats_.indexOf(ext) >= 0) {
+          url = service_.getMediaUrlDefault();
+        } else {
+          url = service_.getMediaUrl(mediaItem);
+        }
+      }
+      //console.log('----[ getMediaUrlThumbnail: ', url);
+      return url;
+    };
+
+    this.getMediaUrlDefault = function() {
+      return '/static/maploom/assets/media-default.png';
+    };
+
+    this.getMediaUrlError = function() {
+      return '/static/maploom/assets/media-error.png';
     };
 
     this.getSelectedItemProperties = function() {
@@ -112,7 +212,7 @@
 
     this.hide = function() {
       selectedItem_ = null;
-      selectedItemPics_ = null;
+      selectedItemMedia_ = null;
       selectedItemProperties_ = null;
       state_ = null;
       featureInfoPerLayer_ = [];
@@ -199,47 +299,6 @@
       //---- if selected item changed
       if (selectedItem_ !== selectedItemOld || forceUpdate) {
 
-        // -- update the selectedItemPics_
-        var pics = null;
-
-        if (getItemType(selectedItem_) === 'feature' && goog.isDefAndNotNull(selectedItem_) &&
-            goog.isDefAndNotNull(selectedItem_.properties)) {
-          var jsonValue = null;
-          if (goog.isDefAndNotNull(selectedItem_.properties.fotos) && selectedItem_.properties.fotos !== '') {
-            if (goog.isArray(selectedItem_.properties.fotos)) {
-              jsonValue = selectedItem_.properties.fotos;
-            } else {
-              jsonValue = JSON.parse(selectedItem_.properties.fotos);
-            }
-            pics = {name: 'fotos', pics: jsonValue};
-          } else if (goog.isDefAndNotNull(selectedItem_.properties.photos) && selectedItem_.properties.photos !== '') {
-            if (goog.isArray(selectedItem_.properties.photos)) {
-              jsonValue = selectedItem_.properties.photos;
-            } else {
-              jsonValue = JSON.parse(selectedItem_.properties.photos);
-            }
-            pics = {name: 'photos', pics: jsonValue};
-          }
-          if (goog.isDefAndNotNull(pics) &&
-              pics.length === 0) {
-            pics = null;
-          }
-        }
-
-        selectedItemPics_ = pics;
-
-        if (selectedItemPics_ !== null) {
-          goog.array.forEach(selectedItemPics_.pics, function(item, index) {
-            // if the pic doesn't start with 'http' then assume the pic is hosted by the local file service.
-            // otherwise list it as is so that a feature can point to an full url
-            if (goog.isString(item) && item.indexOf('http') === -1) {
-              selectedItemPics_.pics[index] = '/file-service/' + item;
-            } else {
-              selectedItemPics_.pics[index] = item;
-            }
-          });
-        }
-
         // -- select the geometry if it is a feature, clear otherwise
         // -- store the selected layer of the feature
         if (getItemType(selectedItem_) === 'feature') {
@@ -255,40 +314,42 @@
           mapService_.clearEditLayer();
         }
 
+
         // -- update the selectedItemProperties_
         var tempProps = {};
         var props = [];
 
         if (getItemType(selectedItem_) === 'feature') {
           goog.object.forEach(selectedItem_.properties, function(v, k) {
-            if (k === 'fotos' || k === 'photos') {
+            if (service_.isMediaPropertyName(k)) {
               if (goog.isDefAndNotNull(v)) {
                 var jsonValue = null;
                 if (goog.isArray(v)) {
                   jsonValue = v;
                 } else {
-                  jsonValue = JSON.parse(v);
-                }
-                var picsAttr = jsonValue;
-                if (!goog.isArray(picsAttr)) {
-                  picsAttr = [picsAttr];
-                }
-                goog.array.forEach(picsAttr, function(item, index) {
-                  // if the pic doesn't start with 'http' then assume the pic is hosted by the local file service.
-                  // otherwise list it as is so that a feature can point to an full url
-                  if (goog.isString(item) && item.indexOf('http') === -1) {
-                    picsAttr[index] = {original: item, modified: '/file-service/' + item};
-                  } else if (goog.isString(item)) {
-                    picsAttr[index] = {original: item, modified: item};
+                  try {
+                    jsonValue = JSON.parse(v);
+                  } catch (e) {
+                    // was not able to parse it. field might unintentionally have a name that fits the media
+                    // property name in maploom. tread it as a string.
+                    console.log('----[ Warning: media property field ' + k + ' has invalid value of: ' + v);
+                    jsonValue = '\"' + v + '\"';
                   }
-                });
-                tempProps[k] = [k, picsAttr];
+                }
+                var arrayValue = jsonValue;
+                if (!goog.isArray(arrayValue)) {
+                  arrayValue = [arrayValue];
+                }
+                tempProps[k] = [k, arrayValue];
+              } else {
+                tempProps[k] = [k, []];
               }
             } else {
               tempProps[k] = [k, v];
             }
           });
         }
+
         var propName = null;
         if (goog.isDefAndNotNull(selectedLayer_) && goog.isDefAndNotNull(selectedLayer_.get('metadata').schema)) {
           for (propName in selectedLayer_.get('metadata').schema) {
@@ -305,7 +366,12 @@
         }
 
         selectedItemProperties_ = props;
-        //console.log('---- selectedItemProperties_: ', selectedItemProperties_);
+        console.log('---- selectedItemProperties_: ', selectedItemProperties_);
+
+        // -- update the selectedItemMedia_
+        selectedItemMedia_ = service_.getSelectedItemMediaByProp(null);
+        console.log('---- selectedItemMedia_: ', selectedItemMedia_);
+
       }
 
       if (goog.isDefAndNotNull(position)) {
@@ -376,8 +442,10 @@
       return '';
     };
 
-    this.showPics = function(activeIndex) {
-      if (goog.isDefAndNotNull(selectedItemPics_)) {
+    this.showMedia = function(prop, activeIndex) {
+      var media = service_.getSelectedItemMediaByProp(prop);
+
+      if (goog.isDefAndNotNull(media)) {
         // use the gallery controls
         $('#blueimp-gallery').toggleClass('blueimp-gallery-controls', true);
 
@@ -389,7 +457,27 @@
           options.index = activeIndex;
         }
 
-        blueimp.Gallery(this.getSelectedItemPics(), options);
+        //clone media array and modify to prepare for media player's preferred format
+        //var media = goog.array.clone(media);
+
+        // if the media item is a video, we need to construct the item differently
+        for (var i = 0; i < media.length; i++) {
+          var fileTokens = media[i].split('.');
+          var ext = fileTokens.pop();
+          var filename = fileTokens.pop();
+          if (supportedVideoFormats_.indexOf(ext) >= 0) {
+            media[i] = {
+              title: filename,
+              href: media[i] = service_.getMediaUrl(media[i]),
+              type: 'video/' + ext,
+              poster: media[i] = service_.getMediaUrlThumbnail(media[i])
+            };
+          } else {
+            media[i] = service_.getMediaUrl(media[i]);
+          }
+        }
+
+        blueimp.Gallery(media, options);
       }
     };
 
@@ -400,8 +488,13 @@
       var props = [];
       var geometryType = '';
       var geometryName = '';
+
+      // Disable DoubleClickZoom
+      //array[1] of interactions is doubleClickZoom
+      mapService_.map.interactions_.array_[1].values_.active = false;
+
       goog.object.forEach(layer.get('metadata').schema, function(v, k) {
-        if (k !== 'fotos' && k !== 'photos') {
+        if (!service_.isMediaPropertyName(k)) {
           if (v._type.search('gml:') == -1) {
             props.push([k, null]);
           } else {
@@ -419,7 +512,9 @@
         geometryType = geometryType.replace('Curve', 'LineString');
       }
       geometryType = geometryType.replace('Surface', 'Polygon');
+
       exclusiveModeService_.startExclusiveMode(translate_.instant('drawing_geometry'),
+          geometryType,
           exclusiveModeService_.button(translate_.instant('accept_feature'), function() {
             if (mapService_.editLayer.getSource().getFeatures().length < 1) {
               dialogService_.warn(translate_.instant('adding_feature'), translate_.instant('must_create_feature'),
@@ -497,6 +592,11 @@
 
     this.endFeatureInsert = function(save, properties, coords) {
       var deferredResponse = q_.defer();
+
+      // Enable DoubleClickZoom
+      //array[1] of interactions is doubleClickZoom
+      mapService_.map.interactions_.array_[1].values_.active = true;
+
       if (save) {
         var propertyXmlPartial = '';
         var featureGML = '';
@@ -592,6 +692,7 @@
         }
       }
       exclusiveModeService_.startExclusiveMode(translate_.instant('editing_geometry'),
+          geometryType,
           exclusiveModeService_.button(translate_.instant('accept_feature'), function() {
             if (mapService_.editLayer.getSource().getFeatures().length < 1) {
               dialogService_.warn(translate_.instant('adding_feature'), translate_.instant('must_create_feature'),
@@ -697,6 +798,9 @@
       }, function(reject) {
         returnResponse.reject(reject);
       });
+
+      // Enable DoubleClickZoom
+
       return returnResponse.promise;
     };
 
@@ -718,10 +822,10 @@
       } else if (save) {
         var propertyXmlPartial = '';
         goog.array.forEach(properties, function(property, index) {
-          if ((property[0] === 'fotos' || property[0] === 'photos') && goog.isObject(property[1])) {
+          if (service_.isMediaPropertyName(property[0]) && goog.isObject(property[1])) {
             var newArray = [];
             forEachArrayish(property[1], function(photo) {
-              newArray.push(photo.original);
+              newArray.push(photo);
             });
             var stringy = JSON.stringify(newArray);
             if (stringy !== selectedItemProperties_[index][1]) {
@@ -794,6 +898,8 @@
       });
       return deferredResponse.promise;
     };
+
+    this.getGeometryGML3FromFeature = getGeometryGML3FromFeature;
   });
 
   //-- Private functions
@@ -842,8 +948,6 @@
                 'FEATURE_COUNT': 5
               });
 
-          //console.log('___ url: ', url);
-
           httpService_.get(url).then(function(response) {
             var layerInfo = {};
             layerInfo.features = response.data.features;
@@ -885,16 +989,16 @@
     var wfsRequestTypePartial;
     var commitMsg;
     if (postType === wfsPostTypes_.INSERT) {
-      var featureType = selectedLayer_.get('metadata').name.split(':')[1] || selectedLayer_.get('metadata').name;
+      var featureType = selectedLayer_.get('metadata').name.split(':')[1];
       commitMsg = translate_.instant('added_1_feature', {'layer': selectedLayer_.get('metadata').nativeName});
       wfsRequestTypePartial = '<wfs:Insert handle="' + commitMsg +
           '"><feature:' + featureType + ' xmlns:feature="' + selectedLayer_.get('metadata').workspaceURL + '">' +
           partial + '</feature:' + featureType + '></wfs:Insert>';
       goog.array.forEach(properties, function(obj) {
-        if (obj[0] === 'fotos' && obj[0] === 'photos' && goog.isArray(obj[1])) {
+        if (service_.isMediaPropertyName(obj[0]) && goog.isArray(obj[1])) {
           var newArray = [];
           forEachArrayish(obj[1], function(photo) {
-            newArray.push(photo.original);
+            newArray.push(photo);
           });
           selectedItem_.properties[obj[0]] = JSON.stringify(newArray);
         } else {
@@ -921,10 +1025,10 @@
         //properties will be null in the case of a geometry edit, so this needs to be handled
         if (goog.isDefAndNotNull(properties)) {
           goog.array.forEach(properties, function(obj) {
-            if (obj[0] === 'fotos' && obj[0] === 'photos' && goog.isArray(obj[1])) {
+            if (service_.isMediaPropertyName(obj[0]) && goog.isArray(obj[1])) {
               var newArray = [];
               forEachArrayish(obj[1], function(photo) {
-                newArray.push(photo.original);
+                newArray.push(photo);
               });
               selectedItem_.properties[obj[0]] = JSON.stringify(newArray);
             } else {
@@ -1106,6 +1210,107 @@
           featureGML += '</gml:Polygon></gml:polygonMember>';
         }
         featureGML += '</gml:MultiPolygon>';
+      }
+      if (isGeometryCollection) {
+        featureGML += '</gml:geometryMember>';
+      }
+    }
+    if (isGeometryCollection) {
+      featureGML += '</gml:MultiGeometry>';
+    }
+    return featureGML;
+  }
+
+  function getGeometryGML3FromFeature(feature) {
+    // TODO: Copied from the above method, changing Polygon to Surface.
+    // Only used by the spatial filter. Didn't know what else is using the above method.
+    // At some point in the future should figure out what needs Surface and what needs Polygon.
+    var featureGML = '';
+    var index = 0;
+    var length = 1;
+    var geometries = [feature.getGeometry()];
+    var buildCoordString = function(coords) {
+      var counter = 0;
+      return String(coords).replace(/,/g, function(all, match) {
+        if (counter === 1) {
+          counter = 0;
+          return ' ';
+        }
+        counter++;
+        return ',';
+      });
+    };
+    var isGeometryCollection = false;
+    if (feature.getGeometry().getType().toLowerCase() == 'geometrycollection') {
+      geometries = feature.getGeometry().getGeometries();
+      length = geometries.length;
+      featureGML += '<gml:MultiGeometry xmlns:gml="http://www.opengis.net/gml" srsName="' +
+          mapService_.map.getView().getProjection().getCode() + '">';
+      isGeometryCollection = true;
+    }
+    for (var geometryIndex = 0; geometryIndex < length; geometryIndex++) {
+      var geometry = geometries[geometryIndex];
+      var geometryType = geometry.getType().toLowerCase();
+      if (isGeometryCollection) {
+        featureGML += '<gml:geometryMember>';
+      }
+      if (geometryType == 'point') {
+        featureGML += '<gml:Point xmlns:gml="http://www.opengis.net/gml" srsName="' +
+            mapService_.map.getView().getProjection().getCode() + '">' +
+            '<gml:coordinates decimal="." cs="," ts=" ">' +
+            geometry.getCoordinates().toString() +
+            '</gml:coordinates></gml:Point>';
+      } else if (geometryType == 'linestring') {
+        featureGML += '<gml:LineString xmlns:gml="http://www.opengis.net/gml" srsName="' +
+            mapService_.map.getView().getProjection().getCode() + '">' +
+            '<gml:coordinates decimal="." cs="," ts=" ">' + buildCoordString(geometry.getCoordinates().toString()) +
+            '</gml:coordinates></gml:LineString>';
+      } else if (geometryType == 'polygon') {
+        featureGML += '<gml:Polygon xmlns:gml="http://www.opengis.net/gml" srsName="' +
+            mapService_.map.getView().getProjection().getCode() + '">' +
+            '<gml:outerBoundaryIs><gml:LinearRing><gml:coordinates decimal="." cs="," ts=" ">' +
+            buildCoordString(geometry.getCoordinates()[0].toString()) + '</gml:coordinates>' +
+            '</gml:LinearRing></gml:outerBoundaryIs>';
+        for (index = 1; index < geometry.getCoordinates().length; index++) {
+          featureGML += '<gml:innerBoundaryIs><gml:LinearRing><gml:coordinates decimal="." cs="," ts=" ">' +
+              buildCoordString(geometry.getCoordinates()[index].toString()) + '</gml:coordinates>' +
+              '</gml:LinearRing></gml:innerBoundaryIs>';
+        }
+        featureGML += '</gml:Polygon>';
+      } else if (geometryType == 'multipoint') {
+        featureGML += '<gml:MultiPoint xmlns:gml="http://www.opengis.net/gml" srsName="' +
+            mapService_.map.getView().getProjection().getCode() + '">';
+        for (index = 0; index < geometry.getCoordinates().length; index++) {
+          featureGML += '<gml:pointMember><gml:Point><gml:coordinates decimal="." cs="," ts=" ">' +
+              geometry.getCoordinates()[index].toString() +
+              '</gml:coordinates></gml:Point></gml:pointMember>';
+        }
+        featureGML += '</gml:MultiPoint>';
+      } else if (geometryType == 'multilinestring') {
+        featureGML += '<gml:MultiLineString xmlns:gml="http://www.opengis.net/gml" srsName="' +
+            mapService_.map.getView().getProjection().getCode() + '">';
+        for (index = 0; index < geometry.getCoordinates().length; index++) {
+          featureGML += '<gml:lineMember><gml:LineString><gml:coordinates decimal="." cs="," ts=" ">' +
+              buildCoordString(geometry.getCoordinates()[index].toString()) +
+              '</gml:coordinates></gml:LineString></gml:lineMember>';
+        }
+        featureGML += '</gml:MultiLineString>';
+      } else if (geometryType == 'multipolygon') {
+        featureGML += '<gml:MultiSurface xmlns:gml="http://www.opengis.net/gml" srsName="' +
+            mapService_.map.getView().getProjection().getCode() + '">';
+        for (index = 0; index < geometry.getCoordinates().length; index++) {
+          featureGML += '<gml:surfaceMember><gml:Polygon>' +
+              '<gml:exterior><gml:LinearRing><gml:posList>' +
+              geometry.getCoordinates()[index][0].toString().replace(/,/g, ' ') + '</gml:posList>' +
+              '</gml:LinearRing></gml:exterior>';
+          for (var innerIndex = 1; innerIndex < geometry.getCoordinates()[index].length; innerIndex++) {
+            featureGML += '<gml:interior><gml:LinearRing><gml:posList>' +
+                geometry.getCoordinates()[index][innerIndex].toString().replace(/,/g, ' ') + '</gml:posList>' +
+                '</gml:LinearRing></gml:interior>';
+          }
+          featureGML += '</gml:Polygon></gml:surfaceMember>';
+        }
+        featureGML += '</gml:MultiSurface>';
       }
       if (isGeometryCollection) {
         featureGML += '</gml:geometryMember>';

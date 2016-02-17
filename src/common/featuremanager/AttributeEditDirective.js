@@ -3,7 +3,7 @@
   var module = angular.module('loom_attribute_edit_directive', []);
 
   module.directive('loomAttributeEdit',
-      function($translate, featureManagerService, dialogService) {
+      function($translate, featureManagerService, dialogService, configService, fileUpload) {
         return {
           restrict: 'C',
           templateUrl: 'featuremanager/partial/attributeedit.tpl.html',
@@ -12,6 +12,8 @@
             scope.$on('startAttributeEdit', function(event, geometry, projection, properties, inserting) {
               scope.properties = [];
               scope.isSaving = false;
+              scope.isLoading = false;
+              scope.isRemoving = false;
               var tempProperties = {};
               var attributeTypes = featureManagerService.getSelectedLayer().get('metadata').schema;
               if (goog.isDefAndNotNull(attributeTypes)) {
@@ -53,7 +55,23 @@
                   projection: projection};
               }
               scope.inserting = inserting;
-              $('#attribute-edit-dialog').modal('toggle');
+
+              var modal = $('#attribute-edit-dialog').modal('toggle');
+              modal.on('shown.bs.modal', function() {
+                $(':file').filestyle({
+                  input: false,
+                  iconName: 'glyphicon glyphicon-upload',
+                  buttonText: '',
+                  size: 'sm',
+                  badge: false
+                });
+
+                $('.bootstrap-filestyle').tooltip({
+                  title: 'Upload Media',
+                  placement: 'left',
+                  trigger: 'focus'
+                });
+              });
             });
 
             scope.translate = function(value) {
@@ -61,7 +79,6 @@
             };
 
             var reset = function() {
-              scope.featureManagerService = null;
               scope.properties = null;
               scope.coordinates = null;
               scope.inserting = false;
@@ -71,6 +88,57 @@
               goog.array.remove(property[1], photo);
               if (property[1].length === 0) {
                 property[1] = null;
+              }
+            };
+
+            scope.fileInputChanged = function(event) {
+              var files = event.target.files;
+              var propName = event.target.attributes['media-prop-name'].value;
+              scope.uploadMedia(propName, files, event.target);
+            };
+
+            scope.uploadMedia = function(propName, files, element) {
+              console.log('====[ uploadMedia, files: ', files, ', propName: ', propName);
+              if (goog.isDefAndNotNull(files)) {
+                scope.isLoading = true;
+                var icon = $(element).parent().find('.bootstrap-filestyle .icon-span-filestyle');
+                icon.removeClass('glyphicon-upload');
+                icon.addClass('glyphicon-transfer');
+
+                var completed = 0;
+                var checkCompleted = function() {
+                  completed++;
+                  if (completed === files.length) {
+                    scope.isLoading = false;
+                    icon.removeClass('glyphicon-transfer');
+                    icon.addClass('glyphicon-upload');
+                  }
+                };
+
+                var onSuccess = function(response) {
+                  console.log(response);
+                  for (var i = 0; i < scope.properties.length; i++) {
+                    if (scope.properties[i][0] === propName) {
+                      scope.properties[i][1].push(response.name);
+                    }
+                  }
+                  checkCompleted();
+                };
+
+                var onReject = function(reject) {
+                  completed++;
+                  console.log(reject);
+                  window.alert(reject);
+                  checkCompleted();
+                };
+
+                for (var i = 0; i < files.length; i++) {
+                  var file = files[i];
+                  if (goog.isDefAndNotNull(file)) {
+                    fileUpload.uploadFileToUrl(file, configService.configuration.fileserviceUploadUrl,
+                        configService.csrfToken).then(onSuccess, onReject);
+                  }
+                }
               }
             };
 
@@ -104,6 +172,11 @@
               }
             };
 
+            var shortXYValue = function(coords) {
+              shortXY = '(' + String(parseFloat(coords[0].toFixed(3))) + ', ' + String(parseFloat(coords[1].toFixed(3))) + ')';
+              return shortXY;
+            };
+
             scope.save = function() {
               if (scope.isSaving) {
                 return;
@@ -125,7 +198,32 @@
                   scope.coordDisplay.value === coordinateDisplays.DMS &&
                   ol.coordinate.toStringHDMS(scope.coordinates.coords4326) !== scope.coordinates.originalText) {
                 dialogService.open($translate.instant('location_lon_lat'), $translate.instant('latlon_confirm',
-                    {value: ol.coordinate.toStringHDMS(scope.coordinates.coords4326)}), [$translate.instant('yes_btn'),
+                    {value: shortXYValue(scope.coordinates.coords)}), [$translate.instant('yes_btn'),
+                      $translate.instant('no_btn')], false).then(function(button) {
+                  switch (button) {
+                    case 0: {
+                      scope.isSaving = true;
+                      featureManagerService.endAttributeEditing(true, scope.inserting, scope.properties,
+                          scope.coordinates.coords).then(function(resolve) {
+                                     reset();
+                                     $('#attribute-edit-dialog').modal('toggle');
+                                     scope.isSaving = false;
+                                   }, function(reject) {
+                                     scope.isSaving = false;
+                                     var message = scope.inserting ?
+                                'unable_to_save_feature' : 'unable_to_save_attributes';
+                                     dialogService.error($translate.instant('error'), $translate.instant(message,
+                                         {'value': reject}), [$translate.instant('btn_ok')], false);
+                                   });
+                    }
+                  }
+                });
+                return;
+              } else if (goog.isDefAndNotNull(scope.coordinates) && scope.coordinates.changed &&
+                  scope.coordDisplay.value === coordinateDisplays.MGRS &&
+                  xyToMGRSFormat(scope.coordinates.coords4326) !== scope.coordinates.originalText) {
+                dialogService.open($translate.instant('location_lon_lat'), $translate.instant('latlon_confirm',
+                    {value: shortXYValue(scope.coordinates.coords)}), [$translate.instant('yes_btn'),
                       $translate.instant('no_btn')], false).then(function(button) {
                   switch (button) {
                     case 0: {

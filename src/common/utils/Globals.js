@@ -1,15 +1,21 @@
 var coordinateDisplays = {
   DMS: 'degree_minute_second',
   DD: 'decimal_degrees',
+  MGRS: 'mgrs',
   Other: 'other'
 };
 
 var settings = {
   coordinateDisplay: coordinateDisplays.DMS,
   DDPrecision: 8,
+  MGRSPrecision: 10,
   WFSVersion: '1.1.0',
   WMSVersion: '1.1.1',
-  WPSVersion: '1.0.0'
+  WPSVersion: '1.0.0',
+  //Set to OsmLocalUrl to 'default' for default mapnick osm basemap
+  OsmLocalUrl: 'default',
+  //OsmLocalUrl: 'http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
+  OsmLocalAttribution: 'All maps &copy; <a href="http://www.opencyclemap.org/">OpenCycleMap</a>'
 };
 
 var forEachArrayish = function(arrayish, funct) {
@@ -262,18 +268,35 @@ var sha1 = function(msg) {
 };
 
 
-// give http://myip/geoserver/wms, ir will return http://myip/geoserver
+// given http://myip/geoserver/wms, it will return http://myip/geoserver
 // it handles extra slash at the end of the url if it has one
-var removeUrlLastRoute = function(urlWithRoutes) {
-  var newUrl = null;
-
-  if (goog.isDefAndNotNull(urlWithRoutes)) {
-    if (urlWithRoutes.lastIndexOf('/') === urlWithRoutes.length - 1) {
-      urlWithRoutes = urlWithRoutes.substring(0, urlWithRoutes.lastIndexOf('/'));
+var urlRemoveLastRoute = function(url) {
+  url = urlRemoveTrailingSlash(url);
+  if (goog.isDefAndNotNull(url)) {
+    if (url.lastIndexOf('/') === url.length - 1) {
+      url = url.substring(0, url.lastIndexOf('/'));
     }
-
-    newUrl = urlWithRoutes.substring(0, urlWithRoutes.lastIndexOf('/'));
+    return url.substring(0, url.lastIndexOf('/'));
   }
+  return url;
+};
 
-  return newUrl;
+// given http://myip/geoserver/, it will return http://myip/geoserver
+// if doesn't have training slash, it will return the url as it was passed in
+var urlRemoveTrailingSlash = function(url) {
+  if (goog.isDefAndNotNull(url)) {
+    if (url.lastIndexOf('/') === url.length - 1) {
+      url = url.substring(0, url.lastIndexOf('/'));
+    }
+  }
+  return url;
+};
+
+// mgrs additions
+var xyToMGRSFormat = function(coordinate) {
+  return mgrs.forward(coordinate, settings.MGRSPrecision);
+};
+
+var mgrsToXYFormat = function(string) {
+  return mgrs.toPoint(string, settings.DDPrecision);
 };

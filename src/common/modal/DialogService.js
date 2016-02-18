@@ -35,7 +35,7 @@
 
       var username = null;
       var password = null;
-      var alwaysAnonymous = false;
+      var alwaysAnonymous = true;
       var deferredPromise = q_.defer();
       var modalScope = rootScope_.$new();
       var ok = false;

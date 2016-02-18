@@ -69,7 +69,7 @@
               'opacity': 1,
               'selected': true,
               'group': 'background',
-              'name': 'geonode',
+              'name': 'geonode:_30river_project1_1',
               'title': 'GeoNode Demo',
               'args': ['Geonode'],
               'visibility': true,

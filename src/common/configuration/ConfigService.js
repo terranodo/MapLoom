@@ -61,19 +61,13 @@
               'title': 'OpenStreetMap',
               'args': ['OpenStreetMap'],
               'visibility': true,
-              'source': 1,
+              'source': 0,
               'fixed': true,
               'type': 'OpenLayers.Layer.OSM'
             }
           ]
         },
         sources: [
-          {
-            'url': ('http://demo.geonode.org/geoserver/wms'),
-            'restUrl': '/gs/rest',
-            'ptype': 'gxp_wmscsource',
-            'name': 'local geoserver'
-          },
           {
             'ptype': 'gxp_osmsource',
             'name': 'OpenStreetMap'

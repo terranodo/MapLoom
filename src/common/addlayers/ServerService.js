@@ -198,7 +198,7 @@ var SERVER_SERVICE_USE_PROXY = true;
               function(credentials) {
                 server.username = credentials.username;
                 server.authentication = $.base64.encode(credentials.username + ':' + credentials.password);
-                server.config.alwaysAnonymous = false;
+                server.config.alwaysAnonymous = true;
 
                 // remove the 'wms endpoint'
                 var serverBaseUrl = urlRemoveLastRoute(server.url);

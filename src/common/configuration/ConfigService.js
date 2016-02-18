@@ -64,18 +64,6 @@
               'source': 1,
               'fixed': true,
               'type': 'OpenLayers.Layer.OSM'
-            },
-            {
-              'opacity': 1,
-              'selected': true,
-              'group': 'background',
-              'name': 'geonode:_30river_project1_1',
-              'title': 'GeoNode Demo',
-              'args': ['Geonode'],
-              'visibility': true,
-              'source': 0,
-              'fixed': true,
-              'type': 'WMS'
             }
           ]
         },
@@ -89,12 +77,6 @@
           {
             'ptype': 'gxp_osmsource',
             'name': 'OpenStreetMap'
-          },
-          {
-            'url': ('http://demo.geonode.org/geoserver/wms'),
-            'restUrl': '/gs/rest',
-            'ptype': 'gxp_wmscsource',
-            'name': 'geonode'
           }
         ],
         currentLanguage: 'en',

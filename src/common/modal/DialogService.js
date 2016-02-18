@@ -30,7 +30,7 @@
         closeButton = false;
       }
       if (!goog.isDefAndNotNull(alwaysAnonymousInitial)) {
-        alwaysAnonymousInitial = false;
+        alwaysAnonymousInitial = true;
       }
 
       var username = null;
@@ -39,7 +39,7 @@
       var deferredPromise = q_.defer();
       var modalScope = rootScope_.$new();
       var ok = false;
-      var skip = false;
+      var skip = true;
       modalScope.serverURL = server;
       modalScope.closeButton = closeButton;
       modalScope.modalOffset = numModals * 20;

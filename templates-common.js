@@ -1,4 +1,4 @@
-angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
+angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'storybox/partials/addstorybox.tpl.html', 'storybox/partials/boxinfo.tpl.html', 'storybox/partials/storyboxes.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
 
 angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayers.tpl.html",
@@ -1217,6 +1217,133 @@ angular.module("statistics/partial/statistics.tpl.html", []).run(["$templateCach
     "        <div loom-statistics-chart id=\"loom-statistics-chart\"></div>\n" +
     "      </div>\n" +
     "\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("storybox/partials/addstorybox.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("storybox/partials/addstorybox.tpl.html",
+    "<div class=\"modal-body\">\n" +
+    "    <form class=\"form-horizontal col-md-12\">\n" +
+    "\n" +
+    "        <div class=\"form-group\">\n" +
+    "            <label for=\"title\">Title</label>\n" +
+    "\n" +
+    "            <div>\n" +
+    "                <input ng-model=\"box.title\" ng-required class=\"form-control\" id=\"title\" placeholder=\"Title\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"form-group\">\n" +
+    "            <label for=\"description\">Description</label>\n" +
+    "\n" +
+    "            <div>\n" +
+    "                <textarea ng-model=\"box.description\" class=\"form-control\" id=\"description\"\n" +
+    "                          placeholder=\"Description\"></textarea>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-5\">\n" +
+    "                <div class=\"form-group\">\n" +
+    "                    <label for=\"start_time\">Start Time</label>\n" +
+    "\n" +
+    "                    <div>\n" +
+    "                        <!--input ng-model=\"box.start_time\" class=\"form-control\" id=\"start_time\" placeholder=\"Start time\"-->\n" +
+    "                         <datetimepicker date-object=\"box.start_time\" default-date=\"inserting\"></datetimepicker>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-5 pull-right\">\n" +
+    "                <div class=\"form-group\">\n" +
+    "                    <label for=\"end_time\">End Time</label>\n" +
+    "\n" +
+    "                    <div>\n" +
+    "                        <!--input ng-model=\"box.end_time\" class=\"form-control\" id=\"end_time\" placeholder=\"End time\"-->\n" +
+    "                         <datetimepicker date-object=\"box.end_time\" default-date=\"inserting\"></datetimepicker>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <button type=\"button\" style=\"margin-left:-15px;\"\n" +
+    "                ng-if=\"currentServer.lazy && currentServer.layersConfig.length===0 && !currentServer.populatingLayersConfig\"\n" +
+    "                tooltip=\"This server is configured to lazily load layers.\" tooltip-placement=\"right\"\n" +
+    "                class=\"btn btn-default\"\n" +
+    "                ng-click=\"serverService.populateLayersConfig(serverService.getServerById(currentServerId), true)\">\n" +
+    "            <i class=\"glyphicon glyphicon-save\"></i>\n" +
+    "            <span>{{'fetch_layers_from_server' | translate}}</span>\n" +
+    "        </button>\n" +
+    "        <div class=\"add-layers-loading loom-loading\" spinner-hidden=\"!currentServer.populatingLayersConfig\"></div>\n" +
+    "        <!--pre>box = {{box | json}}</pre-->\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" translate=\"close_btn\">Close</button>\n" +
+    "    <button type=\"button\" class=\"btn btn-primary\" ng-click=\"addStoryBox(box)\" data-dismiss=\"modal\"\n" +
+    "            translate=\"add_btn\">Add\n" +
+    "    </button>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("storybox/partials/boxinfo.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("storybox/partials/boxinfo.tpl.html",
+    "<div class=\"modal-body\">\n" +
+    "    <div ng-show=\"range\">\n" +
+    "        <div class=\"well\">{{range}}</div>\n" +
+    "    </div>\n" +
+    "    <div ng-show=\"title\">\n" +
+    "        <div><h4 translate=\"title\"></h4></div>\n" +
+    "        <div class=\"well\">{{title}}</div>\n" +
+    "    </div>\n" +
+    "    <div ng-show=\"description\">\n" +
+    "        <div><h4 translate=\"description\"></h4></div>\n" +
+    "        <div class=\"well\">{{description}}</div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "</div>");
+}]);
+
+angular.module("storybox/partials/storyboxes.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("storybox/partials/storyboxes.tpl.html",
+    "<div id=\"storyboxpanel-group\" class=\"panel-group loom-arrangeable storybox-container\">\n" +
+    "  <div class=\"panel\"\n" +
+    "       ng-repeat=\"storyBox in layers = boxService.getBoxes()\">\n" +
+    "    <div class=\"panel-heading storybox-heading\" data-toggle=\"collapse\" ng-class=\"{'placeholder-layer': storyBox.title}\"\n" +
+    "         data-parent=\"#storyboxpanel-group\" data-target=\"#{{storyBox.id}}\">\n" +
+    "      <div class=\"row\">\n" +
+    "        <div class=\"layer-title ellipsis\" ng-class=\"{'placeholder-storybox-title': storyBox.title}\">\n" +
+    "          {{storyBox.title }}\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div id=\"{{storyBox.id}}\" class=\"panel-collapse collapse\">\n" +
+    "      <div class=\"panel-body layer-inner-panel\">\n" +
+    "        <div class=\"btn-group-wrap\">\n" +
+    "          <div class=\"btn-group\">\n" +
+    "            <a type=\"button\" ng-show=\"storyBox\" ng-click=\"zoomToBox(storyBox)\" tooltip-append-to-body=\"true\"\n" +
+    "               tooltip-placement=\"top\" tooltip=\"{{'zoom_to_storybox' | translate}}\"\n" +
+    "               class=\"btn btn-sm btn-default\">\n" +
+    "              <div class=\"loom-loading\" spinner-radius=\"16\" spinner-hidden=\"!zooming\"></div>\n" +
+    "              <i class=\"glyphicon glyphicon-resize-small\"></i>\n" +
+    "            </a>\n" +
+    "            <a type=\"button\" ng-show=\"storyBox\"\n" +
+    "               tooltip-append-to-body=\"true\" ng-click=\"getBoxInfo(storyBox)\"\n" +
+    "               tooltip-placement=\"top\" tooltip=\"{{'show_storybox_info' | translate}}\"\n" +
+    "               class=\"btn btn-sm btn-default\">\n" +
+    "              <i class=\"glyphicon glyphicon-info-sign\"></i>\n" +
+    "            </a>\n" +
+    "            <a type=\"button\" ng-click=\"removeBox(storyBox)\" id=\"remove-button\"\n" +
+    "               class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\"\n" +
+    "               tooltip-placement=\"top\" tooltip=\"{{'remove_storybox' | translate}}\">\n" +
+    "              <i class=\"glyphicon glyphicon-trash\"></i>\n" +
+    "            </a>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "</div>\n" +
     "");

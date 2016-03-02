@@ -191,14 +191,14 @@ var SERVER_SERVICE_USE_PROXY = true;
               deferredResponse.reject(server, reject);
             });
       };
-
+      var alwaysAnonymous = true;
       if (goog.isDefAndNotNull(server.url)) {
-        if (server.url.indexOf(location_.host()) === -1) {
+        if (server.url.indexOf(location_.host()) === -1 && !alwaysAnonymous) {
           dialogService_.promptCredentials(server.url, true, null, server.config.alwaysAnonymous).then(
               function(credentials) {
                 server.username = credentials.username;
                 server.authentication = $.base64.encode(credentials.username + ':' + credentials.password);
-                server.config.alwaysAnonymous = true;
+                server.config.alwaysAnonymous = false;
 
                 // remove the 'wms endpoint'
                 var serverBaseUrl = urlRemoveLastRoute(server.url);
@@ -311,7 +311,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                 function(credentials) {
                   server.username = credentials.username;
                   server.authentication = $.base64.encode(credentials.username + ':' + credentials.password);
-                  server.config.alwaysAnonymous = true;
+                  server.config.alwaysAnonymous = false;
 
                   // remove the 'wms endpoint'
                   var serverBaseUrl = urlRemoveLastRoute(server.url);

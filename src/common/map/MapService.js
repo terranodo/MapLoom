@@ -479,7 +479,7 @@
      */
     this.addLayer = function(minimalConfig, opt_layerOrder) {
       var server = serverService_.getServerById(minimalConfig.source);
-      if (server.ptype === 'gxp_mapquestsource' && minimalConfig.name === 'naip') {
+      if (server && server.ptype === 'gxp_mapquestsource' && minimalConfig.name === 'naip') {
         minimalConfig.name = 'sat';
       }
 

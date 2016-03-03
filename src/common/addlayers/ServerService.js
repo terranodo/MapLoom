@@ -301,8 +301,9 @@ var SERVER_SERVICE_USE_PROXY = true;
       };
 
       if (goog.isDefAndNotNull(server.url)) {
+        alwaysAnonymous = true;
         if (server.url.indexOf(location_.host()) === -1) {
-          if (server.config.alwaysAnonymous) {
+          if (server.config.alwaysAnonymous || alwaysAnonymous) {
             server.username = translate_.instant('anonymous');
             server.authentication = undefined;
             doWork();

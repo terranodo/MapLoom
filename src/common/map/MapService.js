@@ -1093,9 +1093,11 @@
                     // add servers corresponding to basemaps
                     serverService_.configDefaultServers();
                   }
-                  dialogService_.error(translate_.instant('server'), translate_.instant('load_server_failed',
-                      {'server': serverInfo.name, 'value': reject}), [translate_.instant('btn_ok')], false);
-                  console.log('====[ Error: Add server failed. ', reject);
+                  if (reject) {
+                    dialogService_.error(translate_.instant('server'), translate_.instant('load_server_failed',
+                        {'server': serverInfo.name, 'value': reject}), [translate_.instant('btn_ok')], false);
+                    console.log('====[ Error: Add server failed. ', reject);
+                  }
                 });
           } else {
             orderedUniqueLength--;

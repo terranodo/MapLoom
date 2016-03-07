@@ -11,7 +11,7 @@
           config.headers['X-CSRFToken'] = service_.csrfToken;
         }
         if (goog.isDefAndNotNull(config) && goog.isDefAndNotNull(config.url) && config.url.indexOf('http') === 0 &&
-            config.url.indexOf($location.protocol() + '://' + $location.host()) !== 0) {
+            config.url.indexOf('http://' + $location.host()) !== 0) {
           var server = service_.getServerByURL(config.url);
           if (goog.isDefAndNotNull(server)) {
             if (!goog.isDefAndNotNull(server.authentication)) {
@@ -23,7 +23,7 @@
           var configCopy = $.extend(true, {}, config);
           var proxy = service_.configuration.proxy;
           if (goog.isDefAndNotNull(proxy)) {
-            //configCopy.url = proxy + encodeURIComponent(configCopy.url);
+            configCopy.url = proxy + encodeURIComponent(configCopy.url);
           }
           return configCopy;
         }
@@ -50,6 +50,10 @@
           abstract: ''
         },
         map: {
+          about: {
+            title: $translate.instant('new_map'),
+            abstract: ''
+          },
           center: [-9707182.048613328, 1585691.7893914054],
           zoom: 14,
           layers: [
@@ -61,13 +65,19 @@
               'title': 'OpenStreetMap',
               'args': ['OpenStreetMap'],
               'visibility': true,
-              'source': 0,
+              'source': 1,
               'fixed': true,
               'type': 'OpenLayers.Layer.OSM'
             }
           ]
         },
         sources: [
+          {
+            'url': ('http://' + $location.host() + '/geoserver/wms'),
+            'restUrl': '/gs/rest',
+            'ptype': 'gxp_wmscsource',
+            'name': 'local geoserver'
+          },
           {
             'ptype': 'gxp_osmsource',
             'name': 'OpenStreetMap'
@@ -79,15 +89,13 @@
         userprofileemail: '',
         authStatus: 401,
         id: 0,
-        proxy: '/proxy/?url=',
-        nominatimUrl: 'http://nominatim.openstreetmap.org',
-        fileserviceUrlTemplate: '/api/fileservice/view/{}',
-        fileserviceUploadUrl: '/api/fileservice/'
+        nominatimUrl: 'http://nominatim.openstreetmap.org'
       };
 
       if (goog.isDefAndNotNull($window.config)) {
         goog.object.extend(this.configuration, $window.config, {});
       }
+      this.initial_config = this.configuration;
       this.username = this.configuration.username;
       this.currentLanguage = this.configuration.currentLanguage;
       this.user_profile_name = this.configuration.userprofilename;

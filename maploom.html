@@ -5,764 +5,867 @@
 <!DOCTYPE html>
 <html ng-app="MapLoom" ng-controller="AppCtrl">
 <head>
-<title ng-bind="pageTitle"></title>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-COMPATIBLE" content="IE-Edge">
+    <title ng-bind="pageTitle"></title>
 
-<!-- compiled CSS -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE-Edge">
+
+    <!-- compiled CSS -->
     
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}maploom/assets/MapLoom-1.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}maploom/assets/MapLoom-1.2.0.css"/>
     
 
+    
 
+    <link rel="stylesheet" type="text/css" href="http://visjs.org/dist/vis.css"/>
+    <!--link rel="stylesheet" type="text/css" href="/static/mapstory/css/app.css"/-->
 
-<!-- compiled JavaScript -->
+    <!-- compiled JavaScript -->
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/jquery/jquery.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/jquery-sortable/source/js/jquery-sortable-min.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/jquery-sortable/source/js/jquery-sortable-min.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/angular/angular.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/angular/angular.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/angular-ui-router/release/angular-ui-router.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/bootstrap/dist/js/bootstrap.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/bootstrap-filestyl/src/bootstrap-filestyle.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/angular-ui-router/release/angular-ui-router.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/moment/min/moment.min.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/bootstrap/dist/js/bootstrap.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/bootstrap3-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/bootstrap3-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/moment/min/moment.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/x2js/xml2json.min.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/bootstrap3-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/angular-translate/angular-translate.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/bootstrap3-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/ol3/ol-debug.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/x2js/xml2json.min.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/d3/d3.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/proj4/dist/proj4-src.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/angular-translate/angular-translate.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/mgrs/dist/mgrs.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/angular-cookies/angular-cookies.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/blueimp-gallery/js/jquery.blueimp-gallery.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/ol3/ol-debug.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/d3/d3.min.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/vendor/angular-xeditable/dist/js/xeditable.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/DiffPanelController.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/proj4/dist/proj4-src.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/HistoryPanelController.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/vis/dist/vis.min.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/LoomModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/NotificaationPanelController.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/nouislider/distribute/jquery.nouislider.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/Proj4Defs.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/story-tools-core.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/PulldownController.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/story-tools-core-tpls.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/locales/en.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/story-tools-core-ng.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/app/locales/es.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/addlayers/AddLayersDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/story-tools-edit.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/addlayers/AddLayersModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/story-tools-edit-ng.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/addlayers/AddServerDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/addlayers/LayerInfoPopoverDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/story-tools-edit-tpls.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/addlayers/ServerService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/story-tools/dist/ows.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/arrangeable/ArrangeableDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/arrangeable/ArrangeableModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/blueimp-gallery/js/blueimp-gallery.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/configuration/ConfigModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/blueimp-gallery/js/blueimp-gallery-fullscreen.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/configuration/ConfigService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/DiffCommon.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/blueimp-gallery/js/blueimp-gallery-indicator.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/DiffListDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/blueimp-gallery/js/blueimp-helper.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/DiffModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/DiffPanelDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/DiffService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/FeatureBlameService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/FeatureDiffController.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/vendor/angular-xeditable/dist/js/xeditable.min.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/FeatureDiffDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/DiffPanelController.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/FeatureDiffService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/FeaturePanelDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/HistoryPanelController.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/diff/PanelSeparatorDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/LoomModule.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/AttributeEditDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/DrawSelectDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/NotificaationPanelController.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/ExclusiveModeDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/Proj4Defs.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/ExclusiveModeService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/FeatureInfoBoxDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/PulldownController.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/FeatureManagerModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/app.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/featuremanager/FeatureManagerService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/geogig/GeoGigModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/locales/en.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/geogig/GeoGigPrototypes.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/app/locales/es.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/geogig/GeoGigService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/history/HistoryDiffDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/addlayers/AddLayersDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/history/HistoryModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/addlayers/AddLayersModule.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/history/HistoryPanelDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/history/HistoryPopoverDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/addlayers/AddServerDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/history/HistoryService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/addlayers/LayerInfoPopoverDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/layers/LayerInfoDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/layers/LayersDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/addlayers/ServerService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/layers/LayersModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/addlayers/ServerServiceSpec.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/legend/LegendDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/legend/LegendModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/arrangeable/ArrangeableDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/map/MapModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/arrangeable/ArrangeableModule.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/map/MapSaveDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/map/MapService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/configuration/ConfigModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/merge/ConflictService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/configuration/ConfigService.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/merge/MergeDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/merge/MergeModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/DiffCommon.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/modal/DialogDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/DiffListDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/modal/DialogService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/modal/ModalDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/DiffModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/modal/ModalModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/DiffPanelDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/modal/PasswordDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notificationposter/NotificationPosterDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/DiffService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notificationposter/NotificationPosterModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/FeatureBlameService.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notifications/GenerateNotificationDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notifications/NotificationBadgeDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/FeatureDiffController.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notifications/NotificationsDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/FeatureDiffDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notifications/NotificationsModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/notifications/NotificationsService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/FeatureDiffService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/pulldown/PulldownModule.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/FeaturePanelDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/pulldown/PulldownService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/refresh/RefreshModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/diff/PanelSeparatorDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/refresh/RefreshService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/AttributeEditDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/search/SearchDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/search/SearchModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/DrawSelectDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/search/SearchService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/ExclusiveModeDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/statistics/StatisticsDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/statistics/StatisticsModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/ExclusiveModeService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/statistics/StatisticsService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/FeatureInfoBoxDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/storybox/BoxService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/storybox/StoryBoxDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/FeatureManagerModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/storybox/StoryBoxInfoDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/featuremanager/FeatureManagerService.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/storybox/StoryBoxModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/AddSynchronizationLinkDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/geogig/GeoGigModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/RemoteService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/geogig/GeoGigPrototypes.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/SyncModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/SynchronizationConfigurationDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/geogig/GeoGigService.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/SynchronizationLinksDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/history/HistoryDiffDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/SynchronizationPrototypes.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/sync/SynchronizationService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/history/HistoryModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/tableview/FilterOptionsDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/history/HistoryPanelDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/tableview/TableViewDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/tableview/TableViewModule.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/history/HistoryPopoverDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/tableview/TableViewService.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/history/HistoryService.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/test/TestModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/test/TestService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/layers/LayerInfoDirective.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/timeline/TimelineDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/layers/LayersDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/timeline/TimelineModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/timeline/TimelineService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/layers/LayersModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/updatenotification/UpdateNotificationDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/legend/LegendDirective.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/updatenotification/UpdateNotificationModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/utils/Globals.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/legend/LegendModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/utils/LoadingDirective.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/ChapterDelete.js"></script>
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/utils/UtilsModule.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/src/common/utils/wktparser.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/ChapterTitle.js"></script>
     
-
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/templates-common.js"></script>
     
-
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/MapModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/MapProperties.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/MapSave.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/MapSaveDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/map/MapService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/merge/ConflictService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/merge/MergeDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/merge/MergeModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/modal/DialogDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/modal/DialogService.js"></script>
+    
     
-        <script type="text/javascript" src="{{STATIC_URL}}maploom/templates-app.js"></script>
     
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/modal/ModalDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/modal/ModalModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/modal/PasswordDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notificationposter/NotificationPosterDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notificationposter/NotificationPosterModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notifications/GenerateNotificationDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notifications/NotificationBadgeDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notifications/NotificationsDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notifications/NotificationsModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/notifications/NotificationsService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/pulldown/PulldownModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/pulldown/PulldownService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/refresh/RefreshModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/refresh/RefreshService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/search/SearchDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/search/SearchModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/search/SearchService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/statistics/StatisticsDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/statistics/StatisticsModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/statistics/StatisticsService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/story/StoryModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/story/StoryService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/storybox/BoxService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/storybox/StoryBoxDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/storybox/StoryBoxInfoDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/storybox/StoryBoxModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/AddSynchronizationLinkDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/RemoteSelectDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/RemoteService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/SyncModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/SynchronizationConfigurationDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/SynchronizationLinksDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/SynchronizationPrototypes.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/sync/SynchronizationService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/tableview/FilterOptionsDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/tableview/TableViewDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/tableview/TableViewModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/tableview/TableViewService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/test/TestModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/test/TestService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/timeline/TimelineDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/timeline/TimelineModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/timeline/TimelineService.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/updatenotification/UpdateNotificationDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/updatenotification/UpdateNotificationModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/utils/Globals.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/utils/LoadingDirective.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/utils/UtilsModule.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/src/common/utils/wktparser.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/templates-common.js"></script>
+    
+    
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}maploom/templates-app.js"></script>
+    
+    
+
+    
+    {% get_current_language as language %}
+    <script type="text/javascript">
+        config = {
+            authStatus: {% if user.is_authenticated %} 200{% else %} 401{% endif %},
+            username: {% if user.is_authenticated %} "{{ user.username }}" {% else %} undefined {% endif %},
+            currentLanguage: "{{language|default:'en'}}",
+            userprofilename: {% if user.is_authenticated %} "{{ user.get_full_name }}" {% else %} undefined {% endif %},
+            userprofileemail: {% if user.is_authenticated %} "{{ user.email }}" {% else %} undefined {% endif %},
+            proxy: "/proxy/?url=",
+            nominatimUrl: "http://nominatim.openstreetmap.org",
+            printService: "{{GEOSERVER_BASE_URL}}pdf/",
+            /* The URL to a REST map configuration service.  This service
+             * provides listing and, with an authenticated user, saving of
+             * maps on the server for sharing and editing.
+             */
+            rest: "{% url "maps_browse" %}",
+            ajaxLoginUrl: "{% url "account_ajax_login" %}",
+            homeUrl: "{% url "home" %}",
+            portalItems: [{
+                xtype: "container",
+                layout: "fit",
+                {% if classification_banner_enabled %}
+                    height: 99,
+                {% else %}
+                    height: 81,
+                {% endif %}
+                region: "north"
+            }],
+            localGeoServerBaseUrl: "{{ GEOSERVER_BASE_URL }}",
+            localCSWBaseUrl: "{{ CATALOGUE_BASE_URL }}",
+            csrfToken: "{{ csrf_token }}",
+            tools: [{ptype: "gxp_getfeedfeatureinfo"}],
+        };
 
+        goog.object.extend(config, {{ config|safe }});
+
+        console.log('############ config: ', config);
+    </script>
+    
 
-<script type="text/javascript">
-    config =  {
-		"defaultSourceType": "gxp_wmscsource", "about": {"owner": "", "abstract": "", "title": "Ames, Iowa"}, "map": {"layers": [{"opacity": 1.0, "args": ["No background"], "group": "background", "name": "No background", "title": "No background", "selected": false, "visibility": false, "source": "0", "fixed": true, "type": "OpenLayers.Layer"}, {"opacity": 1.0, "args": ["OpenStreetMap"], "group": "background", "name": "OpenStreetMap", "title": "OpenStreetMap", "selected": false, "visibility": true, "source": "0", "fixed": true, "type": "OpenLayers.Layer.OSM"}, {"opacity": 1.0, "args": ["Naked Earth", "http://maps.opengeo.org/geowebcache/service/wms", {"layers": ["Wayne"], "tiled": true, "tilesOrigin": [-20037508.34, -20037508.34], "format": "image/png"}, {"buffer": 0}], "group": "background", "name": "Naked Earth", "title": "Naked Earth", "selected": false, "visibility": false, "source": "0", "fixed": true, "type": "OpenLayers.Layer.WMS"}, {"opacity": 1.0, "group": "background", "name": "naip", "title": "Satellite Imagery", "selected": false, "visibility": false, "source": "1", "fixed": true}, {"opacity": 1.0, "styles": "geonode_New_Subdivisions", "name": "New_Subdivisions", "format": "image/png", "cached": true, "selected": false, "visibility": true, "capability": {"abstract": "asdf", "nestedLayers": [], "cascaded": 0, "fixedHeight": 0, "prefix": "New_Subdivisions", "keywords": ["asdf"], "noSubsets": false, "dimensions": {"time": {"nearestVal": false, "multipleVal": false, "name": "time", "default": "current", "current": false, "units": "ISO8601", "values": ["1865-01-18T00:00:00.000Z", "1866-06-22T00:00:00.000Z", "1867-06-21T00:00:00.000Z", "1867-11-16T00:00:00.000Z", "1868-01-11T00:00:00.000Z", "1868-04-29T00:00:00.000Z", "1868-12-26T00:00:00.000Z", "1869-01-02T00:00:00.000Z", "1869-09-23T00:00:00.000Z", "1869-11-24T00:00:00.000Z", "1872-06-26T00:00:00.000Z", "1872-09-27T00:00:00.000Z", "1873-01-18T00:00:00.000Z", "1876-07-08T00:00:00.000Z", "1879-01-28T00:00:00.000Z", "1880-09-08T00:00:00.000Z", "1887-10-15T00:00:00.000Z", "1889-12-31T00:00:00.000Z", "1891-03-11T00:00:00.000Z", "1891-12-28T00:00:00.000Z", "1892-01-02T00:00:00.000Z", "1892-04-16T00:00:00.000Z", "1892-05-21T00:00:00.000Z", "1892-08-13T00:00:00.000Z", "1892-09-26T00:00:00.000Z", "1893-06-28T00:00:00.000Z", "1893-07-10T00:00:00.000Z", "1893-08-04T00:00:00.000Z", "1897-11-27T00:00:00.000Z", "1900-05-29T00:00:00.000Z", "1900-11-10T00:00:00.000Z", "1901-02-18T00:00:00.000Z", "1901-03-06T00:00:00.000Z", "1901-04-02T00:00:00.000Z", "1901-04-09T00:00:00.000Z", "1901-06-22T00:00:00.000Z", "1902-01-25T00:00:00.000Z", "1902-02-17T00:00:00.000Z", "1902-05-27T00:00:00.000Z", "1902-07-26T00:00:00.000Z", "1903-08-31T00:00:00.000Z", "1904-02-12T00:00:00.000Z", "1904-03-02T00:00:00.000Z", "1904-04-04T00:00:00.000Z", "1904-05-09T00:00:00.000Z", "1904-07-12T00:00:00.000Z", "1905-04-08T00:00:00.000Z", "1905-04-15T00:00:00.000Z", "1905-07-20T00:00:00.000Z", "1905-11-23T00:00:00.000Z", "1905-12-09T00:00:00.000Z", "1906-03-26T00:00:00.000Z", "1906-07-03T00:00:00.000Z", "1906-07-16T00:00:00.000Z", "1906-10-16T00:00:00.000Z", "1907-06-13T00:00:00.000Z", "1907-08-07T00:00:00.000Z", "1907-09-30T00:00:00.000Z", "1908-02-13T00:00:00.000Z", "1908-05-13T00:00:00.000Z", "1908-07-22T00:00:00.000Z", "1908-08-25T00:00:00.000Z", "1909-06-05T00:00:00.000Z", "1909-06-14T00:00:00.000Z", "1909-06-22T00:00:00.000Z", "1909-08-18T00:00:00.000Z", "1909-09-11T00:00:00.000Z", "1909-11-20T00:00:00.000Z", "1910-04-27T00:00:00.000Z", "1910-06-13T00:00:00.000Z", "1911-03-30T00:00:00.000Z", "1911-08-18T00:00:00.000Z", "1912-03-12T00:00:00.000Z", "1912-04-03T00:00:00.000Z", "1912-10-21T00:00:00.000Z", "1912-12-26T00:00:00.000Z", "1912-12-27T00:00:00.000Z", "1913-05-31T00:00:00.000Z", "1913-08-09T00:00:00.000Z", "1913-09-10T00:00:00.000Z", "1913-09-15T00:00:00.000Z", "1913-12-06T00:00:00.000Z", "1914-12-12T00:00:00.000Z", "1915-10-06T00:00:00.000Z", "1916-01-21T00:00:00.000Z", "1916-02-23T00:00:00.000Z", "1916-04-04T00:00:00.000Z", "1916-05-29T00:00:00.000Z", "1916-09-23T00:00:00.000Z", "1916-09-26T00:00:00.000Z", "1916-11-02T00:00:00.000Z", "1916-12-28T00:00:00.000Z", "1916-12-30T00:00:00.000Z", "1917-04-10T00:00:00.000Z", "1917-04-28T00:00:00.000Z", "1917-08-14T00:00:00.000Z", "1917-08-23T00:00:00.000Z", "1918-05-16T00:00:00.000Z", "1919-02-18T00:00:00.000Z", "1920-03-12T00:00:00.000Z", "1920-04-08T00:00:00.000Z", "1920-11-23T00:00:00.000Z", "1922-04-22T00:00:00.000Z", "1922-05-04T00:00:00.000Z", "1922-10-19T00:00:00.000Z", "1922-12-22T00:00:00.000Z", "1923-04-23T00:00:00.000Z", "1923-05-18T00:00:00.000Z", "1923-05-22T00:00:00.000Z", "1923-06-09T00:00:00.000Z", "1924-02-04T00:00:00.000Z", "1924-03-26T00:00:00.000Z", "1924-12-10T00:00:00.000Z", "1925-02-20T00:00:00.000Z", "1925-10-24T00:00:00.000Z", "1925-10-30T00:00:00.000Z", "1927-03-08T00:00:00.000Z", "1927-12-05T00:00:00.000Z", "1928-09-05T00:00:00.000Z", "1928-09-18T00:00:00.000Z", "1928-12-26T00:00:00.000Z", "1931-07-27T00:00:00.000Z", "1936-12-21T00:00:00.000Z", "1937-08-26T00:00:00.000Z", "1938-10-21T00:00:00.000Z", "1939-06-21T00:00:00.000Z", "1940-05-27T00:00:00.000Z", "1940-07-03T00:00:00.000Z", "1940-08-20T00:00:00.000Z", "1940-09-09T00:00:00.000Z", "1940-09-28T00:00:00.000Z", "1941-04-25T00:00:00.000Z", "1941-06-17T00:00:00.000Z", "1941-08-19T00:00:00.000Z", "1942-07-24T00:00:00.000Z", "1942-10-10T00:00:00.000Z", "1944-09-14T00:00:00.000Z", "1945-01-27T00:00:00.000Z", "1946-05-07T00:00:00.000Z", "1946-07-02T00:00:00.000Z", "1946-08-20T00:00:00.000Z", "1946-11-08T00:00:00.000Z", "1946-12-28T00:00:00.000Z", "1947-01-08T00:00:00.000Z", "1947-05-07T00:00:00.000Z", "1947-05-08T00:00:00.000Z", "1947-05-27T00:00:00.000Z", "1947-08-20T00:00:00.000Z", "1947-10-30T00:00:00.000Z", "1947-11-21T00:00:00.000Z", "1947-11-24T00:00:00.000Z", "1947-12-03T00:00:00.000Z", "1947-12-04T00:00:00.000Z", "1948-04-24T00:00:00.000Z", "1948-05-26T00:00:00.000Z", "1948-07-12T00:00:00.000Z", "1948-07-13T00:00:00.000Z", "1948-07-24T00:00:00.000Z", "1948-08-19T00:00:00.000Z", "1949-04-13T00:00:00.000Z", "1949-04-29T00:00:00.000Z", "1949-11-16T00:00:00.000Z", "1949-12-06T00:00:00.000Z", "1949-12-22T00:00:00.000Z", "1950-04-10T00:00:00.000Z", "1950-05-17T00:00:00.000Z", "1950-06-27T00:00:00.000Z", "1950-07-20T00:00:00.000Z", "1950-07-28T00:00:00.000Z", "1950-09-14T00:00:00.000Z", "1950-09-27T00:00:00.000Z", "1950-10-05T00:00:00.000Z", "1950-12-18T00:00:00.000Z", "1951-08-14T00:00:00.000Z", "1951-08-29T00:00:00.000Z", "1951-11-14T00:00:00.000Z", "1951-11-26T00:00:00.000Z", "1952-06-05T00:00:00.000Z", "1952-06-11T00:00:00.000Z", "1952-10-10T00:00:00.000Z", "1953-02-06T00:00:00.000Z", "1953-03-19T00:00:00.000Z", "1953-03-27T00:00:00.000Z", "1953-05-13T00:00:00.000Z", "1953-05-29T00:00:00.000Z", "1953-07-30T00:00:00.000Z", "1953-09-01T00:00:00.000Z", "1953-10-23T00:00:00.000Z", "1953-10-27T00:00:00.000Z", "1953-12-10T00:00:00.000Z", "1954-02-10T00:00:00.000Z", "1954-02-23T00:00:00.000Z", "1954-02-26T00:00:00.000Z", "1954-05-06T00:00:00.000Z", "1954-07-16T00:00:00.000Z", "1954-07-30T00:00:00.000Z", "1955-03-15T00:00:00.000Z", "1955-04-22T00:00:00.000Z", "1955-05-19T00:00:00.000Z", "1955-06-09T00:00:00.000Z", "1955-06-13T00:00:00.000Z", "1955-08-05T00:00:00.000Z", "1955-08-22T00:00:00.000Z", "1955-10-14T00:00:00.000Z", "1955-11-01T00:00:00.000Z", "1955-11-17T00:00:00.000Z", "1955-12-12T00:00:00.000Z", "1955-12-14T00:00:00.000Z", "1956-01-24T00:00:00.000Z", "1956-03-16T00:00:00.000Z", "1956-03-23T00:00:00.000Z", "1956-04-03T00:00:00.000Z", "1956-04-27T00:00:00.000Z", "1956-05-03T00:00:00.000Z", "1956-06-20T00:00:00.000Z", "1956-10-17T00:00:00.000Z", "1956-10-18T00:00:00.000Z", "1956-11-20T00:00:00.000Z", "1956-12-21T00:00:00.000Z", "1957-06-14T00:00:00.000Z", "1957-06-17T00:00:00.000Z", "1957-06-21T00:00:00.000Z", "1957-07-05T00:00:00.000Z", "1957-09-06T00:00:00.000Z", "1957-11-13T00:00:00.000Z", "1957-11-18T00:00:00.000Z", "1957-11-29T00:00:00.000Z", "1957-12-03T00:00:00.000Z", "1957-12-11T00:00:00.000Z", "1957-12-13T00:00:00.000Z", "1957-12-31T00:00:00.000Z", "1958-04-23T00:00:00.000Z", "1958-04-25T00:00:00.000Z", "1958-05-13T00:00:00.000Z", "1958-06-06T00:00:00.000Z", "1958-07-24T00:00:00.000Z", "1958-08-14T00:00:00.000Z", "1958-12-12T00:00:00.000Z", "1958-12-29T00:00:00.000Z", "1959-03-20T00:00:00.000Z", "1959-04-23T00:00:00.000Z", "1959-05-08T00:00:00.000Z", "1959-10-03T00:00:00.000Z", "1959-10-16T00:00:00.000Z", "1959-12-18T00:00:00.000Z", "1960-03-31T00:00:00.000Z", "1960-04-27T00:00:00.000Z", "1960-06-07T00:00:00.000Z", "1960-07-27T00:00:00.000Z", "1960-08-02T00:00:00.000Z", "1960-12-09T00:00:00.000Z", "1961-02-21T00:00:00.000Z", "1961-04-18T00:00:00.000Z", "1961-04-28T00:00:00.000Z", "1961-09-01T00:00:00.000Z", "1961-10-10T00:00:00.000Z", "1961-10-19T00:00:00.000Z", "1961-12-15T00:00:00.000Z", "1962-01-24T00:00:00.000Z", "1962-02-20T00:00:00.000Z", "1962-05-02T00:00:00.000Z", "1962-05-22T00:00:00.000Z", "1962-06-15T00:00:00.000Z", "1962-06-26T00:00:00.000Z", "1962-06-27T00:00:00.000Z", "1962-08-15T00:00:00.000Z", "1962-09-27T00:00:00.000Z", "1962-11-21T00:00:00.000Z", "1962-12-31T00:00:00.000Z", "1963-03-28T00:00:00.000Z", "1963-04-30T00:00:00.000Z", "1963-05-03T00:00:00.000Z", "1963-06-10T00:00:00.000Z", "1963-09-20T00:00:00.000Z", "1963-12-20T00:00:00.000Z", "1963-12-31T00:00:00.000Z", "1964-01-31T00:00:00.000Z", "1964-06-05T00:00:00.000Z", "1964-07-24T00:00:00.000Z", "1964-08-14T00:00:00.000Z", "1964-10-08T00:00:00.000Z", "1964-10-09T00:00:00.000Z", "1965-01-27T00:00:00.000Z", "1965-02-25T00:00:00.000Z", "1965-02-26T00:00:00.000Z", "1965-04-09T00:00:00.000Z", "1965-04-30T00:00:00.000Z", "1965-05-14T00:00:00.000Z", "1965-05-21T00:00:00.000Z", "1965-07-14T00:00:00.000Z", "1965-07-29T00:00:00.000Z", "1965-08-03T00:00:00.000Z", "1965-08-05T00:00:00.000Z", "1965-08-25T00:00:00.000Z", "1965-10-08T00:00:00.000Z", "1965-11-10T00:00:00.000Z", "1965-11-24T00:00:00.000Z", "1965-12-31T00:00:00.000Z", "1966-03-28T00:00:00.000Z", "1966-04-07T00:00:00.000Z", "1966-05-04T00:00:00.000Z", "1966-05-10T00:00:00.000Z", "1966-05-18T00:00:00.000Z", "1966-06-24T00:00:00.000Z", "1966-09-02T00:00:00.000Z", "1966-09-27T00:00:00.000Z", "1966-10-07T00:00:00.000Z", "1966-10-13T00:00:00.000Z", "1966-12-09T00:00:00.000Z", "1966-12-12T00:00:00.000Z", "1967-01-05T00:00:00.000Z", "1967-02-01T00:00:00.000Z", "1967-04-26T00:00:00.000Z", "1967-09-25T00:00:00.000Z", "1967-09-27T00:00:00.000Z", "1967-10-23T00:00:00.000Z", "1967-11-20T00:00:00.000Z", "1968-01-18T00:00:00.000Z", "1968-02-14T00:00:00.000Z", "1968-03-13T00:00:00.000Z", "1968-03-19T00:00:00.000Z", "1968-03-29T00:00:00.000Z", "1968-06-26T00:00:00.000Z", "1968-07-03T00:00:00.000Z", "1968-07-18T00:00:00.000Z", "1968-07-24T00:00:00.000Z", "1968-12-11T00:00:00.000Z", "1968-12-27T00:00:00.000Z", "1968-12-31T00:00:00.000Z", "1969-02-21T00:00:00.000Z", "1969-02-26T00:00:00.000Z", "1969-03-07T00:00:00.000Z", "1969-04-30T00:00:00.000Z", "1969-06-05T00:00:00.000Z", "1969-06-17T00:00:00.000Z", "1969-07-18T00:00:00.000Z", "1969-07-21T00:00:00.000Z", "1969-07-28T00:00:00.000Z", "1969-08-11T00:00:00.000Z", "1969-08-28T00:00:00.000Z", "1969-09-24T00:00:00.000Z", "1969-10-02T00:00:00.000Z", "1969-11-04T00:00:00.000Z", "1969-12-15T00:00:00.000Z", "1969-12-18T00:00:00.000Z", "1970-01-28T00:00:00.000Z", "1970-02-09T00:00:00.000Z", "1970-04-01T00:00:00.000Z", "1970-06-02T00:00:00.000Z", "1970-06-29T00:00:00.000Z", "1970-10-02T00:00:00.000Z", "1970-10-13T00:00:00.000Z", "1971-01-11T00:00:00.000Z", "1971-06-01T00:00:00.000Z", "1971-06-29T00:00:00.000Z", "1971-08-31T00:00:00.000Z", "1971-12-13T00:00:00.000Z", "1972-01-26T00:00:00.000Z", "1972-04-24T00:00:00.000Z", "1972-05-03T00:00:00.000Z", "1972-07-21T00:00:00.000Z", "1972-08-04T00:00:00.000Z", "1972-08-23T00:00:00.000Z", "1972-09-22T00:00:00.000Z", "1972-10-27T00:00:00.000Z", "1973-03-30T00:00:00.000Z", "1973-06-19T00:00:00.000Z", "1973-07-11T00:00:00.000Z", "1973-07-18T00:00:00.000Z", "1973-10-17T00:00:00.000Z", "1974-03-12T00:00:00.000Z", "1974-03-19T00:00:00.000Z", "1974-04-11T00:00:00.000Z", "1974-06-06T00:00:00.000Z", "1974-10-08T00:00:00.000Z", "1974-11-27T00:00:00.000Z", "1975-02-04T00:00:00.000Z", "1975-07-29T00:00:00.000Z", "1975-09-11T00:00:00.000Z", "1975-10-23T00:00:00.000Z", "1975-11-19T00:00:00.000Z", "1975-12-01T00:00:00.000Z", "1975-12-09T00:00:00.000Z", "1975-12-31T00:00:00.000Z", "1976-02-20T00:00:00.000Z", "1976-03-09T00:00:00.000Z", "1976-04-05T00:00:00.000Z", "1976-05-26T00:00:00.000Z", "1976-07-08T00:00:00.000Z", "1976-07-09T00:00:00.000Z", "1976-07-26T00:00:00.000Z", "1976-07-27T00:00:00.000Z", "1976-08-13T00:00:00.000Z", "1976-10-29T00:00:00.000Z", "1976-11-12T00:00:00.000Z", "1976-12-30T00:00:00.000Z", "1977-01-27T00:00:00.000Z", "1977-02-23T00:00:00.000Z", "1977-04-11T00:00:00.000Z", "1977-04-27T00:00:00.000Z", "1977-05-17T00:00:00.000Z", "1977-06-17T00:00:00.000Z", "1977-07-12T00:00:00.000Z", "1977-08-03T00:00:00.000Z", "1977-09-16T00:00:00.000Z", "1977-09-19T00:00:00.000Z", "1977-10-18T00:00:00.000Z", "1977-10-24T00:00:00.000Z", "1977-10-26T00:00:00.000Z", "1977-11-21T00:00:00.000Z", "1977-12-14T00:00:00.000Z", "1977-12-22T00:00:00.000Z", "1978-01-06T00:00:00.000Z", "1978-01-31T00:00:00.000Z", "1978-02-27T00:00:00.000Z", "1978-03-16T00:00:00.000Z", "1978-04-25T00:00:00.000Z", "1978-05-02T00:00:00.000Z", "1978-05-05T00:00:00.000Z", "1978-07-28T00:00:00.000Z", "1978-08-09T00:00:00.000Z", "1978-08-23T00:00:00.000Z", "1978-09-25T00:00:00.000Z", "1978-11-15T00:00:00.000Z", "1978-11-28T00:00:00.000Z", "1978-12-29T00:00:00.000Z", "1979-01-09T00:00:00.000Z", "1979-01-19T00:00:00.000Z", "1979-02-07T00:00:00.000Z", "1979-05-02T00:00:00.000Z", "1980-02-06T00:00:00.000Z", "1980-02-12T00:00:00.000Z", "1980-02-27T00:00:00.000Z", "1980-03-14T00:00:00.000Z", "1980-06-09T00:00:00.000Z", "1980-06-10T00:00:00.000Z", "1980-06-24T00:00:00.000Z", "1980-06-27T00:00:00.000Z", "1980-09-17T00:00:00.000Z", "1980-11-12T00:00:00.000Z", "1980-12-10T00:00:00.000Z", "1980-12-23T00:00:00.000Z", "1980-12-29T00:00:00.000Z", "1981-03-31T00:00:00.000Z", "1981-06-16T00:00:00.000Z", "1983-01-24T00:00:00.000Z", "1983-06-28T00:00:00.000Z", "1983-12-27T00:00:00.000Z", "1984-04-13T00:00:00.000Z", "1984-05-08T00:00:00.000Z", "1984-08-28T00:00:00.000Z", "1984-11-26T00:00:00.000Z", "1985-05-14T00:00:00.000Z", "1985-08-14T00:00:00.000Z", "1985-10-31T00:00:00.000Z", "1986-01-06T00:00:00.000Z", "1986-07-10T00:00:00.000Z", "1986-08-01T00:00:00.000Z", "1986-08-11T00:00:00.000Z", "1986-08-28T00:00:00.000Z", "1986-12-19T00:00:00.000Z", "1987-05-26T00:00:00.000Z", "1987-05-28T00:00:00.000Z", "1987-06-02T00:00:00.000Z", "1987-06-16T00:00:00.000Z", "1987-08-24T00:00:00.000Z", "1987-12-18T00:00:00.000Z", "1988-01-14T00:00:00.000Z", "1988-05-13T00:00:00.000Z", "1988-06-02T00:00:00.000Z", "1988-07-13T00:00:00.000Z", "1988-08-26T00:00:00.000Z", "1988-10-06T00:00:00.000Z", "1988-10-13T00:00:00.000Z", "1988-10-14T00:00:00.000Z", "1988-12-09T00:00:00.000Z", "1989-03-16T00:00:00.000Z", "1989-03-31T00:00:00.000Z", "1989-04-05T00:00:00.000Z", "1989-04-17T00:00:00.000Z", "1989-10-11T00:00:00.000Z", "1990-04-11T00:00:00.000Z", "1990-06-20T00:00:00.000Z", "1990-07-18T00:00:00.000Z", "1990-12-11T00:00:00.000Z", "1991-01-04T00:00:00.000Z", "1991-01-25T00:00:00.000Z", "1991-03-22T00:00:00.000Z", "1991-05-17T00:00:00.000Z", "1991-06-06T00:00:00.000Z", "1991-07-01T00:00:00.000Z", "1991-07-26T00:00:00.000Z", "1991-09-27T00:00:00.000Z", "1991-11-07T00:00:00.000Z", "1992-01-15T00:00:00.000Z", "1992-02-04T00:00:00.000Z", "1992-05-01T00:00:00.000Z", "1992-05-13T00:00:00.000Z", "1992-05-27T00:00:00.000Z", "1992-06-10T00:00:00.000Z", "1992-09-10T00:00:00.000Z", "1992-10-06T00:00:00.000Z", "1992-10-19T00:00:00.000Z", "1992-10-21T00:00:00.000Z", "1992-11-18T00:00:00.000Z", "1992-12-28T00:00:00.000Z", "1993-01-14T00:00:00.000Z", "1993-02-17T00:00:00.000Z", "1993-03-19T00:00:00.000Z", "1993-06-18T00:00:00.000Z", "1993-07-19T00:00:00.000Z", "1993-10-29T00:00:00.000Z", "1993-11-01T00:00:00.000Z", "1993-11-18T00:00:00.000Z", "1993-12-14T00:00:00.000Z", "1993-12-30T00:00:00.000Z", "1994-01-28T00:00:00.000Z", "1994-06-06T00:00:00.000Z", "1994-06-30T00:00:00.000Z", "1994-07-19T00:00:00.000Z", "1994-09-20T00:00:00.000Z", "1994-09-23T00:00:00.000Z", "1994-10-03T00:00:00.000Z", "1994-10-06T00:00:00.000Z", "1994-10-26T00:00:00.000Z", "1994-11-08T00:00:00.000Z", "1994-12-16T00:00:00.000Z", "1995-08-25T00:00:00.000Z", "1995-10-23T00:00:00.000Z", "1996-01-30T00:00:00.000Z", "1996-02-23T00:00:00.000Z", "1996-03-28T00:00:00.000Z", "1996-03-29T00:00:00.000Z", "1996-05-31T00:00:00.000Z", "1996-06-18T00:00:00.000Z", "1996-07-18T00:00:00.000Z", "1996-09-30T00:00:00.000Z", "1996-10-07T00:00:00.000Z", "1996-10-17T00:00:00.000Z", "1996-12-13T00:00:00.000Z", "1997-01-29T00:00:00.000Z", "1997-03-10T00:00:00.000Z", "1997-03-19T00:00:00.000Z", "1997-04-16T00:00:00.000Z", "1997-04-24T00:00:00.000Z", "1997-04-30T00:00:00.000Z", "1997-06-17T00:00:00.000Z", "1997-06-27T00:00:00.000Z", "1997-09-12T00:00:00.000Z", "1997-10-02T00:00:00.000Z", "1997-10-16T00:00:00.000Z", "1997-10-17T00:00:00.000Z", "1997-11-12T00:00:00.000Z", "1997-11-17T00:00:00.000Z", "1997-12-17T00:00:00.000Z", "1998-01-06T00:00:00.000Z", "1998-01-12T00:00:00.000Z", "1998-04-30T00:00:00.000Z", "1998-06-02T00:00:00.000Z", "1998-06-26T00:00:00.000Z", "1998-09-02T00:00:00.000Z", "1998-10-22T00:00:00.000Z", "1998-11-17T00:00:00.000Z", "1998-12-31T00:00:00.000Z", "1999-01-18T00:00:00.000Z", "1999-02-02T00:00:00.000Z", "1999-03-26T00:00:00.000Z", "1999-05-10T00:00:00.000Z", "1999-05-18T00:00:00.000Z", "1999-08-04T00:00:00.000Z", "1999-08-25T00:00:00.000Z", "1999-09-03T00:00:00.000Z", "1999-09-07T00:00:00.000Z", "1999-09-27T00:00:00.000Z", "1999-10-05T00:00:00.000Z", "1999-10-14T00:00:00.000Z", "1999-10-18T00:00:00.000Z", "1999-10-21T00:00:00.000Z", "1999-10-28T00:00:00.000Z", "1999-10-29T00:00:00.000Z", "1999-11-01T00:00:00.000Z", "1999-11-16T00:00:00.000Z", "1999-11-18T00:00:00.000Z", "1999-11-29T00:00:00.000Z", "1999-12-10T00:00:00.000Z", "1999-12-16T00:00:00.000Z", "2000-01-13T00:00:00.000Z", "2000-01-20T00:00:00.000Z", "2000-01-28T00:00:00.000Z", "2000-02-01T00:00:00.000Z", "2000-02-22T00:00:00.000Z", "2000-03-07T00:00:00.000Z", "2000-03-13T00:00:00.000Z", "2000-03-29T00:00:00.000Z", "2000-04-20T00:00:00.000Z", "2000-04-26T00:00:00.000Z", "2000-05-02T00:00:00.000Z", "2000-06-02T00:00:00.000Z", "2000-06-21T00:00:00.000Z", "2000-07-05T00:00:00.000Z", "2000-07-20T00:00:00.000Z", "2000-08-14T00:00:00.000Z", "2000-08-24T00:00:00.000Z", "2000-08-31T00:00:00.000Z", "2000-09-14T00:00:00.000Z", "2000-10-12T00:00:00.000Z", "2000-10-25T00:00:00.000Z", "2001-01-01T00:00:00.000Z", "2001-01-16T00:00:00.000Z", "2001-04-24T00:00:00.000Z", "2001-05-03T00:00:00.000Z", "2001-05-24T00:00:00.000Z", "2001-05-25T00:00:00.000Z", "2001-07-26T00:00:00.000Z", "2001-09-19T00:00:00.000Z", "2001-10-03T00:00:00.000Z", "2001-10-30T00:00:00.000Z", "2001-11-16T00:00:00.000Z", "2001-11-28T00:00:00.000Z", "2001-12-03T00:00:00.000Z", "2002-01-15T00:00:00.000Z", "2002-02-14T00:00:00.000Z", "2002-02-28T00:00:00.000Z", "2002-04-12T00:00:00.000Z", "2002-05-21T00:00:00.000Z", "2002-06-14T00:00:00.000Z", "2002-07-17T00:00:00.000Z", "2002-07-25T00:00:00.000Z", "2002-08-19T00:00:00.000Z", "2002-08-29T00:00:00.000Z", "2002-09-19T00:00:00.000Z", "2002-10-24T00:00:00.000Z", "2002-11-15T00:00:00.000Z", "2003-01-22T00:00:00.000Z", "2003-03-07T00:00:00.000Z", "2003-03-12T00:00:00.000Z", "2003-05-15T00:00:00.000Z", "2003-05-30T00:00:00.000Z", "2003-06-30T00:00:00.000Z", "2003-10-17T00:00:00.000Z", "2003-10-24T00:00:00.000Z", "2003-10-30T00:00:00.000Z", "2003-11-07T00:00:00.000Z", "2003-11-10T00:00:00.000Z", "2003-11-20T00:00:00.000Z", "2003-11-21T00:00:00.000Z", "2003-11-26T00:00:00.000Z", "2004-02-26T00:00:00.000Z", "2004-04-07T00:00:00.000Z", "2004-04-15T00:00:00.000Z", "2004-04-29T00:00:00.000Z", "2004-05-14T00:00:00.000Z", "2004-06-04T00:00:00.000Z", "2004-06-16T00:00:00.000Z", "2004-06-24T00:00:00.000Z", "2004-07-08T00:00:00.000Z", "2004-07-28T00:00:00.000Z", "2004-08-16T00:00:00.000Z", "2004-08-26T00:00:00.000Z", "2004-10-01T00:00:00.000Z", "2004-10-15T00:00:00.000Z", "2004-10-18T00:00:00.000Z", "2004-10-25T00:00:00.000Z", "2004-11-08T00:00:00.000Z", "2004-11-15T00:00:00.000Z", "2004-12-09T00:00:00.000Z", "2005-03-09T00:00:00.000Z", "2005-06-20T00:00:00.000Z", "2005-08-12T00:00:00.000Z", "2005-09-01T00:00:00.000Z", "2005-10-06T00:00:00.000Z", "2005-11-15T00:00:00.000Z", "2005-12-15T00:00:00.000Z", "2006-01-24T00:00:00.000Z", "2006-06-15T00:00:00.000Z", "2006-06-28T00:00:00.000Z", "2006-06-30T00:00:00.000Z", "2006-08-16T00:00:00.000Z", "2006-09-15T00:00:00.000Z", "2006-10-05T00:00:00.000Z", "2006-10-11T00:00:00.000Z", "2006-10-26T00:00:00.000Z", "2007-04-20T00:00:00.000Z", "2007-07-02T00:00:00.000Z", "2007-07-18T00:00:00.000Z", "2007-09-13T00:00:00.000Z", "2007-10-03T00:00:00.000Z", "2008-04-07T00:00:00.000Z", "2008-04-25T00:00:00.000Z", "2008-05-19T00:00:00.000Z", "2008-07-07T00:00:00.000Z", "2008-07-11T00:00:00.000Z", "2008-08-14T00:00:00.000Z", "2008-09-30T00:00:00.000Z", "2008-10-30T00:00:00.000Z", "2008-11-13T00:00:00.000Z", "2009-03-25T00:00:00.000Z", "2009-03-31T00:00:00.000Z", "2009-04-16T00:00:00.000Z", "2009-05-05T00:00:00.000Z", "2009-07-16T00:00:00.000Z", "2009-07-17T00:00:00.000Z", "2009-08-20T00:00:00.000Z", "2009-08-28T00:00:00.000Z", "2009-10-27T00:00:00.000Z", "2009-11-30T00:00:00.000Z", "2010-04-01T00:00:00.000Z", "2010-09-09T00:00:00.000Z", "2010-09-20T00:00:00.000Z", "2010-10-28T00:00:00.000Z", "2010-11-15T00:00:00.000Z", "2011-02-08T00:00:00.000Z", "2011-03-23T00:00:00.000Z", "2011-05-24T00:00:00.000Z", "2011-08-01T00:00:00.000Z", "2012-02-03T00:00:00.000Z", "2012-07-19T00:00:00.000Z", "2012-08-17T00:00:00.000Z", "2012-09-05T00:00:00.000Z", "2012-11-28T00:00:00.000Z", "2012-12-27T00:00:00.000Z", "2012-12-31T00:00:00.000Z", "2013-02-14T00:00:00.000Z", "2013-07-02T00:00:00.000Z", "2013-07-12T00:00:00.000Z", "2014-01-01T00:00:00.000Z"], "unitsymbol": null}}, "opaque": false, "tileSets": [{"layers": "New_Subdivisions", "styles": "", "format": "image/png", "height": 256, "srs": {"EPSG:900913": true}, "bbox": {"EPSG:900913": {"srs": "EPSG:900913", "bbox": [-10644926.305625, 5009377.085000001, -10331840.2378125, 5322463.1528125]}}, "resolutions": [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 0.14929107084870338, 0.07464553542435169, 0.037322767712175846, 0.018661383856087923, 0.009330691928043961, 0.004665345964021981, 0.0023326729820109904, 0.0011663364910054952, 0.0005831682455027476, 0.0002915841227513738, 0.0001457920613756869], "width": 256}], "infoFormats": ["text/plain", "application/vnd.ogc.gml", "application/vnd.ogc.gml/3.1.1", "text/html", "application/json"], "styles": [{"abstract": "", "title": "A red polygon style", "legend": {"height": "20", "width": "20", "href": "http://mapstory.org:80/geoserver/geonode/New_Subdivisions/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=New_Subdivisions", "format": "image/png"}, "name": "geonode_New_Subdivisions"}], "attribution": {"title": "nitin"}, "authorityURLs": {}, "bbox": {"EPSG:3417": {"srs": "EPSG:3417", "bbox": [4867244.790000007, 3424641.4899999946, 4913353.579999998, 3501971.3900000006]}}, "fixedWidth": 0, "metadataURLs": [], "name": "New_Subdivisions", "identifiers": {}, "srs": {"EPSG:900913": true}, "formats": ["image/png", "application/atom xml", "application/atom+xml", "application/openlayers", "application/pdf", "application/rss xml", "application/rss+xml", "application/vnd.google-earth.kml", "application/vnd.google-earth.kml xml", "application/vnd.google-earth.kml+xml", "application/vnd.google-earth.kml+xml;mode=networklink", "application/vnd.google-earth.kmz", "application/vnd.google-earth.kmz xml", "application/vnd.google-earth.kmz+xml", "application/vnd.google-earth.kmz;mode=networklink", "atom", "image/geotiff", "image/geotiff8", "image/gif", "image/gif;subtype=animated", "image/jpeg", "image/png8", "image/png; mode=8bit", "image/svg", "image/svg xml", "image/svg+xml", "image/tiff", "image/tiff8", "kml", "kmz", "openlayers", "rss"], "title": "Ames Iowa Subdivisions, Date of Creation", "queryable": true, "llbbox": [-93.69901459352332, 41.89444139338228, -93.52900138942874, 42.10681273763499]}, "source": "2", "tiled": false, "title": "Ames Iowa Subdivisions, Date of Creation", "fixed": false, "transparent": true}, {"opacity": 1.0, "styles": "geonode_New_Parcels", "name": "New_Parcels", "format": "image/png", "cached": true, "selected": false, "visibility": true, "capability": {"abstract": "asdf", "nestedLayers": [], "cascaded": 0, "fixedHeight": 0, "prefix": "New_Parcels", "keywords": ["asdf"], "noSubsets": false, "dimensions": {"time": {"nearestVal": false, "multipleVal": false, "name": "time", "default": "current", "current": false, "units": "ISO8601", "values": ["1865-01-18T00:00:00.000Z", "1866-06-22T00:00:00.000Z", "1867-06-21T00:00:00.000Z", "1867-11-16T00:00:00.000Z", "1868-01-11T00:00:00.000Z", "1868-04-29T00:00:00.000Z", "1868-12-26T00:00:00.000Z", "1869-01-02T00:00:00.000Z", "1869-09-23T00:00:00.000Z", "1869-11-24T00:00:00.000Z", "1872-06-26T00:00:00.000Z", "1872-09-27T00:00:00.000Z", "1873-01-18T00:00:00.000Z", "1876-07-08T00:00:00.000Z", "1879-01-28T00:00:00.000Z", "1880-09-08T00:00:00.000Z", "1887-10-15T00:00:00.000Z", "1889-12-31T00:00:00.000Z", "1891-03-11T00:00:00.000Z", "1891-12-28T00:00:00.000Z", "1892-01-02T00:00:00.000Z", "1892-04-16T00:00:00.000Z", "1892-05-21T00:00:00.000Z", "1892-08-13T00:00:00.000Z", "1892-09-26T00:00:00.000Z", "1893-06-28T00:00:00.000Z", "1893-07-10T00:00:00.000Z", "1893-08-04T00:00:00.000Z", "1897-11-27T00:00:00.000Z", "1900-05-29T00:00:00.000Z", "1900-11-10T00:00:00.000Z", "1901-02-18T00:00:00.000Z", "1901-03-06T00:00:00.000Z", "1901-04-02T00:00:00.000Z", "1901-04-09T00:00:00.000Z", "1901-06-22T00:00:00.000Z", "1902-01-25T00:00:00.000Z", "1902-02-17T00:00:00.000Z", "1902-05-27T00:00:00.000Z", "1902-07-26T00:00:00.000Z", "1903-08-31T00:00:00.000Z", "1904-02-12T00:00:00.000Z", "1904-03-02T00:00:00.000Z", "1904-04-04T00:00:00.000Z", "1904-05-09T00:00:00.000Z", "1904-07-12T00:00:00.000Z", "1905-04-08T00:00:00.000Z", "1905-04-15T00:00:00.000Z", "1905-07-20T00:00:00.000Z", "1905-11-23T00:00:00.000Z", "1905-12-09T00:00:00.000Z", "1906-03-26T00:00:00.000Z", "1906-07-03T00:00:00.000Z", "1906-07-16T00:00:00.000Z", "1906-10-16T00:00:00.000Z", "1907-06-13T00:00:00.000Z", "1907-08-07T00:00:00.000Z", "1907-09-30T00:00:00.000Z", "1908-02-13T00:00:00.000Z", "1908-05-13T00:00:00.000Z", "1908-07-22T00:00:00.000Z", "1908-08-25T00:00:00.000Z", "1909-06-05T00:00:00.000Z", "1909-06-14T00:00:00.000Z", "1909-06-22T00:00:00.000Z", "1909-08-18T00:00:00.000Z", "1909-09-11T00:00:00.000Z", "1909-11-20T00:00:00.000Z", "1910-04-27T00:00:00.000Z", "1910-06-13T00:00:00.000Z", "1911-03-30T00:00:00.000Z", "1911-08-18T00:00:00.000Z", "1912-03-12T00:00:00.000Z", "1912-04-03T00:00:00.000Z", "1912-10-21T00:00:00.000Z", "1912-12-26T00:00:00.000Z", "1912-12-27T00:00:00.000Z", "1913-05-31T00:00:00.000Z", "1913-08-09T00:00:00.000Z", "1913-09-10T00:00:00.000Z", "1913-09-15T00:00:00.000Z", "1913-12-06T00:00:00.000Z", "1914-12-12T00:00:00.000Z", "1915-10-06T00:00:00.000Z", "1916-01-21T00:00:00.000Z", "1916-02-23T00:00:00.000Z", "1916-04-04T00:00:00.000Z", "1916-05-29T00:00:00.000Z", "1916-09-23T00:00:00.000Z", "1916-09-26T00:00:00.000Z", "1916-11-02T00:00:00.000Z", "1916-12-28T00:00:00.000Z", "1916-12-30T00:00:00.000Z", "1917-04-10T00:00:00.000Z", "1917-04-28T00:00:00.000Z", "1917-08-14T00:00:00.000Z", "1917-08-23T00:00:00.000Z", "1918-05-16T00:00:00.000Z", "1919-02-18T00:00:00.000Z", "1920-03-12T00:00:00.000Z", "1920-04-08T00:00:00.000Z", "1920-11-23T00:00:00.000Z", "1922-04-22T00:00:00.000Z", "1922-05-04T00:00:00.000Z", "1922-10-19T00:00:00.000Z", "1922-12-22T00:00:00.000Z", "1923-04-23T00:00:00.000Z", "1923-05-18T00:00:00.000Z", "1923-05-22T00:00:00.000Z", "1923-06-09T00:00:00.000Z", "1924-02-04T00:00:00.000Z", "1924-03-26T00:00:00.000Z", "1924-12-10T00:00:00.000Z", "1925-02-20T00:00:00.000Z", "1925-10-24T00:00:00.000Z", "1925-10-30T00:00:00.000Z", "1927-03-08T00:00:00.000Z", "1927-12-05T00:00:00.000Z", "1928-09-05T00:00:00.000Z", "1928-09-18T00:00:00.000Z", "1928-12-26T00:00:00.000Z", "1931-07-27T00:00:00.000Z", "1936-12-21T00:00:00.000Z", "1937-08-26T00:00:00.000Z", "1938-10-21T00:00:00.000Z", "1939-06-21T00:00:00.000Z", "1940-05-27T00:00:00.000Z", "1940-07-03T00:00:00.000Z", "1940-08-20T00:00:00.000Z", "1940-09-09T00:00:00.000Z", "1940-09-28T00:00:00.000Z", "1941-04-25T00:00:00.000Z", "1941-06-17T00:00:00.000Z", "1941-08-19T00:00:00.000Z", "1942-07-24T00:00:00.000Z", "1942-10-10T00:00:00.000Z", "1944-09-14T00:00:00.000Z", "1945-01-27T00:00:00.000Z", "1946-05-07T00:00:00.000Z", "1946-07-02T00:00:00.000Z", "1946-08-20T00:00:00.000Z", "1946-11-08T00:00:00.000Z", "1946-12-28T00:00:00.000Z", "1947-01-08T00:00:00.000Z", "1947-05-07T00:00:00.000Z", "1947-05-08T00:00:00.000Z", "1947-05-27T00:00:00.000Z", "1947-08-20T00:00:00.000Z", "1947-10-30T00:00:00.000Z", "1947-11-21T00:00:00.000Z", "1947-11-24T00:00:00.000Z", "1947-12-03T00:00:00.000Z", "1947-12-04T00:00:00.000Z", "1948-04-24T00:00:00.000Z", "1948-05-26T00:00:00.000Z", "1948-07-12T00:00:00.000Z", "1948-07-13T00:00:00.000Z", "1948-07-24T00:00:00.000Z", "1948-08-19T00:00:00.000Z", "1949-04-13T00:00:00.000Z", "1949-04-29T00:00:00.000Z", "1949-11-16T00:00:00.000Z", "1949-12-06T00:00:00.000Z", "1949-12-22T00:00:00.000Z", "1950-04-10T00:00:00.000Z", "1950-05-17T00:00:00.000Z", "1950-06-27T00:00:00.000Z", "1950-07-20T00:00:00.000Z", "1950-07-28T00:00:00.000Z", "1950-09-14T00:00:00.000Z", "1950-09-27T00:00:00.000Z", "1950-10-05T00:00:00.000Z", "1950-12-18T00:00:00.000Z", "1951-08-14T00:00:00.000Z", "1951-08-29T00:00:00.000Z", "1951-11-14T00:00:00.000Z", "1951-11-26T00:00:00.000Z", "1952-06-05T00:00:00.000Z", "1952-06-11T00:00:00.000Z", "1952-10-10T00:00:00.000Z", "1953-02-06T00:00:00.000Z", "1953-03-19T00:00:00.000Z", "1953-03-27T00:00:00.000Z", "1953-05-13T00:00:00.000Z", "1953-05-29T00:00:00.000Z", "1953-07-30T00:00:00.000Z", "1953-09-01T00:00:00.000Z", "1953-10-23T00:00:00.000Z", "1953-10-27T00:00:00.000Z", "1953-12-10T00:00:00.000Z", "1954-02-10T00:00:00.000Z", "1954-02-23T00:00:00.000Z", "1954-02-26T00:00:00.000Z", "1954-05-06T00:00:00.000Z", "1954-07-16T00:00:00.000Z", "1954-07-30T00:00:00.000Z", "1955-03-15T00:00:00.000Z", "1955-04-22T00:00:00.000Z", "1955-05-19T00:00:00.000Z", "1955-06-09T00:00:00.000Z", "1955-06-13T00:00:00.000Z", "1955-08-05T00:00:00.000Z", "1955-08-22T00:00:00.000Z", "1955-10-14T00:00:00.000Z", "1955-11-01T00:00:00.000Z", "1955-11-17T00:00:00.000Z", "1955-12-12T00:00:00.000Z", "1955-12-14T00:00:00.000Z", "1956-01-24T00:00:00.000Z", "1956-03-16T00:00:00.000Z", "1956-03-23T00:00:00.000Z", "1956-04-03T00:00:00.000Z", "1956-04-27T00:00:00.000Z", "1956-05-03T00:00:00.000Z", "1956-06-20T00:00:00.000Z", "1956-10-17T00:00:00.000Z", "1956-10-18T00:00:00.000Z", "1956-11-20T00:00:00.000Z", "1956-12-21T00:00:00.000Z", "1957-06-14T00:00:00.000Z", "1957-06-17T00:00:00.000Z", "1957-06-21T00:00:00.000Z", "1957-07-05T00:00:00.000Z", "1957-09-06T00:00:00.000Z", "1957-11-13T00:00:00.000Z", "1957-11-18T00:00:00.000Z", "1957-11-29T00:00:00.000Z", "1957-12-03T00:00:00.000Z", "1957-12-11T00:00:00.000Z", "1957-12-13T00:00:00.000Z", "1957-12-31T00:00:00.000Z", "1958-04-23T00:00:00.000Z", "1958-04-25T00:00:00.000Z", "1958-05-13T00:00:00.000Z", "1958-06-06T00:00:00.000Z", "1958-07-24T00:00:00.000Z", "1958-08-14T00:00:00.000Z", "1958-12-12T00:00:00.000Z", "1958-12-29T00:00:00.000Z", "1959-03-20T00:00:00.000Z", "1959-04-23T00:00:00.000Z", "1959-05-08T00:00:00.000Z", "1959-10-03T00:00:00.000Z", "1959-10-16T00:00:00.000Z", "1959-12-18T00:00:00.000Z", "1960-03-31T00:00:00.000Z", "1960-04-27T00:00:00.000Z", "1960-06-07T00:00:00.000Z", "1960-07-27T00:00:00.000Z", "1960-08-02T00:00:00.000Z", "1960-12-09T00:00:00.000Z", "1961-02-21T00:00:00.000Z", "1961-04-18T00:00:00.000Z", "1961-04-28T00:00:00.000Z", "1961-09-01T00:00:00.000Z", "1961-10-10T00:00:00.000Z", "1961-10-19T00:00:00.000Z", "1961-12-15T00:00:00.000Z", "1962-01-24T00:00:00.000Z", "1962-02-20T00:00:00.000Z", "1962-05-02T00:00:00.000Z", "1962-05-22T00:00:00.000Z", "1962-06-15T00:00:00.000Z", "1962-06-26T00:00:00.000Z", "1962-06-27T00:00:00.000Z", "1962-08-15T00:00:00.000Z", "1962-09-27T00:00:00.000Z", "1962-11-21T00:00:00.000Z", "1962-12-31T00:00:00.000Z", "1963-03-28T00:00:00.000Z", "1963-04-30T00:00:00.000Z", "1963-05-03T00:00:00.000Z", "1963-06-10T00:00:00.000Z", "1963-09-20T00:00:00.000Z", "1963-12-20T00:00:00.000Z", "1963-12-31T00:00:00.000Z", "1964-01-31T00:00:00.000Z", "1964-06-05T00:00:00.000Z", "1964-07-24T00:00:00.000Z", "1964-08-14T00:00:00.000Z", "1964-10-08T00:00:00.000Z", "1964-10-09T00:00:00.000Z", "1965-01-27T00:00:00.000Z", "1965-02-25T00:00:00.000Z", "1965-02-26T00:00:00.000Z", "1965-04-09T00:00:00.000Z", "1965-04-30T00:00:00.000Z", "1965-05-14T00:00:00.000Z", "1965-05-21T00:00:00.000Z", "1965-07-14T00:00:00.000Z", "1965-07-29T00:00:00.000Z", "1965-08-03T00:00:00.000Z", "1965-08-05T00:00:00.000Z", "1965-08-25T00:00:00.000Z", "1965-10-08T00:00:00.000Z", "1965-11-10T00:00:00.000Z", "1965-11-24T00:00:00.000Z", "1965-12-31T00:00:00.000Z", "1966-03-28T00:00:00.000Z", "1966-04-07T00:00:00.000Z", "1966-05-04T00:00:00.000Z", "1966-05-10T00:00:00.000Z", "1966-05-18T00:00:00.000Z", "1966-06-24T00:00:00.000Z", "1966-09-02T00:00:00.000Z", "1966-09-27T00:00:00.000Z", "1966-10-07T00:00:00.000Z", "1966-10-13T00:00:00.000Z", "1966-12-09T00:00:00.000Z", "1966-12-12T00:00:00.000Z", "1967-01-05T00:00:00.000Z", "1967-02-01T00:00:00.000Z", "1967-04-26T00:00:00.000Z", "1967-09-25T00:00:00.000Z", "1967-09-27T00:00:00.000Z", "1967-10-23T00:00:00.000Z", "1967-11-20T00:00:00.000Z", "1968-01-18T00:00:00.000Z", "1968-02-14T00:00:00.000Z", "1968-03-13T00:00:00.000Z", "1968-03-19T00:00:00.000Z", "1968-03-29T00:00:00.000Z", "1968-06-26T00:00:00.000Z", "1968-07-03T00:00:00.000Z", "1968-07-18T00:00:00.000Z", "1968-07-24T00:00:00.000Z", "1968-12-11T00:00:00.000Z", "1968-12-27T00:00:00.000Z", "1968-12-31T00:00:00.000Z", "1969-02-21T00:00:00.000Z", "1969-02-26T00:00:00.000Z", "1969-03-07T00:00:00.000Z", "1969-04-30T00:00:00.000Z", "1969-06-05T00:00:00.000Z", "1969-06-17T00:00:00.000Z", "1969-07-18T00:00:00.000Z", "1969-07-21T00:00:00.000Z", "1969-07-28T00:00:00.000Z", "1969-08-11T00:00:00.000Z", "1969-08-28T00:00:00.000Z", "1969-09-24T00:00:00.000Z", "1969-10-02T00:00:00.000Z", "1969-11-04T00:00:00.000Z", "1969-12-15T00:00:00.000Z", "1969-12-18T00:00:00.000Z", "1970-01-28T00:00:00.000Z", "1970-02-09T00:00:00.000Z", "1970-04-01T00:00:00.000Z", "1970-06-02T00:00:00.000Z", "1970-06-29T00:00:00.000Z", "1970-10-02T00:00:00.000Z", "1970-10-13T00:00:00.000Z", "1971-01-11T00:00:00.000Z", "1971-06-01T00:00:00.000Z", "1971-06-29T00:00:00.000Z", "1971-08-31T00:00:00.000Z", "1971-12-13T00:00:00.000Z", "1972-01-26T00:00:00.000Z", "1972-04-24T00:00:00.000Z", "1972-05-03T00:00:00.000Z", "1972-07-21T00:00:00.000Z", "1972-08-04T00:00:00.000Z", "1972-08-23T00:00:00.000Z", "1972-09-22T00:00:00.000Z", "1972-10-27T00:00:00.000Z", "1973-03-30T00:00:00.000Z", "1973-06-19T00:00:00.000Z", "1973-07-11T00:00:00.000Z", "1973-07-18T00:00:00.000Z", "1973-10-17T00:00:00.000Z", "1974-03-12T00:00:00.000Z", "1974-03-19T00:00:00.000Z", "1974-04-11T00:00:00.000Z", "1974-06-06T00:00:00.000Z", "1974-10-08T00:00:00.000Z", "1974-11-27T00:00:00.000Z", "1975-02-04T00:00:00.000Z", "1975-07-29T00:00:00.000Z", "1975-09-11T00:00:00.000Z", "1975-10-23T00:00:00.000Z", "1975-11-19T00:00:00.000Z", "1975-12-01T00:00:00.000Z", "1975-12-09T00:00:00.000Z", "1975-12-31T00:00:00.000Z", "1976-02-20T00:00:00.000Z", "1976-03-09T00:00:00.000Z", "1976-04-05T00:00:00.000Z", "1976-05-26T00:00:00.000Z", "1976-07-08T00:00:00.000Z", "1976-07-09T00:00:00.000Z", "1976-07-26T00:00:00.000Z", "1976-07-27T00:00:00.000Z", "1976-08-13T00:00:00.000Z", "1976-10-29T00:00:00.000Z", "1976-11-12T00:00:00.000Z", "1976-12-30T00:00:00.000Z", "1977-01-27T00:00:00.000Z", "1977-02-23T00:00:00.000Z", "1977-04-11T00:00:00.000Z", "1977-04-27T00:00:00.000Z", "1977-05-17T00:00:00.000Z", "1977-06-17T00:00:00.000Z", "1977-07-12T00:00:00.000Z", "1977-08-03T00:00:00.000Z", "1977-09-16T00:00:00.000Z", "1977-09-19T00:00:00.000Z", "1977-10-18T00:00:00.000Z", "1977-10-24T00:00:00.000Z", "1977-10-26T00:00:00.000Z", "1977-11-21T00:00:00.000Z", "1977-12-14T00:00:00.000Z", "1977-12-22T00:00:00.000Z", "1978-01-06T00:00:00.000Z", "1978-01-31T00:00:00.000Z", "1978-02-27T00:00:00.000Z", "1978-03-16T00:00:00.000Z", "1978-04-25T00:00:00.000Z", "1978-05-02T00:00:00.000Z", "1978-05-05T00:00:00.000Z", "1978-07-28T00:00:00.000Z", "1978-08-09T00:00:00.000Z", "1978-08-23T00:00:00.000Z", "1978-09-25T00:00:00.000Z", "1978-11-15T00:00:00.000Z", "1978-11-28T00:00:00.000Z", "1978-12-29T00:00:00.000Z", "1979-01-09T00:00:00.000Z", "1979-01-19T00:00:00.000Z", "1979-02-07T00:00:00.000Z", "1979-05-02T00:00:00.000Z", "1980-02-06T00:00:00.000Z", "1980-02-12T00:00:00.000Z", "1980-02-27T00:00:00.000Z", "1980-03-14T00:00:00.000Z", "1980-06-09T00:00:00.000Z", "1980-06-10T00:00:00.000Z", "1980-06-24T00:00:00.000Z", "1980-06-27T00:00:00.000Z", "1980-09-17T00:00:00.000Z", "1980-11-12T00:00:00.000Z", "1980-12-10T00:00:00.000Z", "1980-12-23T00:00:00.000Z", "1980-12-29T00:00:00.000Z", "1981-03-31T00:00:00.000Z", "1981-06-16T00:00:00.000Z", "1983-01-24T00:00:00.000Z", "1983-06-28T00:00:00.000Z", "1983-12-27T00:00:00.000Z", "1984-04-13T00:00:00.000Z", "1984-05-08T00:00:00.000Z", "1984-08-28T00:00:00.000Z", "1984-11-26T00:00:00.000Z", "1985-05-14T00:00:00.000Z", "1985-08-14T00:00:00.000Z", "1985-10-31T00:00:00.000Z", "1986-01-06T00:00:00.000Z", "1986-07-10T00:00:00.000Z", "1986-08-01T00:00:00.000Z", "1986-08-11T00:00:00.000Z", "1986-08-28T00:00:00.000Z", "1986-12-19T00:00:00.000Z", "1987-05-26T00:00:00.000Z", "1987-05-28T00:00:00.000Z", "1987-06-02T00:00:00.000Z", "1987-06-16T00:00:00.000Z", "1987-08-24T00:00:00.000Z", "1987-12-18T00:00:00.000Z", "1988-01-14T00:00:00.000Z", "1988-05-13T00:00:00.000Z", "1988-06-02T00:00:00.000Z", "1988-07-13T00:00:00.000Z", "1988-08-26T00:00:00.000Z", "1988-10-06T00:00:00.000Z", "1988-10-13T00:00:00.000Z", "1988-10-14T00:00:00.000Z", "1988-12-09T00:00:00.000Z", "1989-03-16T00:00:00.000Z", "1989-03-31T00:00:00.000Z", "1989-04-05T00:00:00.000Z", "1989-04-17T00:00:00.000Z", "1989-10-11T00:00:00.000Z", "1990-04-11T00:00:00.000Z", "1990-06-20T00:00:00.000Z", "1990-07-18T00:00:00.000Z", "1990-12-11T00:00:00.000Z", "1991-01-04T00:00:00.000Z", "1991-01-25T00:00:00.000Z", "1991-03-22T00:00:00.000Z", "1991-05-17T00:00:00.000Z", "1991-06-06T00:00:00.000Z", "1991-07-01T00:00:00.000Z", "1991-07-26T00:00:00.000Z", "1991-09-27T00:00:00.000Z", "1991-11-07T00:00:00.000Z", "1992-01-15T00:00:00.000Z", "1992-02-04T00:00:00.000Z", "1992-05-01T00:00:00.000Z", "1992-05-13T00:00:00.000Z", "1992-05-27T00:00:00.000Z", "1992-06-10T00:00:00.000Z", "1992-09-10T00:00:00.000Z", "1992-10-06T00:00:00.000Z", "1992-10-19T00:00:00.000Z", "1992-10-21T00:00:00.000Z", "1992-11-18T00:00:00.000Z", "1992-12-28T00:00:00.000Z", "1993-01-14T00:00:00.000Z", "1993-02-17T00:00:00.000Z", "1993-03-19T00:00:00.000Z", "1993-06-18T00:00:00.000Z", "1993-07-19T00:00:00.000Z", "1993-10-29T00:00:00.000Z", "1993-11-01T00:00:00.000Z", "1993-11-18T00:00:00.000Z", "1993-12-14T00:00:00.000Z", "1993-12-30T00:00:00.000Z", "1994-01-28T00:00:00.000Z", "1994-06-06T00:00:00.000Z", "1994-06-30T00:00:00.000Z", "1994-07-19T00:00:00.000Z", "1994-09-20T00:00:00.000Z", "1994-09-23T00:00:00.000Z", "1994-10-03T00:00:00.000Z", "1994-10-06T00:00:00.000Z", "1994-10-26T00:00:00.000Z", "1994-11-08T00:00:00.000Z", "1994-12-16T00:00:00.000Z", "1995-08-25T00:00:00.000Z", "1995-10-23T00:00:00.000Z", "1996-01-30T00:00:00.000Z", "1996-02-23T00:00:00.000Z", "1996-03-28T00:00:00.000Z", "1996-03-29T00:00:00.000Z", "1996-05-31T00:00:00.000Z", "1996-06-18T00:00:00.000Z", "1996-07-18T00:00:00.000Z", "1996-09-30T00:00:00.000Z", "1996-10-07T00:00:00.000Z", "1996-10-17T00:00:00.000Z", "1996-12-13T00:00:00.000Z", "1997-01-29T00:00:00.000Z", "1997-03-10T00:00:00.000Z", "1997-03-19T00:00:00.000Z", "1997-04-16T00:00:00.000Z", "1997-04-24T00:00:00.000Z", "1997-04-30T00:00:00.000Z", "1997-06-17T00:00:00.000Z", "1997-06-27T00:00:00.000Z", "1997-09-12T00:00:00.000Z", "1997-10-02T00:00:00.000Z", "1997-10-16T00:00:00.000Z", "1997-10-17T00:00:00.000Z", "1997-11-12T00:00:00.000Z", "1997-11-17T00:00:00.000Z", "1997-12-17T00:00:00.000Z", "1998-01-06T00:00:00.000Z", "1998-01-12T00:00:00.000Z", "1998-04-30T00:00:00.000Z", "1998-06-02T00:00:00.000Z", "1998-06-26T00:00:00.000Z", "1998-09-02T00:00:00.000Z", "1998-10-22T00:00:00.000Z", "1998-11-17T00:00:00.000Z", "1998-12-31T00:00:00.000Z", "1999-01-18T00:00:00.000Z", "1999-02-02T00:00:00.000Z", "1999-03-26T00:00:00.000Z", "1999-05-10T00:00:00.000Z", "1999-05-18T00:00:00.000Z", "1999-08-04T00:00:00.000Z", "1999-08-25T00:00:00.000Z", "1999-09-03T00:00:00.000Z", "1999-09-07T00:00:00.000Z", "1999-09-27T00:00:00.000Z", "1999-10-05T00:00:00.000Z", "1999-10-14T00:00:00.000Z", "1999-10-18T00:00:00.000Z", "1999-10-21T00:00:00.000Z", "1999-10-28T00:00:00.000Z", "1999-10-29T00:00:00.000Z", "1999-11-01T00:00:00.000Z", "1999-11-16T00:00:00.000Z", "1999-11-18T00:00:00.000Z", "1999-11-29T00:00:00.000Z", "1999-12-10T00:00:00.000Z", "1999-12-16T00:00:00.000Z", "2000-01-13T00:00:00.000Z", "2000-01-20T00:00:00.000Z", "2000-01-28T00:00:00.000Z", "2000-02-01T00:00:00.000Z", "2000-02-22T00:00:00.000Z", "2000-03-07T00:00:00.000Z", "2000-03-13T00:00:00.000Z", "2000-03-29T00:00:00.000Z", "2000-04-20T00:00:00.000Z", "2000-04-26T00:00:00.000Z", "2000-05-02T00:00:00.000Z", "2000-06-02T00:00:00.000Z", "2000-06-21T00:00:00.000Z", "2000-07-05T00:00:00.000Z", "2000-07-20T00:00:00.000Z", "2000-08-14T00:00:00.000Z", "2000-08-24T00:00:00.000Z", "2000-08-31T00:00:00.000Z", "2000-09-14T00:00:00.000Z", "2000-10-12T00:00:00.000Z", "2000-10-25T00:00:00.000Z", "2001-01-16T00:00:00.000Z", "2001-04-24T00:00:00.000Z", "2001-05-03T00:00:00.000Z", "2001-05-24T00:00:00.000Z", "2001-05-25T00:00:00.000Z", "2001-07-26T00:00:00.000Z", "2001-09-19T00:00:00.000Z", "2001-10-03T00:00:00.000Z", "2001-10-30T00:00:00.000Z", "2001-11-16T00:00:00.000Z", "2001-11-28T00:00:00.000Z", "2001-12-03T00:00:00.000Z", "2002-01-15T00:00:00.000Z", "2002-02-14T00:00:00.000Z", "2002-02-28T00:00:00.000Z", "2002-04-12T00:00:00.000Z", "2002-05-21T00:00:00.000Z", "2002-06-14T00:00:00.000Z", "2002-07-17T00:00:00.000Z", "2002-07-25T00:00:00.000Z", "2002-08-19T00:00:00.000Z", "2002-08-29T00:00:00.000Z", "2002-09-19T00:00:00.000Z", "2002-10-24T00:00:00.000Z", "2002-11-15T00:00:00.000Z", "2003-01-22T00:00:00.000Z", "2003-03-07T00:00:00.000Z", "2003-03-12T00:00:00.000Z", "2003-05-15T00:00:00.000Z", "2003-05-30T00:00:00.000Z", "2003-06-30T00:00:00.000Z", "2003-10-17T00:00:00.000Z", "2003-10-24T00:00:00.000Z", "2003-10-30T00:00:00.000Z", "2003-11-07T00:00:00.000Z", "2003-11-10T00:00:00.000Z", "2003-11-20T00:00:00.000Z", "2003-11-21T00:00:00.000Z", "2003-11-26T00:00:00.000Z", "2004-02-26T00:00:00.000Z", "2004-04-07T00:00:00.000Z", "2004-04-15T00:00:00.000Z", "2004-04-29T00:00:00.000Z", "2004-05-14T00:00:00.000Z", "2004-06-04T00:00:00.000Z", "2004-06-16T00:00:00.000Z", "2004-06-24T00:00:00.000Z", "2004-07-08T00:00:00.000Z", "2004-07-28T00:00:00.000Z", "2004-08-16T00:00:00.000Z", "2004-08-26T00:00:00.000Z", "2004-10-01T00:00:00.000Z", "2004-10-15T00:00:00.000Z", "2004-10-18T00:00:00.000Z", "2004-10-25T00:00:00.000Z", "2004-11-08T00:00:00.000Z", "2004-11-15T00:00:00.000Z", "2004-12-09T00:00:00.000Z", "2005-03-09T00:00:00.000Z", "2005-06-20T00:00:00.000Z", "2005-08-12T00:00:00.000Z", "2005-09-01T00:00:00.000Z", "2005-10-06T00:00:00.000Z", "2005-11-15T00:00:00.000Z", "2005-12-15T00:00:00.000Z", "2006-01-24T00:00:00.000Z", "2006-06-15T00:00:00.000Z", "2006-06-28T00:00:00.000Z", "2006-06-30T00:00:00.000Z", "2006-08-16T00:00:00.000Z", "2006-09-15T00:00:00.000Z", "2006-10-05T00:00:00.000Z", "2006-10-11T00:00:00.000Z", "2006-10-26T00:00:00.000Z", "2007-04-20T00:00:00.000Z", "2007-07-02T00:00:00.000Z", "2007-07-18T00:00:00.000Z", "2007-09-13T00:00:00.000Z", "2007-10-03T00:00:00.000Z", "2008-04-07T00:00:00.000Z", "2008-04-25T00:00:00.000Z", "2008-05-19T00:00:00.000Z", "2008-07-07T00:00:00.000Z", "2008-07-11T00:00:00.000Z", "2008-08-14T00:00:00.000Z", "2008-09-30T00:00:00.000Z", "2008-10-30T00:00:00.000Z", "2008-11-13T00:00:00.000Z", "2009-03-25T00:00:00.000Z", "2009-03-31T00:00:00.000Z", "2009-04-16T00:00:00.000Z", "2009-05-05T00:00:00.000Z", "2009-07-16T00:00:00.000Z", "2009-07-17T00:00:00.000Z", "2009-08-20T00:00:00.000Z", "2009-08-28T00:00:00.000Z", "2009-10-27T00:00:00.000Z", "2009-11-30T00:00:00.000Z", "2010-04-01T00:00:00.000Z", "2010-09-09T00:00:00.000Z", "2010-09-20T00:00:00.000Z", "2010-10-28T00:00:00.000Z", "2010-11-15T00:00:00.000Z", "2011-02-08T00:00:00.000Z", "2011-03-23T00:00:00.000Z", "2011-05-24T00:00:00.000Z", "2011-08-01T00:00:00.000Z", "2012-02-03T00:00:00.000Z", "2012-07-19T00:00:00.000Z", "2012-08-17T00:00:00.000Z", "2012-09-05T00:00:00.000Z", "2012-11-28T00:00:00.000Z", "2012-12-27T00:00:00.000Z", "2012-12-31T00:00:00.000Z", "2013-02-14T00:00:00.000Z", "2013-07-02T00:00:00.000Z", "2013-07-12T00:00:00.000Z"], "unitsymbol": null}}, "opaque": false, "tileSets": [{"layers": "New_Parcels", "styles": "", "format": "image/png", "height": 256, "srs": {"EPSG:900913": true}, "bbox": {"EPSG:900913": {"srs": "EPSG:900913", "bbox": [-10644926.305625, 5009377.085000001, -10331840.2378125, 5322463.1528125]}}, "resolutions": [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 0.14929107084870338, 0.07464553542435169, 0.037322767712175846, 0.018661383856087923, 0.009330691928043961, 0.004665345964021981, 0.0023326729820109904, 0.0011663364910054952, 0.0005831682455027476, 0.0002915841227513738, 0.0001457920613756869], "width": 256}], "infoFormats": ["text/plain", "application/vnd.ogc.gml", "application/vnd.ogc.gml/3.1.1", "text/html", "application/json"], "styles": [{"abstract": "", "title": "A dark orange polygon style", "legend": {"height": "20", "width": "20", "href": "http://mapstory.org:80/geoserver/geonode/New_Parcels/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=New_Parcels", "format": "image/png"}, "name": "geonode_New_Parcels"}], "attribution": {"title": "nitin"}, "authorityURLs": {}, "bbox": {"EPSG:3417": {"srs": "EPSG:3417", "bbox": [4867253.109999999, 3457967.25, 4902161.870000005, 3491473.519999996]}}, "fixedWidth": 0, "metadataURLs": [], "name": "New_Parcels", "identifiers": {}, "srs": {"EPSG:900913": true}, "formats": ["image/png", "application/atom xml", "application/atom+xml", "application/openlayers", "application/pdf", "application/rss xml", "application/rss+xml", "application/vnd.google-earth.kml", "application/vnd.google-earth.kml xml", "application/vnd.google-earth.kml+xml", "application/vnd.google-earth.kml+xml;mode=networklink", "application/vnd.google-earth.kmz", "application/vnd.google-earth.kmz xml", "application/vnd.google-earth.kmz+xml", "application/vnd.google-earth.kmz;mode=networklink", "atom", "image/geotiff", "image/geotiff8", "image/gif", "image/gif;subtype=animated", "image/jpeg", "image/png8", "image/png; mode=8bit", "image/svg", "image/svg xml", "image/svg+xml", "image/tiff", "image/tiff8", "kml", "kmz", "openlayers", "rss"], "title": "Ames Iowa Parcels, Date of Creation", "queryable": true, "llbbox": [-93.69889291872838, 41.98589036388097, -93.57020711041781, 42.07798739712909]}, "source": "3", "tiled": false, "title": "Ames Iowa Parcels, Date of Creation", "fixed": false, "transparent": true}, {"opacity": 1.0, "styles": "geonode_Merged_Lot_Lines_corrected", "name": "Merged_Lot_Lines_corrected", "format": "image/png", "cached": true, "selected": false, "visibility": true, "capability": {"abstract": "asdf", "nestedLayers": [], "cascaded": 0, "fixedHeight": 0, "prefix": "Merged_Lot_Lines_corrected", "keywords": ["asdf"], "noSubsets": false, "dimensions": {"time": {"nearestVal": false, "multipleVal": false, "name": "time", "default": "current", "current": false, "units": "ISO8601", "values": ["1865-01-18T00:00:00.000Z", "1866-06-22T00:00:00.000Z", "1867-06-21T00:00:00.000Z", "1867-11-16T00:00:00.000Z", "1868-01-11T00:00:00.000Z", "1868-04-29T00:00:00.000Z", "1868-12-26T00:00:00.000Z", "1869-01-02T00:00:00.000Z", "1869-09-23T00:00:00.000Z", "1869-11-24T00:00:00.000Z", "1872-06-26T00:00:00.000Z", "1872-09-27T00:00:00.000Z", "1873-01-18T00:00:00.000Z", "1876-07-08T00:00:00.000Z", "1879-01-28T00:00:00.000Z", "1880-09-08T00:00:00.000Z", "1887-10-15T00:00:00.000Z", "1889-12-31T00:00:00.000Z", "1891-03-11T00:00:00.000Z", "1891-12-28T00:00:00.000Z", "1892-01-02T00:00:00.000Z", "1892-04-16T00:00:00.000Z", "1892-05-21T00:00:00.000Z", "1892-08-13T00:00:00.000Z", "1892-09-26T00:00:00.000Z", "1893-06-28T00:00:00.000Z", "1893-07-10T00:00:00.000Z", "1893-08-04T00:00:00.000Z", "1897-11-27T00:00:00.000Z", "1900-05-29T00:00:00.000Z", "1900-11-10T00:00:00.000Z", "1901-02-18T00:00:00.000Z", "1901-03-06T00:00:00.000Z", "1901-04-02T00:00:00.000Z", "1901-04-09T00:00:00.000Z", "1901-06-22T00:00:00.000Z", "1902-01-25T00:00:00.000Z", "1902-02-17T00:00:00.000Z", "1902-05-27T00:00:00.000Z", "1902-07-26T00:00:00.000Z", "1903-08-31T00:00:00.000Z", "1904-02-12T00:00:00.000Z", "1904-03-02T00:00:00.000Z", "1904-04-04T00:00:00.000Z", "1904-05-09T00:00:00.000Z", "1904-07-12T00:00:00.000Z", "1905-04-08T00:00:00.000Z", "1905-04-15T00:00:00.000Z", "1905-11-23T00:00:00.000Z", "1905-12-09T00:00:00.000Z", "1906-03-26T00:00:00.000Z", "1906-07-03T00:00:00.000Z", "1906-07-16T00:00:00.000Z", "1906-10-16T00:00:00.000Z", "1907-06-13T00:00:00.000Z", "1907-08-07T00:00:00.000Z", "1907-09-30T00:00:00.000Z", "1908-02-13T00:00:00.000Z", "1908-07-22T00:00:00.000Z", "1908-08-25T00:00:00.000Z", "1909-06-05T00:00:00.000Z", "1909-06-14T00:00:00.000Z", "1909-06-22T00:00:00.000Z", "1909-08-18T00:00:00.000Z", "1909-09-11T00:00:00.000Z", "1909-11-20T00:00:00.000Z", "1910-04-27T00:00:00.000Z", "1910-06-13T00:00:00.000Z", "1911-08-18T00:00:00.000Z", "1912-03-12T00:00:00.000Z", "1912-04-03T00:00:00.000Z", "1912-10-21T00:00:00.000Z", "1912-12-26T00:00:00.000Z", "1912-12-27T00:00:00.000Z", "1913-05-31T00:00:00.000Z", "1913-08-09T00:00:00.000Z", "1913-09-10T00:00:00.000Z", "1913-09-15T00:00:00.000Z", "1913-12-06T00:00:00.000Z", "1914-12-12T00:00:00.000Z", "1915-10-06T00:00:00.000Z", "1916-01-21T00:00:00.000Z", "1916-02-23T00:00:00.000Z", "1916-04-04T00:00:00.000Z", "1916-05-29T00:00:00.000Z", "1916-09-23T00:00:00.000Z", "1916-09-26T00:00:00.000Z", "1916-11-02T00:00:00.000Z", "1916-12-28T00:00:00.000Z", "1916-12-30T00:00:00.000Z", "1917-04-10T00:00:00.000Z", "1917-04-28T00:00:00.000Z", "1917-08-14T00:00:00.000Z", "1918-05-16T00:00:00.000Z", "1919-02-18T00:00:00.000Z", "1920-03-12T00:00:00.000Z", "1920-11-23T00:00:00.000Z", "1922-04-22T00:00:00.000Z", "1922-05-04T00:00:00.000Z", "1922-10-19T00:00:00.000Z", "1922-12-22T00:00:00.000Z", "1923-04-23T00:00:00.000Z", "1923-05-18T00:00:00.000Z", "1923-05-22T00:00:00.000Z", "1923-06-09T00:00:00.000Z", "1924-02-04T00:00:00.000Z", "1924-03-26T00:00:00.000Z", "1924-12-10T00:00:00.000Z", "1925-10-24T00:00:00.000Z", "1925-10-30T00:00:00.000Z", "1927-03-08T00:00:00.000Z", "1928-09-05T00:00:00.000Z", "1928-09-18T00:00:00.000Z", "1928-12-26T00:00:00.000Z", "1931-07-27T00:00:00.000Z", "1936-12-21T00:00:00.000Z", "1937-08-26T00:00:00.000Z", "1938-10-21T00:00:00.000Z", "1939-06-21T00:00:00.000Z", "1940-05-27T00:00:00.000Z", "1940-07-03T00:00:00.000Z", "1940-08-20T00:00:00.000Z", "1940-09-09T00:00:00.000Z", "1940-09-28T00:00:00.000Z", "1941-04-25T00:00:00.000Z", "1941-08-19T00:00:00.000Z", "1942-07-24T00:00:00.000Z", "1942-10-10T00:00:00.000Z", "1944-09-14T00:00:00.000Z", "1945-01-27T00:00:00.000Z", "1946-05-07T00:00:00.000Z", "1946-08-20T00:00:00.000Z", "1946-11-08T00:00:00.000Z", "1947-01-08T00:00:00.000Z", "1947-05-07T00:00:00.000Z", "1947-05-08T00:00:00.000Z", "1947-05-27T00:00:00.000Z", "1947-08-20T00:00:00.000Z", "1947-10-30T00:00:00.000Z", "1947-11-21T00:00:00.000Z", "1947-11-24T00:00:00.000Z", "1947-12-03T00:00:00.000Z", "1947-12-04T00:00:00.000Z", "1948-04-24T00:00:00.000Z", "1948-05-26T00:00:00.000Z", "1948-07-12T00:00:00.000Z", "1948-07-13T00:00:00.000Z", "1948-07-24T00:00:00.000Z", "1949-04-13T00:00:00.000Z", "1949-04-29T00:00:00.000Z", "1949-11-16T00:00:00.000Z", "1949-12-06T00:00:00.000Z", "1949-12-22T00:00:00.000Z", "1950-05-17T00:00:00.000Z", "1950-06-27T00:00:00.000Z", "1950-07-20T00:00:00.000Z", "1950-07-28T00:00:00.000Z", "1950-09-14T00:00:00.000Z", "1950-09-27T00:00:00.000Z", "1950-10-05T00:00:00.000Z", "1950-12-18T00:00:00.000Z", "1951-08-14T00:00:00.000Z", "1951-08-29T00:00:00.000Z", "1951-11-14T00:00:00.000Z", "1951-11-26T00:00:00.000Z", "1952-06-05T00:00:00.000Z", "1952-06-11T00:00:00.000Z", "1952-10-10T00:00:00.000Z", "1953-02-06T00:00:00.000Z", "1953-03-27T00:00:00.000Z", "1953-05-13T00:00:00.000Z", "1953-05-29T00:00:00.000Z", "1953-07-30T00:00:00.000Z", "1953-09-01T00:00:00.000Z", "1953-10-23T00:00:00.000Z", "1953-10-27T00:00:00.000Z", "1954-02-10T00:00:00.000Z", "1954-02-23T00:00:00.000Z", "1954-02-26T00:00:00.000Z", "1954-07-16T00:00:00.000Z", "1954-07-30T00:00:00.000Z", "1955-03-15T00:00:00.000Z", "1955-04-22T00:00:00.000Z", "1955-05-19T00:00:00.000Z", "1955-06-09T00:00:00.000Z", "1955-06-13T00:00:00.000Z", "1955-08-05T00:00:00.000Z", "1955-08-22T00:00:00.000Z", "1955-10-14T00:00:00.000Z", "1955-11-17T00:00:00.000Z", "1955-12-12T00:00:00.000Z", "1955-12-14T00:00:00.000Z", "1956-01-24T00:00:00.000Z", "1956-03-16T00:00:00.000Z", "1956-03-23T00:00:00.000Z", "1956-04-03T00:00:00.000Z", "1956-10-18T00:00:00.000Z", "1956-12-21T00:00:00.000Z", "1957-06-21T00:00:00.000Z", "1957-07-05T00:00:00.000Z", "1957-09-06T00:00:00.000Z", "1957-11-13T00:00:00.000Z", "1957-11-18T00:00:00.000Z", "1957-12-03T00:00:00.000Z", "1957-12-13T00:00:00.000Z", "1957-12-31T00:00:00.000Z", "1958-05-13T00:00:00.000Z", "1958-07-24T00:00:00.000Z", "1958-08-14T00:00:00.000Z", "1958-12-12T00:00:00.000Z", "1959-04-23T00:00:00.000Z", "1959-05-08T00:00:00.000Z", "1959-10-03T00:00:00.000Z", "1959-10-16T00:00:00.000Z", "1959-12-18T00:00:00.000Z", "1960-03-31T00:00:00.000Z", "1960-04-27T00:00:00.000Z", "1960-06-07T00:00:00.000Z", "1960-07-27T00:00:00.000Z", "1960-08-02T00:00:00.000Z", "1960-12-09T00:00:00.000Z", "1961-02-21T00:00:00.000Z", "1961-04-18T00:00:00.000Z", "1961-04-28T00:00:00.000Z", "1961-09-01T00:00:00.000Z", "1961-10-10T00:00:00.000Z", "1961-10-19T00:00:00.000Z", "1961-12-15T00:00:00.000Z", "1962-02-20T00:00:00.000Z", "1962-05-22T00:00:00.000Z", "1962-06-15T00:00:00.000Z", "1962-06-26T00:00:00.000Z", "1962-06-27T00:00:00.000Z", "1962-09-27T00:00:00.000Z", "1962-11-21T00:00:00.000Z", "1962-12-31T00:00:00.000Z", "1963-03-28T00:00:00.000Z", "1963-04-30T00:00:00.000Z", "1963-05-03T00:00:00.000Z", "1963-06-10T00:00:00.000Z", "1963-09-20T00:00:00.000Z", "1963-12-20T00:00:00.000Z", "1963-12-31T00:00:00.000Z", "1964-01-31T00:00:00.000Z", "1964-06-05T00:00:00.000Z", "1964-07-24T00:00:00.000Z", "1964-10-09T00:00:00.000Z", "1965-01-27T00:00:00.000Z", "1965-02-26T00:00:00.000Z", "1965-04-09T00:00:00.000Z", "1965-04-30T00:00:00.000Z", "1965-05-14T00:00:00.000Z", "1965-07-29T00:00:00.000Z", "1965-08-03T00:00:00.000Z", "1965-08-05T00:00:00.000Z", "1965-08-25T00:00:00.000Z", "1965-10-08T00:00:00.000Z", "1965-11-10T00:00:00.000Z", "1966-03-28T00:00:00.000Z", "1966-04-07T00:00:00.000Z", "1966-05-04T00:00:00.000Z", "1966-05-18T00:00:00.000Z", "1966-06-24T00:00:00.000Z", "1966-09-02T00:00:00.000Z", "1966-09-27T00:00:00.000Z", "1966-10-07T00:00:00.000Z", "1966-12-12T00:00:00.000Z", "1967-01-05T00:00:00.000Z", "1967-09-25T00:00:00.000Z", "1967-10-23T00:00:00.000Z", "1967-11-20T00:00:00.000Z", "1968-01-18T00:00:00.000Z", "1968-02-14T00:00:00.000Z", "1968-03-13T00:00:00.000Z", "1968-03-19T00:00:00.000Z", "1968-03-29T00:00:00.000Z", "1968-06-26T00:00:00.000Z", "1968-07-03T00:00:00.000Z", "1968-07-24T00:00:00.000Z", "1968-12-11T00:00:00.000Z", "1969-02-21T00:00:00.000Z", "1969-02-26T00:00:00.000Z", "1969-03-07T00:00:00.000Z", "1969-04-30T00:00:00.000Z", "1969-06-05T00:00:00.000Z", "1969-06-17T00:00:00.000Z", "1969-07-18T00:00:00.000Z", "1969-07-21T00:00:00.000Z", "1969-07-28T00:00:00.000Z", "1969-08-11T00:00:00.000Z", "1969-08-28T00:00:00.000Z", "1969-09-24T00:00:00.000Z", "1969-11-04T00:00:00.000Z", "1969-12-15T00:00:00.000Z", "1969-12-18T00:00:00.000Z", "1970-01-28T00:00:00.000Z", "1970-02-09T00:00:00.000Z", "1970-06-02T00:00:00.000Z", "1970-06-29T00:00:00.000Z", "1970-10-02T00:00:00.000Z", "1970-10-13T00:00:00.000Z", "1971-01-11T00:00:00.000Z", "1971-12-13T00:00:00.000Z", "1972-01-26T00:00:00.000Z", "1972-04-24T00:00:00.000Z", "1972-05-03T00:00:00.000Z", "1972-07-21T00:00:00.000Z", "1972-08-04T00:00:00.000Z", "1972-08-23T00:00:00.000Z", "1972-09-22T00:00:00.000Z", "1973-03-30T00:00:00.000Z", "1973-06-19T00:00:00.000Z", "1973-07-11T00:00:00.000Z", "1973-07-18T00:00:00.000Z", "1973-10-17T00:00:00.000Z", "1974-03-19T00:00:00.000Z", "1974-04-11T00:00:00.000Z", "1974-06-06T00:00:00.000Z", "1974-10-08T00:00:00.000Z", "1975-07-29T00:00:00.000Z", "1975-09-11T00:00:00.000Z", "1975-11-19T00:00:00.000Z", "1975-12-01T00:00:00.000Z", "1975-12-09T00:00:00.000Z", "1975-12-31T00:00:00.000Z", "1976-03-09T00:00:00.000Z", "1976-04-05T00:00:00.000Z", "1976-05-26T00:00:00.000Z", "1976-07-09T00:00:00.000Z", "1976-07-26T00:00:00.000Z", "1976-07-27T00:00:00.000Z", "1976-10-29T00:00:00.000Z", "1976-12-30T00:00:00.000Z", "1977-01-27T00:00:00.000Z", "1977-02-23T00:00:00.000Z", "1977-04-11T00:00:00.000Z", "1977-05-17T00:00:00.000Z", "1977-06-17T00:00:00.000Z", "1977-10-18T00:00:00.000Z", "1977-10-24T00:00:00.000Z", "1977-10-26T00:00:00.000Z", "1977-11-21T00:00:00.000Z", "1977-12-14T00:00:00.000Z", "1978-01-06T00:00:00.000Z", "1978-01-31T00:00:00.000Z", "1978-02-27T00:00:00.000Z", "1978-04-25T00:00:00.000Z", "1978-05-02T00:00:00.000Z", "1978-05-05T00:00:00.000Z", "1978-07-28T00:00:00.000Z", "1978-08-23T00:00:00.000Z", "1978-09-25T00:00:00.000Z", "1978-11-15T00:00:00.000Z", "1978-11-28T00:00:00.000Z", "1978-12-29T00:00:00.000Z", "1979-01-09T00:00:00.000Z", "1979-01-19T00:00:00.000Z", "1979-05-02T00:00:00.000Z", "1980-02-06T00:00:00.000Z", "1980-02-12T00:00:00.000Z", "1980-02-27T00:00:00.000Z", "1980-03-14T00:00:00.000Z", "1980-06-24T00:00:00.000Z", "1980-06-27T00:00:00.000Z", "1980-09-17T00:00:00.000Z", "1980-12-10T00:00:00.000Z", "1980-12-23T00:00:00.000Z", "1983-01-24T00:00:00.000Z", "1983-06-28T00:00:00.000Z", "1984-04-13T00:00:00.000Z", "1984-11-26T00:00:00.000Z", "1985-05-14T00:00:00.000Z", "1985-10-31T00:00:00.000Z", "1986-01-06T00:00:00.000Z", "1986-07-10T00:00:00.000Z", "1986-08-01T00:00:00.000Z", "1986-08-11T00:00:00.000Z", "1987-05-26T00:00:00.000Z", "1987-06-02T00:00:00.000Z", "1987-08-24T00:00:00.000Z", "1987-12-18T00:00:00.000Z", "1988-05-13T00:00:00.000Z", "1988-10-06T00:00:00.000Z", "1988-10-13T00:00:00.000Z", "1989-03-31T00:00:00.000Z", "1989-04-05T00:00:00.000Z", "1989-04-17T00:00:00.000Z", "1990-04-11T00:00:00.000Z", "1990-06-20T00:00:00.000Z", "1990-07-18T00:00:00.000Z", "1991-01-04T00:00:00.000Z", "1991-01-25T00:00:00.000Z", "1991-03-22T00:00:00.000Z", "1991-06-06T00:00:00.000Z", "1991-07-01T00:00:00.000Z", "1991-09-27T00:00:00.000Z", "1991-11-07T00:00:00.000Z", "1992-01-15T00:00:00.000Z", "1992-05-01T00:00:00.000Z", "1992-05-13T00:00:00.000Z", "1992-09-10T00:00:00.000Z", "1992-10-19T00:00:00.000Z", "1992-11-18T00:00:00.000Z", "1992-12-28T00:00:00.000Z", "1993-02-17T00:00:00.000Z", "1993-07-19T00:00:00.000Z", "1993-10-29T00:00:00.000Z", "1993-11-01T00:00:00.000Z", "1993-12-14T00:00:00.000Z", "1994-06-06T00:00:00.000Z", "1994-07-19T00:00:00.000Z", "1994-09-23T00:00:00.000Z", "1994-10-03T00:00:00.000Z", "1994-10-06T00:00:00.000Z", "1994-10-26T00:00:00.000Z", "1994-11-08T00:00:00.000Z", "1994-12-16T00:00:00.000Z", "1995-08-25T00:00:00.000Z", "1995-10-23T00:00:00.000Z", "1996-01-30T00:00:00.000Z", "1996-03-28T00:00:00.000Z", "1996-03-29T00:00:00.000Z", "1996-06-18T00:00:00.000Z", "1996-09-30T00:00:00.000Z", "1996-10-17T00:00:00.000Z", "1997-03-19T00:00:00.000Z", "1997-04-24T00:00:00.000Z", "1997-06-17T00:00:00.000Z", "1997-06-27T00:00:00.000Z", "1997-10-02T00:00:00.000Z", "1997-10-16T00:00:00.000Z", "1997-10-17T00:00:00.000Z", "1997-11-17T00:00:00.000Z", "1998-01-06T00:00:00.000Z", "1998-01-12T00:00:00.000Z", "1998-09-02T00:00:00.000Z", "1998-10-22T00:00:00.000Z", "1998-12-31T00:00:00.000Z", "1999-01-18T00:00:00.000Z", "1999-03-26T00:00:00.000Z", "1999-05-10T00:00:00.000Z", "1999-05-18T00:00:00.000Z", "1999-08-25T00:00:00.000Z", "1999-09-27T00:00:00.000Z", "1999-10-14T00:00:00.000Z", "1999-10-28T00:00:00.000Z", "1999-11-18T00:00:00.000Z", "1999-11-29T00:00:00.000Z", "1999-12-10T00:00:00.000Z", "1999-12-16T00:00:00.000Z", "2000-01-20T00:00:00.000Z", "2000-01-28T00:00:00.000Z", "2000-03-13T00:00:00.000Z", "2000-03-29T00:00:00.000Z", "2000-04-20T00:00:00.000Z", "2000-04-26T00:00:00.000Z", "2000-08-24T00:00:00.000Z", "2000-08-31T00:00:00.000Z", "2000-09-14T00:00:00.000Z", "2000-10-12T00:00:00.000Z", "2001-01-01T00:00:00.000Z", "2001-05-24T00:00:00.000Z", "2001-05-25T00:00:00.000Z", "2001-10-03T00:00:00.000Z", "2001-12-03T00:00:00.000Z", "2002-01-15T00:00:00.000Z", "2002-02-14T00:00:00.000Z", "2002-06-14T00:00:00.000Z", "2002-07-17T00:00:00.000Z", "2003-05-15T00:00:00.000Z", "2003-05-30T00:00:00.000Z", "2003-10-17T00:00:00.000Z", "2003-10-24T00:00:00.000Z", "2004-04-29T00:00:00.000Z", "2004-05-14T00:00:00.000Z", "2004-06-24T00:00:00.000Z", "2004-07-28T00:00:00.000Z", "2004-10-01T00:00:00.000Z", "2005-10-06T00:00:00.000Z", "2005-12-15T00:00:00.000Z", "2006-06-28T00:00:00.000Z", "2006-10-11T00:00:00.000Z", "2007-04-20T00:00:00.000Z", "2007-07-02T00:00:00.000Z", "2007-07-18T00:00:00.000Z", "2008-04-07T00:00:00.000Z", "2008-07-11T00:00:00.000Z", "2008-08-14T00:00:00.000Z", "2008-10-30T00:00:00.000Z", "2008-11-13T00:00:00.000Z", "2009-03-31T00:00:00.000Z", "2009-08-20T00:00:00.000Z", "2009-10-27T00:00:00.000Z", "2010-04-01T00:00:00.000Z", "2010-09-20T00:00:00.000Z", "2011-02-08T00:00:00.000Z", "2011-03-23T00:00:00.000Z", "2011-05-24T00:00:00.000Z", "2012-02-03T00:00:00.000Z", "2012-07-19T00:00:00.000Z", "2012-12-27T00:00:00.000Z", "2012-12-31T00:00:00.000Z", "2013-02-14T00:00:00.000Z", "2013-07-02T00:00:00.000Z", "2013-07-12T00:00:00.000Z"], "unitsymbol": null}}, "opaque": false, "tileSets": [{"layers": "Merged_Lot_Lines_corrected", "styles": "", "format": "image/png", "height": 256, "srs": {"EPSG:900913": true}, "bbox": {"EPSG:900913": {"srs": "EPSG:900913", "bbox": [-10644926.305625, 5009377.085000001, -10331840.2378125, 5322463.1528125]}}, "resolutions": [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 0.14929107084870338, 0.07464553542435169, 0.037322767712175846, 0.018661383856087923, 0.009330691928043961, 0.004665345964021981, 0.0023326729820109904, 0.0011663364910054952, 0.0005831682455027476, 0.0002915841227513738, 0.0001457920613756869], "width": 256}], "infoFormats": ["text/plain", "application/vnd.ogc.gml", "application/vnd.ogc.gml/3.1.1", "text/html", "application/json"], "styles": [{"abstract": "", "title": "A orange line style", "legend": {"height": "20", "width": "20", "href": "http://mapstory.org:80/geoserver/geonode/Merged_Lot_Lines_corrected/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Merged_Lot_Lines_corrected", "format": "image/png"}, "name": "geonode_Merged_Lot_Lines_corrected"}], "attribution": {"title": "nitin"}, "authorityURLs": {}, "bbox": {"EPSG:3417": {"srs": "EPSG:3417", "bbox": [4867285.269999996, 3458137.280000001, 4901725.900000006, 3486233.620000005]}}, "fixedWidth": 0, "metadataURLs": [], "name": "Merged_Lot_Lines_corrected", "identifiers": {}, "srs": {"EPSG:900913": true}, "formats": ["image/png", "application/atom xml", "application/atom+xml", "application/openlayers", "application/pdf", "application/rss xml", "application/rss+xml", "application/vnd.google-earth.kml", "application/vnd.google-earth.kml xml", "application/vnd.google-earth.kml+xml", "application/vnd.google-earth.kml+xml;mode=networklink", "application/vnd.google-earth.kmz", "application/vnd.google-earth.kmz xml", "application/vnd.google-earth.kmz+xml", "application/vnd.google-earth.kmz;mode=networklink", "atom", "image/geotiff", "image/geotiff8", "image/gif", "image/gif;subtype=animated", "image/jpeg", "image/png8", "image/png; mode=8bit", "image/svg", "image/svg xml", "image/svg+xml", "image/tiff", "image/tiff8", "kml", "kmz", "openlayers", "rss"], "title": "Ames - Lot Lines by Date of Subdivision", "queryable": true, "llbbox": [-93.69872908963553, 41.9863571497876, -93.57181116065541, 42.063607545536655]}, "source": "4", "tiled": false, "title": "Ames - Lot Lines by Date of Subdivision", "fixed": false, "transparent": true}, {"opacity": 1.0, "styles": "geonode_proximity_plus_railroads1", "name": "proximity_plus_railroads0", "format": "image/png", "cached": true, "selected": false, "visibility": true, "capability": {"abstract": "asdf", "nestedLayers": [], "cascaded": 0, "fixedHeight": 0, "prefix": "proximity_plus_railroads0", "keywords": ["asdf"], "noSubsets": false, "dimensions": {"time": {"nearestVal": false, "multipleVal": false, "name": "time", "default": "current", "current": false, "units": "ISO8601", "values": ["1860-01-01T00:00:00.000Z", "1863-01-01T00:00:00.000Z", "1865-01-01T00:00:00.000Z", "1870-01-01T00:00:00.000Z", "1872-01-01T00:00:00.000Z", "1875-01-01T00:00:00.000Z", "1879-01-01T00:00:00.000Z", "1880-01-01T00:00:00.000Z", "1882-01-01T00:00:00.000Z", "1885-01-01T00:00:00.000Z", "1886-01-01T00:00:00.000Z", "1890-01-01T00:00:00.000Z", "1891-01-01T00:00:00.000Z", "1892-01-01T00:00:00.000Z", "1893-01-01T00:00:00.000Z", "1894-01-01T00:00:00.000Z", "1895-01-01T00:00:00.000Z", "1896-01-01T00:00:00.000Z", "1899-01-01T00:00:00.000Z", "1900-01-01T00:00:00.000Z", "1901-01-01T00:00:00.000Z", "1902-01-01T00:00:00.000Z", "1903-01-01T00:00:00.000Z", "1904-01-01T00:00:00.000Z", "1905-01-01T00:00:00.000Z", "1906-01-01T00:00:00.000Z", "1907-01-01T00:00:00.000Z", "1908-01-01T00:00:00.000Z", "1909-01-01T00:00:00.000Z", "1910-01-01T00:00:00.000Z", "1911-01-01T00:00:00.000Z", "1912-01-01T00:00:00.000Z", "1913-01-01T00:00:00.000Z", "1914-01-01T00:00:00.000Z", "1915-01-01T00:00:00.000Z", "1916-01-01T00:00:00.000Z", "1917-01-01T00:00:00.000Z", "1918-01-01T00:00:00.000Z", "1919-01-01T00:00:00.000Z", "1920-01-01T00:00:00.000Z", "1921-01-01T00:00:00.000Z", "1922-01-01T00:00:00.000Z", "1923-01-01T00:00:00.000Z", "1924-01-01T00:00:00.000Z", "1925-01-01T00:00:00.000Z", "1926-01-01T00:00:00.000Z", "1927-01-01T00:00:00.000Z", "1928-01-01T00:00:00.000Z", "1929-01-01T00:00:00.000Z", "1930-01-01T00:00:00.000Z", "1931-01-01T00:00:00.000Z", "1932-01-01T00:00:00.000Z", "1933-01-01T00:00:00.000Z", "1934-01-01T00:00:00.000Z", "1935-01-01T00:00:00.000Z", "1936-01-01T00:00:00.000Z", "1937-01-01T00:00:00.000Z", "1938-01-01T00:00:00.000Z", "1939-01-01T00:00:00.000Z", "1940-01-01T00:00:00.000Z", "1941-01-01T00:00:00.000Z", "1942-01-01T00:00:00.000Z", "1943-01-01T00:00:00.000Z", "1945-01-01T00:00:00.000Z", "1946-01-01T00:00:00.000Z", "1947-01-01T00:00:00.000Z", "1948-01-01T00:00:00.000Z", "1949-01-01T00:00:00.000Z", "1950-01-01T00:00:00.000Z", "1951-01-01T00:00:00.000Z", "1952-01-01T00:00:00.000Z", "1953-01-01T00:00:00.000Z", "1954-01-01T00:00:00.000Z", "1955-01-01T00:00:00.000Z", "1956-01-01T00:00:00.000Z", "1957-01-01T00:00:00.000Z", "1958-01-01T00:00:00.000Z", "1959-01-01T00:00:00.000Z", "1960-01-01T00:00:00.000Z", "1961-01-01T00:00:00.000Z", "1962-01-01T00:00:00.000Z", "1963-01-01T00:00:00.000Z", "1964-01-01T00:00:00.000Z", "1965-01-01T00:00:00.000Z", "1966-01-01T00:00:00.000Z", "1967-01-01T00:00:00.000Z", "1968-01-01T00:00:00.000Z", "1969-01-01T00:00:00.000Z", "1970-01-01T00:00:00.000Z", "1971-01-01T00:00:00.000Z", "1972-01-01T00:00:00.000Z", "1973-01-01T00:00:00.000Z", "1974-01-01T00:00:00.000Z", "1975-01-01T00:00:00.000Z", "1976-01-01T00:00:00.000Z", "1977-01-01T00:00:00.000Z", "1978-01-01T00:00:00.000Z", "1979-01-01T00:00:00.000Z", "1980-01-01T00:00:00.000Z", "1981-01-01T00:00:00.000Z", "1982-01-01T00:00:00.000Z", "1983-01-01T00:00:00.000Z", "1984-01-01T00:00:00.000Z", "1985-01-01T00:00:00.000Z", "1986-01-01T00:00:00.000Z", "1987-01-01T00:00:00.000Z", "1988-01-01T00:00:00.000Z", "1989-01-01T00:00:00.000Z", "1990-01-01T00:00:00.000Z", "1991-01-01T00:00:00.000Z", "1992-01-01T00:00:00.000Z", "1993-01-01T00:00:00.000Z", "1994-01-01T00:00:00.000Z", "1995-01-01T00:00:00.000Z", "1996-01-01T00:00:00.000Z", "1997-01-01T00:00:00.000Z", "1998-01-01T00:00:00.000Z", "1999-01-01T00:00:00.000Z", "2000-01-01T00:00:00.000Z", "2001-01-01T00:00:00.000Z", "2002-01-01T00:00:00.000Z", "2003-01-01T00:00:00.000Z", "2004-01-01T00:00:00.000Z", "2005-01-01T00:00:00.000Z", "2006-01-01T00:00:00.000Z", "2007-01-01T00:00:00.000Z", "2008-01-01T00:00:00.000Z", "2009-01-01T00:00:00.000Z", "2010-01-01T00:00:00.000Z", "2011-01-01T00:00:00.000Z", "2012-01-01T00:00:00.000Z"], "unitsymbol": null}}, "opaque": false, "tileSets": [{"layers": "proximity_plus_railroads0", "styles": "", "format": "image/png", "height": 256, "srs": {"EPSG:900913": true}, "bbox": {"EPSG:900913": {"srs": "EPSG:900913", "bbox": [-10644926.305625, 5009377.085000001, -10331840.2378125, 5322463.1528125]}}, "resolutions": [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 0.14929107084870338, 0.07464553542435169, 0.037322767712175846, 0.018661383856087923, 0.009330691928043961, 0.004665345964021981, 0.0023326729820109904, 0.0011663364910054952, 0.0005831682455027476, 0.0002915841227513738, 0.0001457920613756869], "width": 256}], "infoFormats": ["text/plain", "application/vnd.ogc.gml", "application/vnd.ogc.gml/3.1.1", "text/html", "application/json"], "styles": [{"abstract": "", "title": "A dark yellow line style", "legend": {"height": "20", "width": "20", "href": "http://mapstory.org:80/geoserver/geonode/proximity_plus_railroads0/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=proximity_plus_railroads0", "format": "image/png"}, "name": "geonode_proximity_plus_railroads1"}], "attribution": {"title": "nitin"}, "authorityURLs": {}, "bbox": {"EPSG:3417": {"srs": "EPSG:3417", "bbox": [4867016.370071441, 3413162.630054027, 4994137.2900416935, 3539319.8498519403]}}, "fixedWidth": 0, "metadataURLs": [], "name": "proximity_plus_railroads0", "identifiers": {}, "srs": {"EPSG:900913": true}, "formats": ["image/png", "application/atom xml", "application/atom+xml", "application/openlayers", "application/pdf", "application/rss xml", "application/rss+xml", "application/vnd.google-earth.kml", "application/vnd.google-earth.kml xml", "application/vnd.google-earth.kml+xml", "application/vnd.google-earth.kml+xml;mode=networklink", "application/vnd.google-earth.kmz", "application/vnd.google-earth.kmz xml", "application/vnd.google-earth.kmz+xml", "application/vnd.google-earth.kmz;mode=networklink", "atom", "image/geotiff", "image/geotiff8", "image/gif", "image/gif;subtype=animated", "image/jpeg", "image/png8", "image/png; mode=8bit", "image/svg", "image/svg xml", "image/svg+xml", "image/tiff", "image/tiff8", "kml", "kmz", "openlayers", "rss"], "title": "Ames, Iowa - Roads and Railroads", "queryable": true, "llbbox": [-93.7001822449642, 41.8627997118216, -93.23096546582569, 42.20929937314145]}, "source": "5", "tiled": false, "title": "Ames - Roads and Railroads", "fixed": false, "transparent": true}, {"opacity": 1.0, "name": "spatial_merged_buildings", "format": "image/png", "cached": true, "selected": false, "visibility": true, "capability": {"abstract": "asdf", "nestedLayers": [], "cascaded": 0, "fixedHeight": 0, "prefix": "spatial_merged_buildings", "keywords": ["asdf"], "noSubsets": false, "dimensions": {"time": {"nearestVal": false, "multipleVal": false, "name": "time", "default": "current", "current": false, "units": "ISO8601", "values": ["1860-01-01T00:00:00.000Z", "1863-01-01T00:00:00.000Z", "1865-01-01T00:00:00.000Z", "1870-01-01T00:00:00.000Z", "1872-01-01T00:00:00.000Z", "1875-01-01T00:00:00.000Z", "1879-01-01T00:00:00.000Z", "1880-01-01T00:00:00.000Z", "1881-01-01T00:00:00.000Z", "1882-01-01T00:00:00.000Z", "1883-01-01T00:00:00.000Z", "1885-01-01T00:00:00.000Z", "1888-01-01T00:00:00.000Z", "1890-01-01T00:00:00.000Z", "1891-01-01T00:00:00.000Z", "1892-01-01T00:00:00.000Z", "1893-01-01T00:00:00.000Z", "1894-01-01T00:00:00.000Z", "1895-01-01T00:00:00.000Z", "1896-01-01T00:00:00.000Z", "1897-01-01T00:00:00.000Z", "1898-01-01T00:00:00.000Z", "1899-01-01T00:00:00.000Z", "1900-01-01T00:00:00.000Z", "1901-01-01T00:00:00.000Z", "1902-01-01T00:00:00.000Z", "1903-01-01T00:00:00.000Z", "1904-01-01T00:00:00.000Z", "1905-01-01T00:00:00.000Z", "1906-01-01T00:00:00.000Z", "1907-01-01T00:00:00.000Z", "1908-01-01T00:00:00.000Z", "1909-01-01T00:00:00.000Z", "1910-01-01T00:00:00.000Z", "1911-01-01T00:00:00.000Z", "1912-01-01T00:00:00.000Z", "1913-01-01T00:00:00.000Z", "1914-01-01T00:00:00.000Z", "1915-01-01T00:00:00.000Z", "1916-01-01T00:00:00.000Z", "1917-01-01T00:00:00.000Z", "1918-01-01T00:00:00.000Z", "1919-01-01T00:00:00.000Z", "1920-01-01T00:00:00.000Z", "1921-01-01T00:00:00.000Z", "1922-01-01T00:00:00.000Z", "1923-01-01T00:00:00.000Z", "1924-01-01T00:00:00.000Z", "1925-01-01T00:00:00.000Z", "1926-01-01T00:00:00.000Z", "1927-01-01T00:00:00.000Z", "1928-01-01T00:00:00.000Z", "1929-01-01T00:00:00.000Z", "1930-01-01T00:00:00.000Z", "1931-01-01T00:00:00.000Z", "1932-01-01T00:00:00.000Z", "1933-01-01T00:00:00.000Z", "1934-01-01T00:00:00.000Z", "1935-01-01T00:00:00.000Z", "1936-01-01T00:00:00.000Z", "1937-01-01T00:00:00.000Z", "1938-01-01T00:00:00.000Z", "1939-01-01T00:00:00.000Z", "1940-01-01T00:00:00.000Z", "1941-01-01T00:00:00.000Z", "1942-01-01T00:00:00.000Z", "1943-01-01T00:00:00.000Z", "1944-01-01T00:00:00.000Z", "1945-01-01T00:00:00.000Z", "1946-01-01T00:00:00.000Z", "1947-01-01T00:00:00.000Z", "1948-01-01T00:00:00.000Z", "1949-01-01T00:00:00.000Z", "1950-01-01T00:00:00.000Z", "1951-01-01T00:00:00.000Z", "1952-01-01T00:00:00.000Z", "1953-01-01T00:00:00.000Z", "1954-01-01T00:00:00.000Z", "1955-01-01T00:00:00.000Z", "1956-01-01T00:00:00.000Z", "1957-01-01T00:00:00.000Z", "1958-01-01T00:00:00.000Z", "1959-01-01T00:00:00.000Z", "1960-01-01T00:00:00.000Z", "1961-01-01T00:00:00.000Z", "1962-01-01T00:00:00.000Z", "1963-01-01T00:00:00.000Z", "1964-01-01T00:00:00.000Z", "1965-01-01T00:00:00.000Z", "1966-01-01T00:00:00.000Z", "1967-01-01T00:00:00.000Z", "1968-01-01T00:00:00.000Z", "1969-01-01T00:00:00.000Z", "1970-01-01T00:00:00.000Z", "1971-01-01T00:00:00.000Z", "1972-01-01T00:00:00.000Z", "1973-01-01T00:00:00.000Z", "1974-01-01T00:00:00.000Z", "1975-01-01T00:00:00.000Z", "1976-01-01T00:00:00.000Z", "1977-01-01T00:00:00.000Z", "1978-01-01T00:00:00.000Z", "1979-01-01T00:00:00.000Z", "1980-01-01T00:00:00.000Z", "1981-01-01T00:00:00.000Z", "1982-01-01T00:00:00.000Z", "1983-01-01T00:00:00.000Z", "1984-01-01T00:00:00.000Z", "1985-01-01T00:00:00.000Z", "1986-01-01T00:00:00.000Z", "1987-01-01T00:00:00.000Z", "1988-01-01T00:00:00.000Z", "1989-01-01T00:00:00.000Z", "1990-01-01T00:00:00.000Z", "1991-01-01T00:00:00.000Z", "1992-01-01T00:00:00.000Z", "1993-01-01T00:00:00.000Z", "1994-01-01T00:00:00.000Z", "1995-01-01T00:00:00.000Z", "1996-01-01T00:00:00.000Z", "1997-01-01T00:00:00.000Z", "1998-01-01T00:00:00.000Z", "1999-01-01T00:00:00.000Z", "2000-01-01T00:00:00.000Z", "2001-01-01T00:00:00.000Z", "2002-01-01T00:00:00.000Z", "2003-01-01T00:00:00.000Z", "2004-01-01T00:00:00.000Z", "2005-01-01T00:00:00.000Z", "2006-01-01T00:00:00.000Z", "2007-01-01T00:00:00.000Z", "2008-01-01T00:00:00.000Z", "2009-01-01T00:00:00.000Z", "2010-01-01T00:00:00.000Z", "2011-01-01T00:00:00.000Z", "2012-01-01T00:00:00.000Z"], "unitsymbol": null}}, "opaque": false, "tileSets": [{"layers": "spatial_merged_buildings", "styles": "", "format": "image/png", "height": 256, "srs": {"EPSG:900913": true}, "bbox": {"EPSG:900913": {"srs": "EPSG:900913", "bbox": [-10644926.305625, 5009377.085000001, -10331840.2378125, 5322463.1528125]}}, "resolutions": [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 0.14929107084870338, 0.07464553542435169, 0.037322767712175846, 0.018661383856087923, 0.009330691928043961, 0.004665345964021981, 0.0023326729820109904, 0.0011663364910054952, 0.0005831682455027476, 0.0002915841227513738, 0.0001457920613756869], "width": 256}], "infoFormats": ["text/plain", "application/vnd.ogc.gml", "application/vnd.ogc.gml/3.1.1", "text/html", "application/json"], "styles": [{"abstract": "", "title": "A orange polygon style", "legend": {"height": "20", "width": "20", "href": "http://mapstory.org:80/geoserver/geonode/spatial_merged_buildings/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=spatial_merged_buildings", "format": "image/png"}, "name": "geonode_spatial_merged_buildings"}], "attribution": {"title": "nitin"}, "authorityURLs": {}, "bbox": {"EPSG:3417": {"srs": "EPSG:3417", "bbox": [4866880.34409678, 3452640.253854513, 4910327.026888281, 3497021.7320205267]}}, "fixedWidth": 0, "metadataURLs": [], "name": "spatial_merged_buildings", "identifiers": {}, "srs": {"EPSG:900913": true}, "formats": ["image/png", "application/atom xml", "application/atom+xml", "application/openlayers", "application/pdf", "application/rss xml", "application/rss+xml", "application/vnd.google-earth.kml", "application/vnd.google-earth.kml xml", "application/vnd.google-earth.kml+xml", "application/vnd.google-earth.kml+xml;mode=networklink", "application/vnd.google-earth.kmz", "application/vnd.google-earth.kmz xml", "application/vnd.google-earth.kmz+xml", "application/vnd.google-earth.kmz;mode=networklink", "atom", "image/geotiff", "image/geotiff8", "image/gif", "image/gif;subtype=animated", "image/jpeg", "image/png8", "image/png; mode=8bit", "image/svg", "image/svg xml", "image/svg+xml", "image/tiff", "image/tiff8", "kml", "kmz", "openlayers", "rss"], "title": "Ames Buildings", "queryable": true, "llbbox": [-93.70031438862421, 41.97127016776621, -93.54016594643468, 42.09322693713311]}, "source": "6", "tiled": false, "title": "Ames Buildings", "fixed": false, "transparent": true}, {"opacity": 1.0, "cql_filter": null, "name": "city_limits_individualized", "title": "Ames City Limits (uploaded 2/19/13)", "cached": true, "format": "image/png", "selected": true, "maxscale": null, "visibility": false, "capability": {"abstract": "", "nestedLayers": [], "cascaded": 0, "fixedHeight": 0, "prefix": "city_limits_individualized", "keywords": ["serg"], "noSubsets": false, "dimensions": {"time": {"nearestVal": false, "multipleVal": false, "name": "time", "default": "current", "current": false, "units": "ISO8601", "values": ["1912-01-01T00:00:00.000Z", "1926-01-01T00:00:00.000Z", "1943-01-01T00:00:00.000Z", "1960-01-01T00:00:00.000Z", "1962-01-01T00:00:00.000Z", "1963-01-01T00:00:00.000Z", "1964-01-01T00:00:00.000Z", "1965-01-01T00:00:00.000Z", "1966-01-01T00:00:00.000Z", "1967-01-01T00:00:00.000Z", "1968-01-01T00:00:00.000Z", "1969-01-01T00:00:00.000Z", "1970-01-01T00:00:00.000Z", "1971-01-01T00:00:00.000Z", "1972-01-01T00:00:00.000Z", "1973-01-01T00:00:00.000Z", "1974-01-01T00:00:00.000Z", "1975-01-01T00:00:00.000Z", "1976-01-01T00:00:00.000Z", "1978-01-01T00:00:00.000Z", "1979-01-01T00:00:00.000Z", "1980-01-01T00:00:00.000Z", "1981-01-01T00:00:00.000Z", "1982-01-01T00:00:00.000Z", "1983-01-01T00:00:00.000Z", "1985-01-01T00:00:00.000Z", "1986-01-01T00:00:00.000Z", "1987-01-01T00:00:00.000Z", "1988-01-01T00:00:00.000Z", "1989-01-01T00:00:00.000Z", "1990-01-01T00:00:00.000Z", "1991-01-01T00:00:00.000Z", "1992-01-01T00:00:00.000Z", "1993-01-01T00:00:00.000Z", "1994-01-01T00:00:00.000Z", "1995-01-01T00:00:00.000Z", "1996-01-01T00:00:00.000Z", "1997-01-01T00:00:00.000Z", "1999-01-01T00:00:00.000Z", "2000-01-01T00:00:00.000Z", "2001-01-01T00:00:00.000Z", "2002-01-01T00:00:00.000Z", "2003-01-01T00:00:00.000Z", "2004-01-01T00:00:00.000Z", "2005-01-01T00:00:00.000Z", "2006-01-01T00:00:00.000Z", "2008-01-01T00:00:00.000Z", "2011-01-01T00:00:00.000Z"], "unitsymbol": null}}, "opaque": false, "tileSets": [{"layers": "city_limits_individualized", "styles": "", "format": "image/jpeg", "height": 256, "srs": {"EPSG:900913": true}, "bbox": {"EPSG:900913": {"srs": "EPSG:900913", "bbox": [-10644926.305625, 5009377.085000001, -10331840.2378125, 5322463.1528125]}}, "resolutions": [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 0.14929107084870338, 0.07464553542435169, 0.037322767712175846, 0.018661383856087923, 0.009330691928043961, 0.004665345964021981, 0.0023326729820109904, 0.0011663364910054952, 0.0005831682455027476, 0.0002915841227513738, 0.0001457920613756869], "width": 256}], "infoFormats": ["text/plain", "application/vnd.ogc.gml", "application/vnd.ogc.gml/3.1.1", "text/html"], "styles": [{"abstract": "", "title": "A cyan polygon style", "legend": {"height": "20", "width": "20", "href": "http://mapstory.org:80/geoserver/geonode/city_limits_individualized/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=city_limits_individualized", "format": "image/png"}, "name": "city_limits_individualized"}], "attribution": {"title": "nitin"}, "authorityURLs": {}, "bbox": {"EPSG:3417": {"srs": "EPSG:3417", "bbox": [4867253.110047731, 3453917.355072395, 4906476.549966521, 3491473.530086673]}}, "fixedWidth": 0, "metadataURLs": [], "name": "city_limits_individualized", "identifiers": {}, "srs": {"EPSG:900913": true}, "formats": ["image/png", "application/atom xml", "application/atom+xml", "application/openlayers", "application/pdf", "application/rss xml", "application/rss+xml", "application/vnd.google-earth.kml", "application/vnd.google-earth.kml xml", "application/vnd.google-earth.kml+xml", "application/vnd.google-earth.kml+xml;mode=networklink", "application/vnd.google-earth.kmz", "application/vnd.google-earth.kmz xml", "application/vnd.google-earth.kmz+xml", "application/vnd.google-earth.kmz;mode=networklink", "atom", "image/geotiff", "image/geotiff8", "image/gif", "image/gif;subtype=animated", "image/jpeg", "image/png8", "image/png; mode=8bit", "image/svg", "image/svg xml", "image/svg+xml", "image/tiff", "image/tiff8", "kml", "kmz", "openlayers", "rss"], "title": "Ames City Limits (uploaded 2/19/13)", "queryable": true, "llbbox": [-93.69889291863997, 41.97477706541876, -93.55432793108204, 42.077996158978436]}, "source": "7", "tiled": false, "minscale": null, "fixed": false, "transparent": true}], "center": [-10421299.907008, 5165545.8690437], "units": "m", "maxResolution": 156543.03390625, "maxExtent": [-20037508.34, -20037508.34, 20037508.34, 20037508.34], "zoom": 13, "projection": "EPSG:900913"}, "id": 475, "sources": {"10": {"hidden": true, "ptype": "gxp_mapboxsource"}, "1": {"hidden": true, "id": "1", "ptype": "gxp_mapquestsource"}, "0": {"id": "0", "ptype": "gx_olsource"}, "3": {"title": "My GeoServer WMS", "url": "http://mapstory.org/geoserver/geonode/New_Parcels/wms", "baseParams": {"VERSION": "1.1.1", "REQUEST": "GetCapabilities", "TILED": true, "SERVICE": "WMS"}, "ptype": "gxp_wmscsource", "restUrl": "/gs/rest", "version": "1.1.1", "hidden": true, "id": "geonode:New_Parcels-search"}, "2": {"title": "My GeoServer WMS", "url": "http://mapstory.org/geoserver/geonode/New_Subdivisions/wms", "baseParams": {"VERSION": "1.1.1", "REQUEST": "GetCapabilities", "TILED": true, "SERVICE": "WMS"}, "ptype": "gxp_wmscsource", "restUrl": "/gs/rest", "version": "1.1.1", "hidden": true, "id": "geonode:New_Subdivisions-search"}, "5": {"title": "My GeoServer WMS", "url": "http://mapstory.org/geoserver/geonode/proximity_plus_railroads0/wms", "baseParams": {"VERSION": "1.1.1", "REQUEST": "GetCapabilities", "TILED": true, "SERVICE": "WMS"}, "ptype": "gxp_wmscsource", "restUrl": "/gs/rest", "version": "1.1.1", "hidden": true, "id": "geonode:proximity_plus_railroads0-search"}, "4": {"title": "My GeoServer WMS", "url": "http://mapstory.org/geoserver/geonode/Merged_Lot_Lines_corrected/wms", "baseParams": {"VERSION": "1.1.1", "REQUEST": "GetCapabilities", "TILED": true, "SERVICE": "WMS"}, "ptype": "gxp_wmscsource", "restUrl": "/gs/rest", "version": "1.1.1", "hidden": true, "id": "geonode:Merged_Lot_Lines_corrected-search"}, "7": {"title": "My GeoServer WMS", "url": "http://mapstory.org/geoserver/geonode/city_limits_individualized/wms", "baseParams": {"VERSION": "1.1.1", "REQUEST": "GetCapabilities", "TILED": true, "SERVICE": "WMS"}, "ptype": "gxp_wmscsource", "restUrl": "/gs/rest", "version": "1.1.1", "hidden": true, "id": "geonode:city_limits_individualized-search"}, "6": {"title": "My GeoServer WMS", "url": "http://mapstory.org/geoserver/geonode/spatial_merged_buildings/wms", "baseParams": {"VERSION": "1.1.1", "REQUEST": "GetCapabilities", "TILED": true, "SERVICE": "WMS"}, "ptype": "gxp_wmscsource", "restUrl": "/gs/rest", "version": "1.1.1", "hidden": true, "id": "geonode:spatial_merged_buildings-search"}, "9": {"ptype": "gxp_olsource"}, "8": {"lazy": true, "name": "local geoserver", "title": "Local Geoserver", "url": "http://mapstory.org/geoserver/wms", "ptype": "gxp_wmscsource", "restUrl": "/gs/rest"}}};
-    console.log('############ config: ', config);
-</script>
+    <script type="text/javascript">
+        var onErrorCallback = function (msg, url, linenumber) {
+            return true;
+        };
+        window.onerror = function (msg, url, linenumber) {
+            onErrorCallback(msg, url, linenumber);
+        };
+    </script>
 
-<script type="text/javascript">
-  var onErrorCallback = function(msg, url, linenumber) { return true; };
-  window.onerror = function(msg, url, linenumber) {
-    onErrorCallback(msg,url,linenumber);
-  };
-</script>
 
 </head>
 <body class="maploom-body">
 
 {% verbatim %}
-
-<div id="map" class="map">
-  <div class="map-shadow"></div>
-  <div id="pulldown" ng-controller="LoomPulldownController">
-    <div id="pulldown-shadow">
-      <div class="panel flat" id="map-title">
-        <div class="panel-heading">
-          <em id="map-name">
-            <div class="map-title-text ellipsis">{{ mapService.getTitle() }}</div>
-            <i id="saveButton" class="glyphicon pull-right" data-target="#saveMap"
-               tooltip-placement="bottom" tooltip="{{'save_this_map' | translate}}" tooltip-append-to-body="true"
-               ng-class="{'hide': !configService.username}" data-toggle="modal"></i>
-            <i id="refreshButton" class="glyphicon pull-right" ng-click="refreshService.refreshLayers()"
-               tooltip-placement="bottom" tooltip="{{'refresh_layers' | translate}}" tooltip-append-to-body="true"></i>
-          </em>
-          <!--<span ng-class="{'hidden': !notificationsPanel}" class="loom-notification-badge pull-right"></span>-->
+    
+    <div id="pushobj">
+        <div id="map" class="map">
+            <div class="map-shadow"></div>
+            <div class="loom-notification-poster"></div>
+            <div class="loom-legend"></div>
+            <div class="loom-exclusive-mode"></div>
+            <div id="zoom-to-world-border" class="map-btn-border" tooltip-append-to-body="true"
+                 tooltip-placement="left" tooltip="{{ 'zoom_world' | translate }}">
+                <div id="zoom-to-world" ng-click="mapService.zoomToExtent()">
+                    <i class="glyphicon glyphicon-globe"></i>
+                </div>
+            </div>
+            <div id="switch-coords-border" class="map-btn-border" tooltip-append-to-body="true"
+                 tooltip-placement="right" tooltip="{{ 'switch_coords' | translate }}">
+                <div id="switch-coords" ng-click="mapService.switchMousePosCoordFormat()">
+                    <i class="glyphicon glyphicon-map-marker"></i>
+                </div>
+            </div>
+            <div id="toggle-fullscreen-border" class="map-btn-border" tooltip-append-to-body="true"
+                 tooltip-placement="left" tooltip="{{ 'toggle_fullscreen' | translate }}">
+                <div id="toggle-fullscreen" ng-click="mapService.toggleFullscreen()">
+                    <i class="glyphicon glyphicon-fullscreen"></i>
+                </div>
+            </div>
+            <div class="loom-timeline"></div>
         </div>
-      </div>
-      <div class="loom-search"></div>
-      <div id="pulldown-menu" class="panel-group in">
-        <div id="pulldown-content">
-          <div class="panel" ng-show="notificationsPanel" ng-controller="LoomNotificationController">
-            <div class="tooltip-mask" tooltip="{{notificationStartTime}}"
-                 tooltip-append-to-body="true" tooltip-placement="right" data-toggle="collapse"
-                 data-parent="#pulldown-content" data-target="#notification-panel"></div>
-            <div class="panel-heading">
-              <span translate="notifications_tab" >Notifications</span>
-              <div ng-show="addLayers" stop-event='click' ng-controller="modalToggle"
-                   ng-click="toggleModal('#generate-notification-dialog')"
-                   tooltip-placement="top" tooltip="{{'generate_notification' | translate}}" tooltip-append-to-body="true"
-                   class="glyphicon glyphicon-time panel-header-button pull-right"></div>
-              <span class="loom-notification-badge pull-right" tooltip="{{'unread_notifications' | translate}}"
-                    tooltip-append-to-body="true"
-                    tooltip-placement="top"></span>
-            </div>
-            <div id="notification-panel" class="panel-collapse collapse pulldown-panel">
-              <div notification-empty-text="'no_notifications' | translate"
-                   class="loom-notifications">
-              </div>
-            </div>
-          </div>
-          <div class="panel" ng-show="layersPanel">
-            <div class="panel-heading" data-toggle="collapse" data-parent="#pulldown-content"
-                 data-target="#layer-manager-panel">
-              <span translate="map_layers">Map Layers</span>
-              <div ng-show="addLayers" stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#add-layer-dialog')"
-                   tooltip-placement="top" tooltip="{{'add_layer_btn' | translate}}" tooltip-append-to-body="true"
-                   class="glyphicon glyphicon-plus-sign panel-header-button pull-right"></div>
-              <div id="server-loading" class="loom-loading pull-right" spinner-radius="20" spinner-width="3" spinner-hidden="!serversLoading"></div>
-            </div>
-            <div id="layer-manager-panel" class="panel-collapse collapse pulldown-panel">
-              <div class="loom-layers"></div>
-            </div>
-          </div>
-          <div class="panel" ng-show="syncPanel">
-            <div class="panel-heading" data-toggle="collapse" data-parent="#pulldown-content"
-                 data-target="#syncronization-panel">
-              <span translate="synchronization">Synchronization</span>
+    </div>
+    <div id="menu">
+        <nav>
+            <div id="mainMenu">
+                <div id="mainMenuTop">
+                    <ng-include src="'sidebarapp/partials/mainMenuTop.tpl.html'"></ng-include>
+                </div>
 
-              <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#configWindow')"
-                   tooltip-placement="top" tooltip="{{'remote_options' | translate}}" tooltip-append-to-body="true"
-                   class="glyphicon glyphicon-cog panel-header-button pull-right"></div>
-            </div>
-            <div id="syncronization-panel" class="panel-collapse collapse">
-              <div class="loom-synclinks"></div>
-            </div>
-          </div>
-          <div class="panel" ng-show="historyPanel" ng-controller="LoomHistoryController">
-            <div class="panel-heading fixed-height-header" data-toggle="collapse" data-parent="#pulldown-content"
-                 data-target="#history-panel">
-              <span class="ellipsis pulldown-menu-title">{{title}}</span>
+                <div ng-repeat="chapter in mapstories.chapters">
+                    <div id="chaptersList" ng-show="menuSection=='mainMenu'">
+                        <ng-include src="'sidebarapp/partials/chaptersList.tpl.html'"></ng-include>
+                    </div>
 
-              <div stop-event='click' ng-click="clearHistory()"
-                   class="glyphicon glyphicon-remove pull-right panel-header-button"></div>
-              <div stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#historyDiffWindow')"
-                   tooltip-placement="top" tooltip="{{'history_summary' | translate}}" tooltip-append-to-body="true"
-                   class="glyphicon glyphicon-list-alt pull-right panel-header-button"></div>
-            </div>
-            <div id="history-panel" class="loom-history-panel panel-collapse collapse pulldown-panel">History goes
-              here.
-            </div>
-          </div>
-          <div class="panel" ng-show="diffPanel" ng-controller="LoomDiffController">
-            <div class="panel-heading fixed-height-header" data-toggle="collapse" data-parent="#pulldown-content"
-                 data-target="#diff-panel">
-              <span class="ellipsis pulldown-menu-title">{{title}}</span>
+                    <div id="selectedChapter" ng-show="menuSection=='selectedChapter' + chapter.id">
+                        <ng-include src="'sidebarapp/partials/selectedChapter.tpl.html'"></ng-include>
+                    </div>
 
-              <div ng-if="!isMerge" stop-event='click' ng-click="clearDiff()"
-                   class="glyphicon glyphicon-remove panel-header-button pull-right"></div>
-              <span ng-class="{'hidden': !(numConflicts > 0)}" class="badge pull-right">{{numConflicts}}</span>
+                    <div id="chapterInfo" ng-show="menuSection=='chapterInfo'+ chapter.id">
+                        <ng-include src="'sidebarapp/partials/chapterInfo.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="storyLayers" ng-show="menuSection=='storyLayers' + chapter.id">
+                        <ng-include src="'sidebarapp/partials/storyLayers.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="editStoryLayer" ng-show="menuSection=='editStoryLayer' + chapter.id + storyLayers.id">
+                        <ng-include src="'sidebarapp/partials/editStoryLayer.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="storyBoxes" ng-show="menuSection=='storyBoxes' + chapter.id">
+                        <ng-include src="'sidebarapp/partials/storyBoxes.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="addStoryBox" ng-show="menuSection=='addStoryBox' + chapter.id">
+                        <ng-include src="'sidebarapp/partials/addStoryBox.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="editStoryBox" ng-show="menuSection=='editStoryBox' + chapter.id + storyLayers.id">
+                        <ng-include src="'sidebarapp/partials/editStoryBox.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="storyPins" ng-show="menuSection=='storyPins' + chapter.id">
+                        <ng-include src="'sidebarapp/partials/storyPins.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="addStoryPin" ng-show="menuSection=='addStoryPin' + chapter.id + storyPins.id">
+                        <ng-include src="'sidebarapp/partials/addStoryPin.tpl.html'"></ng-include>
+                    </div>
+
+                    <div id="editStoryPin" ng-show="menuSection=='editStoryPin' + chapter.id + storyPins.id">
+                        <ng-include src="'sidebarapp/partials/editStoryPin.tpl.html'"></ng-include>
+                    </div>
+                </div>
+
+                <div id="addChapter" ng-show="menuSection=='mainMenu'">
+                    <ng-include src="'sidebarapp/partials/addChapter.tpl.html'"></ng-include>
+                </div>
+
+                <div id="getSkills" ng-show="menuSection=='mainMenu'">
+                    <ng-include src="'sidebarapp/partials/getSkills.tpl.html'"></ng-include>
+                </div>
             </div>
-            <div id="diff-panel" class="loom-diff-panel panel-collapse collapse pulldown-panel">Diffs go here.</div>
-          </div>
+        </nav>
+    </div>
+    <!--modal titles are in a lower case underscore separated format so that they can be translated-->
+    <div loom-modal id="add-layer-dialog" modal-title="add_layers">
+        <div loom-addlayers id="add-layers">
         </div>
-      </div>
     </div>
-    <button ng-disabled="!toggleEnabled" type="button" data-toggle="collapse" data-target="#pulldown-menu" translate="toggle_menu"
-            class="toggle-menu toggle btn btn-default flat-top">Toggle Menu
-    </button>
-  </div>
-  <div class="loom-notification-poster"></div>
-  <div class="loom-legend"></div>
-  <div class="loom-exclusive-mode"></div>
-  <div id="zoom-to-world-border" class="map-btn-border" tooltip-append-to-body="true"
-             tooltip-placement="left" tooltip="{{'zoom_world' | translate}}">
-    <div id="zoom-to-world" ng-click="mapService.zoomToExtent()">
-      <i class="glyphicon glyphicon-globe"></i>
-    </div>
-  </div>
-  <div id="switch-coords-border" class="map-btn-border" tooltip-append-to-body="true"
-       tooltip-placement="right" tooltip="{{'switch_coords' | translate}}">
-    <div id="switch-coords" ng-click="mapService.switchMousePosCoordFormat()">
-      <i class="glyphicon glyphicon-map-marker"></i>
-    </div>
-  </div>
-  <div id="toggle-fullscreen-border" class="map-btn-border" tooltip-append-to-body="true"
-       tooltip-placement="left" tooltip="{{'toggle_fullscreen' | translate}}">
-    <div id="toggle-fullscreen" ng-click="mapService.toggleFullscreen()">
-      <i class="glyphicon glyphicon-fullscreen"></i>
-    </div>
-  </div>
-  <div class="loom-timeline"></div>
-</div>
-<!--modal titles are in a lower case underscore separated format so that they can be translated-->
-<div loom-modal id="add-layer-dialog" modal-title="add_layers">
-  <div loom-addlayers id="add-layers">
-  </div>
-</div>
-<div loom-modal id="add-server-dialog" modal-title="add_server">
-  <div loom-add-server id="add-server">
-  </div>
-</div>
-<div loom-modal id="mergeWindow" modal-title="{{'merge' | translate}}" close-button="false">
-  <div loom-merge id="merge">
-  </div>
-</div>
-<div loom-modal id="historyDiffWindow" modal-title="{{'select_date_range' | translate}}" close-button="false">
-  <div loom-history-diff id="historyDiff">
-  </div>
-</div>
-<div loom-modal id="generate-notification-dialog" modal-title="{{'select_start_time' | translate}}" close-button="false">
-  <div loom-generate-notification id="generateNotification">
-  </div>
-</div>
-<div loom-modal id="addSyncWindow" modal-title="{{'add_sync' | translate}}">
-  <div loom-addsync id="add-sync">
-  </div>
-</div>
-<div loom-modal id="configWindow" modal-title="config">
-  <div loom-syncconfig id="sync-config">
-  </div>
-</div>
-<div loom-modal id="remoteSelectDialog" close-button="false" modal-title="remote">
-  <div loom-remoteselect id="remote-select">
-  </div>
-</div>
-<div loom-modal id="drawSelectDialog" close-button="false" modal-title="draw">
-  <div loom-drawselect id="draw-select">
-  </div>
-</div>
-<div loom-modal id="feature-diff-dialog" ng-controller="LoomFeatureDiffController" modal-title="{{title}}">
-  <div class="loom-feature-diff" id="feature-diff">
-  </div>
-</div>
-<div loom-modal id="attribute-edit-dialog" modal-title="{{'edit_attributes' | translate}}">
-  <div class="loom-attribute-edit" id="edit-feature">
-  </div>
-</div>
-<div loom-modal id="table-view-window" modal-title="{{'table_view' | translate}}" close-button="true">
-  <div class="loom-table-view" id="table-view">
-  </div>
-</div>
-<div loom-modal id="statistics-view-window" modal-title="{{'statistics_view' | translate}}"  close-button="true">
-  <div class="loom-statistics-view" id="statistics-view">
-  </div>
-</div>
-<div loom-modal id="layerInfoDialog" modal-title="layerinfo">
-  <div loom-layer-info id="layer-info">
-  </div>
-</div>
-<div loom-feature-info-box id="info-box" ng-show="featureManagerService.getSelectedItem() && featureManagerService.getEnabled()"
-     class="feature-info-box-popup">
-</div>
-<div loom-modal id="saveMap" modal-title="{{ 'save_this_map' | translate}}">
-    <div loom-save-map id="save-map">
-    </div>
-</div>
-
-<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
-<div id="blueimp-gallery" class="blueimp-gallery">
-  <!-- The container for the modal slides -->
-  <div class="slides"></div>
-  <!-- Controls for the borderless lightbox -->
-  <h3 class="title"></h3>
-  <a class="prev">‹</a>
-  <a class="next">›</a>
-  <a class="close">×</a>
-  <a class="play-pause"></a>
-  <ol class="indicator"></ol>
-  <!-- The modal dialog, which will be used to wrap the lightbox content -->
-  <div class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"></h4>
+    <div loom-modal id="add-server-dialog" modal-title="add_server">
+        <div loom-add-server id="add-server">
         </div>
-        <div class="modal-body next"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left prev">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            Previous
-          </button>
-          <button type="button" class="btn btn-primary next">
-            Next
-            <i class="glyphicon glyphicon-chevron-right"></i>
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
+    <div loom-modal id="mergeWindow" modal-title="{{ 'merge' | translate }}" close-button="false">
+        <div loom-merge id="merge">
+        </div>
+    </div>
+    <div loom-modal id="historyDiffWindow" modal-title="{{ 'select_date_range' | translate }}" close-button="false">
+        <div loom-history-diff id="historyDiff">
+        </div>
+    </div>
+    <div loom-modal id="generate-notification-dialog" modal-title="{{ 'select_start_time' | translate }}" close-button="false">
+        <div loom-generate-notification id="generateNotification">
+        </div>
+    </div>
+    <div loom-modal id="addSyncWindow" modal-title="{{ 'add_sync' | translate }}">
+        <div loom-addsync id="add-sync">
+        </div>
+    </div>
+    <div loom-modal id="configWindow" modal-title="config">
+        <div loom-syncconfig id="sync-config">
+        </div>
+    </div>
+    <div loom-modal id="remoteSelectDialog" close-button="false" modal-title="remote">
+        <div loom-remoteselect id="remote-select">
+        </div>
+    </div>
+    <div loom-modal id="drawSelectDialog" close-button="false" modal-title="draw">
+        <div loom-drawselect id="draw-select">
+        </div>
+    </div>
+    <div loom-modal id="feature-diff-dialog" ng-controller="LoomFeatureDiffController" modal-title="{{ title }}">
+        <div class="loom-feature-diff" id="feature-diff">
+        </div>
+    </div>
+    <div loom-modal id="attribute-edit-dialog" modal-title="{{ 'edit_attributes' | translate }}">
+        <div class="loom-attribute-edit" id="edit-feature">
+        </div>
+    </div>
+    <div loom-modal id="table-view-window" modal-title="{{ 'table_view' | translate }}" close-button="true">
+        <div class="loom-table-view" id="table-view">
+        </div>
+    </div>
+    <div loom-modal id="statistics-view-window" modal-title="{{ 'statistics_view' | translate }}" close-button="true">
+        <div class="loom-statistics-view" id="statistics-view">
+        </div>
+    </div>
+    <div loom-modal id="layerInfoDialog" modal-title="layerinfo">
+        <div loom-layer-info id="layer-info">
+        </div>
+    </div>
+    <div loom-modal id="storyBoxInfoDialog" modal-title="{{ 'box_info' | translate }}">
+        <div loom-box-info id="box-info">
+        </div>
+    </div>
+    <div loom-feature-info-box id="info-box" ng-show="featureManagerService.getSelectedItem() && featureManagerService.getEnabled()"
+         class="feature-info-box-popup">
+    </div>
+    <div loom-modal id="saveMap" modal-title="{{ 'save_this_map' | translate }}">
+        <div loom-save-map id="save-map">
+        </div>
+    </div>
+    <div loom-modal id="add-storybox-dialog" modal-title="add_storybox">
+        <div loom-storybox id="storybox">
+        </div>
+    </div>
+    <!-- New Modals -->
+    <div loom-modal id="mapProperties" modal-title="MapStory Properties">
+        <div loom-map-properties id="map-properties">
+        </div>
+    </div>
+    <div loom-modal id="mapSave" modal-title="Save MapStory?">
+        <div loom-map-save id="map-save">
+        </div>
+    </div>
+    <div loom-modal id="chapterDelete" modal-title="Are you sure you want to delete this chapter?">
+        <div loom-chapter-delete id="chapter-delete">
+        </div>
+    </div>
 
+    <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <!-- The container for the modal slides -->
+        <div class="slides"></div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 {% endverbatim %}
 
 </body>

@@ -10,6 +10,8 @@
   var geogigService_;
   var synchronizationService_;
 
+  var counter = 0;
+
   module.provider('remoteService', function() {
 
     this.remoteName = null;
@@ -21,6 +23,7 @@
     this.selectedText = '';
     this.editing = false;
     this.verificationResult = null;
+    this.compatibleRepos = [];
     this.selectedRepoInitialCommit = null;
 
     this.$get = function($rootScope, $http, $q, $translate, dialogService, geogigService, synchronizationService) {
@@ -43,6 +46,7 @@
       service_.remoteURL = null;
       service_.remoteUsername = '';
       service_.remotePassword = '';
+      service_.compatibleRepos = [];
       if (goog.isDefAndNotNull(service_.selectedRemote)) {
         service_.remoteName = service_.selectedRemote.name;
         service_.remoteURL = service_.selectedRemote.url;
@@ -72,6 +76,19 @@
       }, function(reject) {
         result.reject(translate_.instant('not_a_repo'));
       });
+    };
+
+    var multipleCompatibleRepos = function() {
+      counter--;
+      if (counter === 0) {
+        if (service_.compatibleRepos.length > 1) {
+          $('#remoteSelectDialog').modal('toggle');
+        } else if (service_.compatibleRepos.length < 1) {
+          service_.verificationResult.reject(translate_.instant('no_compatible_repos'));
+        } else {
+          service_.verificationResult.resolve(service_.compatibleRepos[0]);
+        }
+      }
     };
 
     this.reset = function() {
@@ -147,6 +164,7 @@
             if (!service_.editing) {
               resetForm();
             } else {
+              service_.compatibleRepos = [];
               service_.selectedRemote.name = service_.remoteName;
               service_.selectedRemote.url = service_.remoteURL;
               service_.selectedRemote.username = service_.remoteUsername;
@@ -192,24 +210,55 @@
           options.newName = service_.remoteName;
           options.remoteName = service_.selectedRemote.name;
         }
-        var url = urlRemoveTrailingSlash(service_.remoteURL);
+        var protocol = service_.remoteURL.substr(0, service_.remoteURL.indexOf('://') + '://'.length);
+        var url = service_.remoteURL.substr(protocol.length);
+        var index = url.lastIndexOf('/') + 1;
+        if (index === url.length) {
+          url = url.slice(0, url.length - 1);
+          index = url.lastIndexOf('/') + 1;
+        }
+        var splitinfo = [];
+        if (index > 0) {
+          var info = url.slice(index);
+          splitinfo = info.split(':');
+          if (splitinfo.length > 1) {
+            console.log(splitinfo);
+            var temp = encodeURIComponent(encodeURIComponent(splitinfo[0])) + ':' +
+                encodeURIComponent(encodeURIComponent(splitinfo[1]));
+            url = url.replace(info, temp);
+          }
+        }
+        url = protocol + url;
+        var extraPath = '';
+        if (splitinfo[0] === 'geoserver') {
+          extraPath = '/geogig';
+        } else if (splitinfo[0] !== 'geogig') {
+          extraPath = '/geoserver/geogig';
+        }
         service_.verificationResult = q_.defer();
         var config = {headers: {'Accept': 'text/json'}};
         if (goog.isDefAndNotNull(service_.remoteUsername)) {
           config.headers['Authorization'] = 'Basic ' +
               $.base64.encode(service_.remoteUsername + ':' + service_.remotePassword);
         }
-        http_.get(url + '.json', config).then(function(response) {
-          if (!goog.isDefAndNotNull(response.data.repository)) {
+        http_.get(url + extraPath, config).then(function(response) {
+          if (!goog.isDefAndNotNull(response.data.repositories)) {
             checkCompatiblity(url, service_.verificationResult);
           } else {
-            var compatibilityResult = q_.defer();
-            checkCompatiblity(url, compatibilityResult);
-            compatibilityResult.promise.then(function(url) {
-              service_.verificationResult.resolve(url, response.data.repository);
-            }, function() {
-              service_.verificationResult.reject(translate_.instant('no_compatible_repos'));
-            });
+            counter = response.data.repositories.length;
+            var successFunc = function(url) {
+              service_.compatibleRepos.push(url);
+              multipleCompatibleRepos();
+            };
+            var rejectFunc = function() {
+              multipleCompatibleRepos();
+            };
+            for (var index = 0; index < response.data.repositories.length; index++) {
+              var repo = response.data.repositories[index];
+              var compatibilityResult = q_.defer();
+              checkCompatiblity(url + extraPath + '/' + repo, compatibilityResult);
+              compatibilityResult.promise.then(successFunc, rejectFunc);
+            }
           }
         }, function(error) {
           // There was a problem connecting to the endpoint
@@ -220,7 +269,7 @@
           }
         });
 
-        service_.verificationResult.promise.then(function(url, repoInfo) {
+        service_.verificationResult.promise.then(function(url) {
           service_.addRemote(url, options, result);
           service_.verificationResult = null;
         }, function(error) {
@@ -236,3 +285,4 @@
     };
   });
 }());
+

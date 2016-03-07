@@ -191,9 +191,9 @@ var SERVER_SERVICE_USE_PROXY = true;
               deferredResponse.reject(server, reject);
             });
       };
-      var alwaysAnonymous = true;
+
       if (goog.isDefAndNotNull(server.url)) {
-        if (server.url.indexOf(location_.host()) === -1 && !alwaysAnonymous) {
+        if (server.url.indexOf(location_.host()) === -1) {
           dialogService_.promptCredentials(server.url, true, null, server.config.alwaysAnonymous).then(
               function(credentials) {
                 server.username = credentials.username;
@@ -201,7 +201,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                 server.config.alwaysAnonymous = false;
 
                 // remove the 'wms endpoint'
-                var serverBaseUrl = urlRemoveLastRoute(server.url);
+                var serverBaseUrl = removeUrlLastRoute(server.url);
                 var serverAuthenticationUrl = serverBaseUrl + '/rest/settings.json';
                 serverAuthenticationUrl = serverAuthenticationUrl.replace('http://', 'http://null:null@');
                 ignoreNextScriptError = true;
@@ -301,9 +301,8 @@ var SERVER_SERVICE_USE_PROXY = true;
       };
 
       if (goog.isDefAndNotNull(server.url)) {
-        alwaysAnonymous = true;
         if (server.url.indexOf(location_.host()) === -1) {
-          if (server.config.alwaysAnonymous || alwaysAnonymous) {
+          if (server.config.alwaysAnonymous) {
             server.username = translate_.instant('anonymous');
             server.authentication = undefined;
             doWork();
@@ -315,7 +314,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                   server.config.alwaysAnonymous = false;
 
                   // remove the 'wms endpoint'
-                  var serverBaseUrl = urlRemoveLastRoute(server.url);
+                  var serverBaseUrl = removeUrlLastRoute(server.url);
                   var serverAuthenticationUrl = serverBaseUrl + '/rest/settings.json';
                   serverAuthenticationUrl = serverAuthenticationUrl.replace('http://', 'http://null:null@');
                   ignoreNextScriptError = true;
@@ -405,6 +404,13 @@ var SERVER_SERVICE_USE_PROXY = true;
       }
     };
 
+    this.getLayersConfigByName = function(server_name) {
+      var server = service_.getServerByName(server_name);
+      if (goog.isDefAndNotNull(server)) {
+        return server.layersConfig;
+      }
+    };
+
     this.getLayersConfig = function(serverId) {
       var server = service_.getServerById(serverId);
       if (goog.isDefAndNotNull(server)) {
@@ -420,15 +426,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         if (layersConfig[index].Name === layerName || (typeof layerName.split != 'undefined' &&
             layersConfig[index].Name === layerName.split(':')[1])) {
           layerConfig = layersConfig[index];
-
-          if (goog.isDefAndNotNull(layerConfig.CRS)) {
-            for (var code in layerConfig.CRS) {
-              if (layerConfig.CRS[code] !== 'CRS:84') {
-                layerConfig.CRS = layerConfig.CRS[code];
-                break;
-              }
-            }
-          }
+          //TODO: Update with handling multiple projections per layer if needed.
           console.log('getting layer config, crs', layerConfig.CRS);
           break;
         }
@@ -436,6 +434,103 @@ var SERVER_SERVICE_USE_PROXY = true;
 
       console.log('---- ServerService.getLayerConfig: ', layerConfig);
       return layerConfig;
+    };
+
+    this.reformatLayerConfigs = function(elastic_response, serverUrl) {
+      var final_configs = [];
+      var layer_objects = elastic_response.objects;
+      var layerName = function(detailUrl) {
+        if (!detailUrl) { return ''; }
+        return detailUrl.split('/').pop();
+      };
+      var thumbnail = function(thumbnailUrl, layerName) {
+        if (thumbnailUrl && thumbnailUrl.indexOf('missing_thumb') !== -1) {
+          return serverUrl + '/reflect?format=application/openlayers&layers=' + layerName + '&width=200';
+        }
+        return thumbnailUrl;
+      };
+      var author = function(layerInfo) {
+        if (layerInfo.owner__first_name) {
+          return layerInfo.owner__first_name + ' ' + layerInfo.owner__last_name;
+        }
+        if (layerInfo.owner__username) {
+          return layerInfo.owner__username;
+        }
+        return 'No owner name available';
+      };
+      //TODO: Update with handling multiple projections per layer if needed.
+      for (var iLayer = 0; iLayer < layer_objects.length; iLayer += 1) {
+        var layer_info = layer_objects[iLayer];
+        var config_template = {
+          Abstract: layer_info.abstract,
+          Name: layer_info.typename,
+          Title: layer_info.title,
+          CRS: layer_info.srid,
+          thumbnail_url: thumbnail(layer_info.thumbnail_url, layerName(layer_info.detail_url)),
+          author: author(layer_info),
+          detail_url: layer_info.detail_url
+        };
+
+        final_configs.push(config_template);
+      }
+
+      return final_configs;
+    };
+
+
+    this.apply_filter = function(url, filter_options) {
+
+      if (filter_options.owner !== null) {
+        url = url + '&owner=' + configService_.username;
+      }
+      if (filter_options.text !== null) {
+        url = url + '&q=' + filter_options.text;
+      }
+      return url;
+    };
+
+    this.populateLayersConfigElastic = function(server, filter_options) {
+      //var url = 'http://mapstory.org/api/layers/search/?is_published=true&limit=100';
+      var url = 'http://demo.geonode.org/api/base/?owner__username=admin&limit=100';
+      var layers_loaded = false;
+
+      if (filter_options !== null) {
+        url = service_.apply_filter(url, filter_options);
+      }
+
+      console.log('---url: ', url);
+      server.populatingLayersConfig = true;
+      server.layersConfig = [];
+      var config = {};
+      config.headers = {};
+      if (goog.isDefAndNotNull(server.authentication)) {
+        config.headers['Authorization'] = 'Basic ' + server.authentication;
+      } else {
+        config.headers['Authorization'] = '';
+      }
+      // server hasn't been added yet, so specify the auth headers here
+      serverGeoserverUrl = function(url) {
+        pathArray = url.split('/');
+        protocol = pathArray[0];
+        host = pathArray[2];
+        return protocol + '//' + host + '/geoserver/wms';
+      };
+      http_.get(url, config).then(function(xhr) {
+        if (xhr.status === 200) {
+          server.layersConfig = service_.reformatLayerConfigs(xhr.data, serverGeoserverUrl(url));
+          console.log('---- populateLayersConfig.populateLayersConfig server', server);
+          rootScope_.$broadcast('layers-loaded', server.id);
+          layers_loaded = true;
+          server.populatingLayersConfig = false;
+        } else {
+          layers_loaded = false;
+          server.populatingLayersConfig = false;
+        }
+      }, function(xhr) {
+        layers_loaded = false;
+        server.populatingLayersConfig = false;
+      });
+      return layers_loaded;
     };
 
     this.populateLayersConfig = function(server, force) {
@@ -524,58 +619,14 @@ var SERVER_SERVICE_USE_PROXY = true;
           deferredResponse.resolve(server);
         } else if (server.ptype === 'gxp_wmscsource' ||
             server.ptype === 'gxp_tmssource') { // currently, if it is a tms endpoint, assume it has wmsgetcapabilities
-          console.log('---- ServerService.Sending GetCapabilities.server: ', server);
+          console.log('---- ServerService.Sending Elastic Search: ', server);
           if (!goog.isDefAndNotNull(server.url)) {
             dialogService_.error(translate_.instant('error'), translate_.instant('server_url_not_specified'));
             deferredResponse.reject(server);
           } else {
-            // prevent getCapabilities request until ran by the user.
-            if (server.lazy !== true || force === true || server.mapLayerRequiresServer === true) {
-              var parser = new ol.format.WMSCapabilities();
-              var url = server.url;
+            service_.populateLayersConfigElastic(server, null);
+            deferredResponse.resolve(server);
 
-              // If this is a virtual service, use the virtual service url for getCapabilties
-              if (server.isVirtualService === true) {
-                url = server.virtualServiceUrl;
-              }
-
-              var iqm = url.indexOf('?');
-              var url_getcaps = url + (iqm >= 0 ? (iqm - 1 == url.length ? '' : '&') : '?') + 'SERVICE=WMS&REQUEST=GetCapabilities';
-
-              server.populatingLayersConfig = true;
-              var config = {};
-              config.headers = {};
-              if (goog.isDefAndNotNull(server.authentication)) {
-                config.headers['Authorization'] = 'Basic ' + server.authentication;
-              } else {
-                config.headers['Authorization'] = '';
-              }
-              // server hasn't been added yet, so specify the auth headers here
-              http_.get(url_getcaps, config).then(function(xhr) {
-                if (xhr.status === 200) {
-                  var response = parser.read(xhr.data);
-                  if (goog.isDefAndNotNull(response.Capability) &&
-                      goog.isDefAndNotNull(response.Capability.Layer)) {
-                    server.layersConfig = response.Capability.Layer.Layer;
-                    console.log('---- populateLayersConfig.populateLayersConfig server', server);
-                    rootScope_.$broadcast('layers-loaded', server.id);
-                    deferredResponse.resolve(server);
-                  } else {
-                    deferredResponse.resolve(server);
-                  }
-                  server.populatingLayersConfig = false;
-                } else {
-                  deferredResponse.resolve(server);
-                  server.populatingLayersConfig = false;
-                }
-              }, function(xhr) {
-                deferredResponse.resolve(server);
-                server.populatingLayersConfig = false;
-              });
-            } else {
-              deferredResponse.resolve(server);
-              server.populatingLayersConfig = false;
-            }
           }
         } else {
           deferredResponse.reject();

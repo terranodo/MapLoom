@@ -1,21 +1,15 @@
 var coordinateDisplays = {
   DMS: 'degree_minute_second',
   DD: 'decimal_degrees',
-  MGRS: 'mgrs',
   Other: 'other'
 };
 
 var settings = {
   coordinateDisplay: coordinateDisplays.DMS,
   DDPrecision: 8,
-  MGRSPrecision: 10,
   WFSVersion: '1.1.0',
   WMSVersion: '1.1.1',
-  WPSVersion: '1.0.0',
-  //Set to OsmLocalUrl to 'default' for default mapnick osm basemap
-  OsmLocalUrl: 'default',
-  //OsmLocalUrl: 'http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png',
-  OsmLocalAttribution: 'All maps &copy; <a href="http://www.opencyclemap.org/">OpenCycleMap</a>'
+  WPSVersion: '1.0.0'
 };
 
 var forEachArrayish = function(arrayish, funct) {
@@ -50,6 +44,201 @@ var clean = function(array, deleteValue) {
   }
   return array;
 };
+
+var create_chapter_template = function(index) {
+  var add_chapter_template = [
+    {
+      name: 'Chapter ' + (index),
+      id: 'chapter' + (index),
+      link: '#',
+      items: [
+        {
+          title: 'Chapter ' + (index),
+          id: 'sub-chapter' + (index),
+          icon: 'fa fa-bookmark',
+          items: [
+            {
+              name: 'Chapter Info',
+              icon: 'fa fa-info-circle',
+              link: '#',
+              items: [
+                {
+                  title: 'Chapter Info',
+                  id: ('chapter-info-' + (index)),
+                  icon: 'fa fa-info-cicle',
+                  items: [
+                    {
+                      name: 'Chapter Title',
+                      link: '#'
+                    },
+                    {
+                      name: '<input type="text" name="test" id="test" value="" />',
+                      link: '#'
+                    },
+                    {
+                      name: 'Chapter Summary',
+                      link: '#'
+                    },
+                    {
+                      name: '<textarea rows ="6" cols="20"></textarea>',
+                      link: '#'
+                    },
+                    {
+                      name: '<button data-target="#mapSave" data-toggle="modal" type="button" class="btn btn-default btn-lg center-block">Save Chapter Info</button>'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: 'StoryLayers',
+              icon: 'fa fa-clone',
+              link: '#',
+              items: [
+                {
+                  title: 'Chapter ' + (index) + ' StoryLayers',
+                  icon: 'fa fa-bookmark',
+                  id: 'storylayers' + (index),
+                  items: [
+                    {
+                      name: 'Add a New StoryLayer...',
+                      id: 'addNewLayer',
+                      link: '#'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: 'StoryBoxes',
+              icon: 'fa fa-object-group',
+              link: '#',
+              items: [
+                {
+                  title: 'Chapter ' + (index),
+                  icon: 'fa fa-bookmark',
+                  items: [
+                    {
+                      name: 'Add a New StoryBox...',
+                      link: '#',
+                      items: [
+                        {
+                          title: 'Add Storybox',
+                          icon: 'fa fa-bookmark',
+                          link: '#',
+                          items: [
+                            {
+                              name: 'Story # Map Extents',
+                              link: '#'
+                            },
+                            {
+                              name: '<p>Pan and zoom on the map to set the map bounds.</p><button class = "btn btn-default btn-lg center-block">Set Map Bounds</button>',
+                              link: '#'
+                            },
+                            {
+                              name: 'Time Frame',
+                              link: '#'
+                            },
+                            {
+                              name: '<p>Start Time</p><input type = "time" name = "start_time">',
+                              link: '#'
+                            },
+                            {
+                              name: '<p>End Time<p><input type = "time" name = "end_time">',
+                              link: '#'
+                            },
+                            {
+                              name: '<button data-target="#mapSave" data-toggle="modal" type="button" class="btn btn-default btn-lg center-block">Save Storybox</button>',
+                              link: '#'
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: 'StoryPins',
+              icon: 'fa fa-neuter',
+              link: '#',
+              items: [
+                {
+                  title: 'Chapter ' + (index),
+                  icon: 'fa fa-bookmark',
+                  items: [
+                    {
+                      name: 'Add a New StoryPin...',
+                      link: '#',
+                      items: [
+                        {
+                          title: 'Add StoryPin',
+                          icon: 'fa fa-bookmark',
+                          link: '#',
+                          items: [
+                            {
+                              name: 'StoryPin Title',
+                              link: '#'
+                            },
+                            {
+                              name: '<input type="text" name="storyPinTitle" />',
+                              link: '#'
+                            },
+                            {
+                              name: 'StoryPin Content',
+                              link: '#'
+                            },
+                            {
+                              name: '<input type="text" name="storyPinContent" />',
+                              link: '#'
+                            },
+                            {
+                              name: '<button class = "btn btn-default btn-lg center-block">Link Media...</button>',
+                              link: '#'
+                            },
+                            {
+                              name: 'Pin Location',
+                              link: '#'
+                            },
+                            {
+                              name: '<p>Drop pin on the map to set pin location</p><button class = "btn btn-default btn-lg center-block">Save Pin Location</button>',
+                              link: '#'
+                            },
+                            {
+                              name: 'Time',
+                              link: '#'
+                            },
+                            {
+                              name: '<input type = "time" name = "storyPinTime">',
+                              link: '#'
+                            },
+                            {
+                              name: '<button data-target="#mapSave" data-toggle="modal" type="button" class="btn btn-default btn-lg center-block">Save StoryPin</button>',
+                              link: '#'
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: 'Delete Chapter',
+              id: 'deleteChapter',
+              icon: 'fa fa-trash-o',
+              link: '#'
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  return add_chapter_template;
+};
+
 
 var transformGeometry = function(geometry, crsFrom, crsTo) {
   var newGeom;
@@ -268,35 +457,18 @@ var sha1 = function(msg) {
 };
 
 
-// given http://myip/geoserver/wms, it will return http://myip/geoserver
+// give http://myip/geoserver/wms, ir will return http://myip/geoserver
 // it handles extra slash at the end of the url if it has one
-var urlRemoveLastRoute = function(url) {
-  url = urlRemoveTrailingSlash(url);
-  if (goog.isDefAndNotNull(url)) {
-    if (url.lastIndexOf('/') === url.length - 1) {
-      url = url.substring(0, url.lastIndexOf('/'));
+var removeUrlLastRoute = function(urlWithRoutes) {
+  var newUrl = null;
+
+  if (goog.isDefAndNotNull(urlWithRoutes)) {
+    if (urlWithRoutes.lastIndexOf('/') === urlWithRoutes.length - 1) {
+      urlWithRoutes = urlWithRoutes.substring(0, urlWithRoutes.lastIndexOf('/'));
     }
-    return url.substring(0, url.lastIndexOf('/'));
+
+    newUrl = urlWithRoutes.substring(0, urlWithRoutes.lastIndexOf('/'));
   }
-  return url;
-};
 
-// given http://myip/geoserver/, it will return http://myip/geoserver
-// if doesn't have training slash, it will return the url as it was passed in
-var urlRemoveTrailingSlash = function(url) {
-  if (goog.isDefAndNotNull(url)) {
-    if (url.lastIndexOf('/') === url.length - 1) {
-      url = url.substring(0, url.lastIndexOf('/'));
-    }
-  }
-  return url;
-};
-
-// mgrs additions
-var xyToMGRSFormat = function(coordinate) {
-  return mgrs.forward(coordinate, settings.MGRSPrecision);
-};
-
-var mgrsToXYFormat = function(string) {
-  return mgrs.toPoint(string, settings.DDPrecision);
+  return newUrl;
 };

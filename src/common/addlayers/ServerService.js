@@ -490,8 +490,8 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.populateLayersConfigElastic = function(server, filter_options) {
-      //var url = 'http://mapstory.org/api/layers/search/?is_published=true&limit=100';
-      var url = 'http://demo.geonode.org/api/base/?owner__username=admin&limit=100';
+      var url = 'http://mapstory.org/api/layers/search/?is_published=true&limit=100';
+      //var url = 'http://demo.geonode.org/api/base/?owner__username=admin&limit=100';
       var layers_loaded = false;
 
       if (filter_options !== null) {

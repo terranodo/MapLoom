@@ -6,7 +6,6 @@
     'notifications_tab': 'Notificaciones',
     'no_notifications': 'Ninguna notificación',
     'map_layers': 'Capas',
-    'edit_feature': 'Edit',
     'add_layer_btn': 'Añadir Capa',
     'add_layers': 'Añadir Capas',
     'remove_layer': 'Retirar la Capa',
@@ -35,7 +34,8 @@
     'remote': 'Remoto',
     'new_remote': 'Nuevo Remoto',
     'add_remote': 'Añadir Remoto',
-    'repo_name': 'Nombre',
+    'repo_name': 'Nombre de Repo',
+    'repo_uuid': 'UUID de Repo',
     'remote_name': 'Nombre Remoto',
     'edit_btn': 'Editar',
     'repo_url': 'URL',
@@ -222,6 +222,7 @@
     'latlon_confirm': '{{value}} es el valor interpretado de sus coordenadas. ¿Esto es correcto?',
     'degree_minute_second': 'Grados Minutos Segundos',
     'decimal_degrees': 'Grados Decimales',
+    'mgrs': 'MGRS',
     'other': 'Otro',
     'search': 'Búsqueda',
     'search_locations': 'Ubicaciones de Búsqueda',
@@ -317,20 +318,7 @@
     'standard_deviation': 'Desviacion Estandar',
     'count': 'Cuentas',
     'populated_count': 'Llenado Cuentas',
-    'unique_values': 'Valor Único',
-    'map_storybox': 'StoryBoxes',
-    'add_storybox_btn': 'Add StoryBox',
-    'add_storybox': 'Add StoryBox',
-    'edit_box': 'Edit StoryBox',
-    'remove_storybox': 'Remove StoryBox',
-    'show_storybox_info': 'Show StoryBox Info',
-    'zoom_to_storybox': 'Zoom to StoryBox',
-    'remove_box': 'Remove Box',
-    'box_info': 'Box Information',
-    'sure_remove_box': 'Are you sure you want to remove this box?',
-    'style_layer': 'Style Layer',
-    'show_attributes': 'Show Attributes'
-
+    'unique_values': 'Valor Único'
   };
 
   var module = angular.module('loom_translations_es', ['pascalprecht.translate']);

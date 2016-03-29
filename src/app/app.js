@@ -2,7 +2,6 @@
   var module = angular.module('MapLoom', [
     'templates-app',
     'templates-common',
-    'storytools.edit.style',
     'loom',
     'ui.bootstrap',
     'ui.router',
@@ -12,17 +11,12 @@
     'xeditable'
   ]);
 
-  module.config(['$locationProvider', function($locationProvider) {
-    $locationProvider.html5Mode(true);
-  }]);
-
   module.run(function run(editableOptions) {
     editableOptions.theme = 'bs3';
   });
 
   module.controller('AppCtrl', function AppCtrl($scope, $window, $location, $translate, mapService, debugService,
-                                                refreshService, dialogService, storyService, $compile) {
-
+                                                refreshService, dialogService) {
         $scope.$on('$stateChangeSuccess', function(event, toState) {
           if (angular.isDefined(toState.data.pageTitle)) {
             $scope.pageTitle = toState.data.pageTitle;
@@ -70,60 +64,7 @@
         }
 
         $scope.mapService = mapService;
-        $scope.storyService = storyService;
         $scope.refreshService = refreshService;
-
-        $scope.mapstories = {
-          name: storyService.title,
-          chapters: []
-        };
-
-        $scope.menuSection = 'mainMenu';
-
-        $scope.updateMenuSection = function(updateMenuSection) {
-          $scope.menuSection = updateMenuSection;
-        };
-
-
-        $scope.addChapter = function() {
-          //Add chapter to backend story service will return new chapter ID or null if failure
-          var new_index = storyService.add_chapter();
-          if (new_index !== null) {
-            $scope.addChapterToMenu(new_index);
-            //Change focus to chapter info for newly created chapter
-            $scope.updateMenuSection('chapterInfo' + new_index);
-          }
-        };
-
-        $scope.addStorylayerToMenu = function(chapter_index, layer_config) {
-          console.log('layer to add:', layer_config);
-          var add_index = $scope.mapstories.chapters[chapter_index].storyLayers.length;
-          var new_layer = {
-            id: add_index,
-            title: layer_config.title || 'Untitled Layer'
-          };
-          $scope.mapstories.chapters[chapter_index].storyLayers.push(new_layer);
-
-        };
-        //front end initialization of new chapter on menu element
-        $scope.addChapterToMenu = function(index) {
-          var new_chapter_item = {
-            id: index,
-            chapter: 'Chapter ' + (index + 1),
-            title: storyService.configurations[index].about.title,
-            summary: storyService.configurations[index].about.abstract,
-            storyLayers: [],
-            storyBoxes: [],
-            storyPins: []
-          };
-
-          //Add new chapter to sidebar menu
-          $scope.mapstories.chapters.push(new_chapter_item);
-
-        };
-
-        $scope.addChapterToMenu(0);
-
       });
 
   module.provider('debugService', function() {
@@ -153,3 +94,4 @@
     $translateProvider.preferredLanguage('en');
   });
 }());
+

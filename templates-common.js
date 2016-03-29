@@ -1,4 +1,4 @@
-angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/chapterdelete.tpl.html', 'map/partial/mapproperties.tpl.html', 'map/partial/mapsave.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'sidebarapp/partials/addChapter.tpl.html', 'sidebarapp/partials/addStoryBox.tpl.html', 'sidebarapp/partials/addStoryPin.tpl.html', 'sidebarapp/partials/chapterInfo.tpl.html', 'sidebarapp/partials/chaptersList.tpl.html', 'sidebarapp/partials/editStoryBox.tpl.html', 'sidebarapp/partials/editStoryLayer.tpl.html', 'sidebarapp/partials/editStoryPin.tpl.html', 'sidebarapp/partials/getSkills.tpl.html', 'sidebarapp/partials/mainMenuTop.tpl.html', 'sidebarapp/partials/selectedChapter.tpl.html', 'sidebarapp/partials/storyBoxes.tpl.html', 'sidebarapp/partials/storyLayers.tpl.html', 'sidebarapp/partials/storyPins.tpl.html', 'statistics/partial/statistics.tpl.html', 'storybox/partials/addstorybox.tpl.html', 'storybox/partials/boxinfo.tpl.html', 'storybox/partials/storyboxes.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/remoteselect.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
+angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
 
 angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayers.tpl.html",
@@ -7,9 +7,10 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"filterOptions.text = null;filterOptions.owner = null;applyFilters()\">Search</a></li>\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"filterOptions.text = null;filterOptions.owner = true;applyFilters()\">My Uploads</a></li>\n" +
-    "                    <li><a data-toggle=\"tab\">My Favorites</a></li>\n" +
+    "                    <li><a data-toggle=\"tab\" ng-click=\"defaultSearch();\">Search</a></li>\n" +
+    "                    <li><a data-toggle=\"tab\" ng-click=\"searchMyUploads();\">My Uploads</a></li>\n" +
+    "                    <li><a data-toggle=\"tab\" ng-click=\"searchMyFavorites();\">My Favorites</a></li>\n" +
+    "                    <li><a data-toggle=\"tab\" ng-click=\"searchHyper();\">Hyper</a></li>\n" +
     "                </ul>\n" +
     "            </div>\n" +
     "            <div class=\"tab-content col-md-12\" style=\"min-height:270px;\">\n" +
@@ -20,7 +21,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                                <div class=\"input-group search-bar\" >\n" +
     "                                    <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for StoryLayers ...\" ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
     "                                    <span class=\"input-group-btn\">\n" +
-    "                                        <button class=\"btn btn-primary search-btn\" ng-disabled=\"!filterOptions.text\" ng-click=\"applyFilters()\" type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> Search</button>\n" +
+    "                                        <button class=\"btn btn-primary search-btn\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\" type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> Search</button>\n" +
     "                                    </span>\n" +
     "                                </div>\n" +
     "                            </nav>\n" +
@@ -31,7 +32,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                                            <h4>{{ layer.Title }}</h4>\n" +
     "                                            <i class = \"icon-user\"></i><h4>{{ layer.author }}</h4>\n" +
     "                                            <button class = \"btn btn-default center-block\" ng-click = \"addLayers(layer)\" data-dismiss=\"modal\">Use</button>\n" +
-    "                                            <a ng-href=\"http://www.mapstory.org{{ layer.detail_url }}\" target = \"_blank\"><button class = \"btn btn-default center-block\">View</button></a>\n" +
+    "                                            <a ng-href=\"{{ layer.detail_url }}\" target = \"_blank\"><button class = \"btn btn-default center-block\">View</button></a>\n" +
     "                                        </div>\n" +
     "                                    </div>\n" +
     "\n" +
@@ -413,14 +414,28 @@ angular.module("featuremanager/partial/attributeedit.tpl.html", []).run(["$templ
     "      <latloneditor id=\"latLonEdit\" coord-display=\"coordDisplay\" geom=\"coordinates\"></latloneditor>\n" +
     "    </div>\n" +
     "    <div class=\"form-group\" ng-repeat=\"prop in properties\">\n" +
-    "      <div ng-if=\"prop[0] === 'fotos' || prop[0] === 'photos'\">\n" +
+    "\n" +
+    "      <div ng-if=\"featureManagerService.isMediaPropertyName(prop[0])\">\n" +
     "        <label class=\"control-label custom-control-label\">{{prop[0]}}</label>\n" +
-    "        <div class=\"photo-group\" ng-repeat=\"photo in prop[1]\">\n" +
-    "          <i ng-click=\"removePhoto(prop, photo)\" class=\"close glyphicon glyphicon-remove\"></i>\n" +
-    "          <img width=\"100%\" ng-src=\"{{photo.modified}}\">\n" +
+    "\n" +
+    "        <div class=\"media-list\" ng-if=\"prop[1].length > 0\">\n" +
+    "          <div ng-repeat=\"photo in prop[1] track by $index\" style=\"padding-right: 10px;\">\n" +
+    "            <div class=\"media-item\" style=\"position: relative\">\n" +
+    "              <img class=\"media-item-thumbnail\" ng-src=\"{{featureManagerService.getMediaUrlThumbnail(photo)}}\"\n" +
+    "                   onerror=\"this.src='/static/maploom/assets/media-error.png'\"\n" +
+    "                   ng-click=\"featureManagerService.showMedia(prop[0], $index)\"/>\n" +
+    "              <i ng-click=\"removePhoto(prop, photo)\" class=\"media-item-remove btn-xs glyphicon glyphicon-remove\"></i>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"row\" style=\"margin-left: 0px;\">\n" +
+    "          <input type=\"file\" multiple=\"multiple\" custom-on-change=\"$parent.$parent.fileInputChanged\" media-prop-name=\"{{prop[0]}}\"\n" +
+    "                 data-toggle=\"tooltip\" tooltip-append-to-body=\"true\" tooltip-placement=\"left\" title=\"dfvdfdf\" tooltip=\"Upload\"/>\n" +
     "        </div>\n" +
     "      </div>\n" +
-    "      <div ng-if=\"prop[0] !== 'fotos' && prop[0] !== 'photos'\">\n" +
+    "\n" +
+    "      <div ng-if=\"!featureManagerService.isMediaPropertyName(prop[0])\">\n" +
     "        <label class=\"control-label custom-control-label\">{{prop[0]}}</label>\n" +
     "        <div ng-switch on=\"prop.type\">\n" +
     "          <datetimepicker ng-switch-when=\"xsd:dateTime\" date-object=\"prop[1]\" default-date=\"inserting\"></datetimepicker>\n" +
@@ -505,18 +520,19 @@ angular.module("featuremanager/partial/exclusivemode.tpl.html", []).run(["$templ
   $templateCache.put("featuremanager/partial/exclusivemode.tpl.html",
     "<div id=\"exclusive-mode-container\" class=\"panel-group collapse flat-top\">\n" +
     "  <div id=\"exclusive-mode-panel\" class=\"panel in\">\n" +
-    "    <div align=\"center\"><h5>{{exclusiveModeService.getTitle()}}</h5></div>\n" +
+    "    <div align=\"center\"><h4>{{exclusiveModeService.getTitle()}}</h4></div>\n" +
+    "    <div align=\"center\"><h6>{{exclusiveModeService.getSubtitle()}}</h6></div>\n" +
     "    <div class=\"btn-group-wrap\">\n" +
     "\n" +
     "    <button ng-click=\"exclusiveModeService.getButtonTwo().callback()\" class=\"btn btn-sm btn-danger\" tooltip-append-to-body=\"true\"\n" +
     "            tooltip-placement=\"bottom\" tooltip=\"{{exclusiveModeService.getButtonTwo().title}}\"><i class=\"glyphicon glyphicon-remove\"></i></button>\n" +
     "    <div ng-show=\"exclusiveModeService.isMultiType()\" class=\"btn-group\">\n" +
     "      <button class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\" ng-click=\"exclusiveModeService.addToFeature()\"\n" +
-    "              tooltip-placement=\"bottom\" tooltip=\"{{'add_to_feature' | translate}}\"><i class=\"glyphicon glyphicon-plus\"></i></button>\n" +
+    "              tooltip-placement=\"bottom\" tooltip=\"{{'add_to_feature' | translate}} {{exclusiveModeService.getBaseType()}} {{'geometry_to' | translate}} {{exclusiveModeService.getType()}}\"><i class=\"glyphicon glyphicon-plus\"></i></button>\n" +
     "      <button class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\" ng-click=\"exclusiveModeService.orthogonalize()\" ng-show=\"exclusiveModeService.isPolygon()\"\n" +
     "              tooltip-placement=\"bottom\" tooltip=\"{{'right_angles' | translate}}\"><i class=\"glyphicon glyphicon-fullscreen\"></i></button>\n" +
     "      <button class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\" ng-click=\"exclusiveModeService.removeFromFeature()\"\n" +
-    "              tooltip-placement=\"bottom\" tooltip=\"{{'remove_from_feature' | translate}}\"><i class=\"glyphicon glyphicon-minus\"></i></button>\n" +
+    "              tooltip-placement=\"bottom\" tooltip=\"{{'remove_from_feature' | translate}} {{exclusiveModeService.getBaseType()}} {{'from' | translate}} {{exclusiveModeService.getType()}}\"><i class=\"glyphicon glyphicon-minus\"></i></button>\n" +
     "    </div>\n" +
     "    <button class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\" ng-show=\"!exclusiveModeService.isMultiType() && exclusiveModeService.isPolygon()\"\n" +
     "            tooltip-placement=\"bottom\" tooltip=\"{{'right_angles' | translate}}\" ng-click=\"exclusiveModeService.orthogonalize()\"><i class=\"glyphicon glyphicon-fullscreen\"></i></button>\n" +
@@ -528,8 +544,7 @@ angular.module("featuremanager/partial/exclusivemode.tpl.html", []).run(["$templ
     "    </div>\n" +
     "\n" +
     "  </div>\n" +
-    "</div>\n" +
-    "");
+    "</div>");
 }]);
 
 angular.module("featuremanager/partial/featureinfobox.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -563,10 +578,12 @@ angular.module("featuremanager/partial/featureinfobox.tpl.html", []).run(["$temp
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"featureManagerService.getState() == 'feature'\">\n" +
-    "    <div id=\"pic-carousel-container\" ng-if=\"featureManagerService.getSelectedItemPics() && isAttributeVisible(featureManagerService.getSelectedItemPics().name)\">\n" +
+    "    <div id=\"pic-carousel-container\" ng-if=\"featureManagerService.getSelectedItemMedia()\">\n" +
     "      <carousel id=\"feature-info-box-carousel\" interval=\"2000\">\n" +
-    "        <slide ng-repeat=\"pic in featureManagerService.getSelectedItemPics() track by $index\">\n" +
-    "          <img ng-src=\"{{pic}}\" style=\"margin: auto\" ng-click=\"featureManagerService.showPics($index)\">\n" +
+    "        <slide ng-repeat=\"mediaItem in featureManagerService.getSelectedItemMedia() track by $index\">\n" +
+    "          <img ng-src=\"{{featureManagerService.getMediaUrlThumbnail(mediaItem)}}\"\n" +
+    "               onerror=\"this.src='/static/maploom/assets/media-error.png'\"\n" +
+    "               style=\"margin: auto\" ng-click=\"featureManagerService.showMedia(null, $index)\">\n" +
     "        </slide>\n" +
     "      </carousel>\n" +
     "    </div>\n" +
@@ -574,7 +591,7 @@ angular.module("featuremanager/partial/featureinfobox.tpl.html", []).run(["$temp
     "    <div class=\"feature-info-box\">\n" +
     "      <span class=\"info-box-attribute\" ng-show=\"!isShowingAttributes()\" translate=\"no_attributes\"></span>\n" +
     "      <span ng-repeat=\"prop in featureManagerService.getSelectedItemProperties()\">\n" +
-    "        <div ng-if=\"prop[0] !== 'fotos' && prop[0] !== 'photos'\" ng-show=\"isAttributeVisible(prop[0])\">\n" +
+    "        <div ng-if=\"!featureManagerService.isMediaPropertyName(prop[0])\" ng-show=\"isAttributeVisible(prop[0])\">\n" +
     "          <span class=\"info-box-attribute\">{{prop[0]}}</span>\n" +
     "            <span ng-switch on=\"isUrl(prop[1])\">\n" +
     "              <a ng-switch-when=\"true\" class=\"info-box-attribute-value\" target=\"_blank\" href=\"{{prop[1]}}\">{{prop[1]}}</a>\n" +
@@ -586,6 +603,9 @@ angular.module("featuremanager/partial/featureinfobox.tpl.html", []).run(["$temp
     "\n" +
     "    <div id=\"feature-info-box-bottom\">\n" +
     "      <div id=\"feature-info-box-button-group\" class=\"btn-group pull-right\">\n" +
+    "        <button type=\"button\" ng-click=\"setAsSpatialFilter()\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\"\n" +
+    "                tooltip=\"{{'set_spatial_filter' | translate}}\" class=\"btn btn-sm btn-default glyphicon glyphicon-filter\">\n" +
+    "        </button>\n" +
     "        <button type=\"button\" ng-click=\"showTable(featureManagerService.getSelectedLayer())\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\"\n" +
     "                tooltip=\"{{'show_table' | translate}}\" class=\"btn btn-sm btn-default glyphicon glyphicon-list\">\n" +
     "            <div class=\"loom-loading\" spinner-radius=\"16\" spinner-hidden=\"!isLoadingTable(featureManagerService.getSelectedLayer())\"></div>\n" +
@@ -596,7 +616,7 @@ angular.module("featuremanager/partial/featureinfobox.tpl.html", []).run(["$temp
     "                class=\"btn btn-sm btn-default glyphicon glyphicon-time\">\n" +
     "          <div class=\"loom-loading\" spinner-radius=\"10\" spinner-width=\"2\" spinner-hidden=\"!loadingHistory\"></div>\n" +
     "                </button>\n" +
-    "        <!--<button type=\"button\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"{{'show_pics' | translate}}\"\n" +
+    "        <!--<button type=\"button\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"{{'show_media' | translate}}\"\n" +
     "                class=\"btn btn-sm btn-default glyphicon glyphicon-camera\"></button>-->\n" +
     "        <button type=\"button\" ng-if=\"featureManagerService.getSelectedLayer().get('metadata').editable &&\n" +
     "        !featureManagerService.getSelectedLayer().get('metadata').readOnly\" ng-click=\"featureManagerService.startAttributeEditing()\"\n" +
@@ -721,8 +741,12 @@ angular.module("layers/partials/layerinfo.tpl.html", []).run(["$templateCache", 
     "    <div class=\"well\">{{serverURL}}</div>\n" +
     "  </div>\n" +
     "  <div ng-show=\"repoName\">\n" +
-    "    <div><h4 translate=\"repo\"></h4></div>\n" +
+    "    <div><h4 translate=\"repo_name\"></h4></div>\n" +
     "    <div class=\"well\">{{repoName}}</div>\n" +
+    "  </div>\n" +
+    "  <div ng-show=\"repoUUID\">\n" +
+    "    <div><h4 translate=\"repo_uuid\"></h4></div>\n" +
+    "    <div class=\"well\">{{repoUUID}}</div>\n" +
     "  </div>\n" +
     "  <div ng-show=\"branchName\">\n" +
     "    <div><h4 translate=\"branch\"></h4></div>\n" +
@@ -740,18 +764,18 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "     arrangeable-placeholder='<div class=\"placeholder\"></div>'>\n" +
     "  <div class=\"panel\"\n" +
     "       ng-repeat=\"layer in layers = mapService.map.getLayers().getArray() | reverse | filter:filterInternalLayers\">\n" +
-    "    <div class=\"panel-heading layer-heading {{ layer.get('metadata').config.group }}\" data-toggle=\"collapse\" ng-class=\"{'placeholder-layer': layer.get('metadata').placeholder}\"\n" +
+    "    <div class=\"panel-heading layer-heading\" data-toggle=\"collapse\" ng-class=\"{'placeholder-layer': layer.get('metadata').placeholder}\"\n" +
     "         data-parent=\"#layerpanel-group\" data-target=\"#{{layer.get('metadata').uniqueID}}\">\n" +
     "      <div class=\"row\">\n" +
     "        <div class=\"layer-title ellipsis\" ng-class=\"{'placeholder-layer-title': layer.get('metadata').placeholder}\">\n" +
     "          {{layer.get('metadata').title}}\n" +
     "        </div>\n" +
     "        <div class=\"layer-buttons\">\n" +
-    "            <span ng-click=\"featureManagerService.startFeatureInsert(layer)\" tooltip-append-to-body=\"true\"\n" +
+    "          <span ng-click=\"featureManagerService.startFeatureInsert(layer)\" tooltip-append-to-body=\"true\"\n" +
     "                tooltip-placement=\"top\" tooltip=\"{{'add_feature' | translate}}\"\n" +
     "                ng-show=\"layer.get('metadata').editable\" stop-event=\"click mousedown\" class=\"btn btn-xs btn-default\"\n" +
     "                ng-disabled=\"(!layer.get('visible') || !layer.get('metadata').schema || layer.get('metadata').readOnly)\">\n" +
-    "            <i class=\"glyphicon glyphicon-pencil\"></i>&nbsp;{{'edit_feature' | translate}}\n" +
+    "            <i class=\"glyphicon glyphicon-pencil\"></i>\n" +
     "          </span>\n" +
     "          <span ng-click=\"toggleVisibility(layer)\" stop-event=\"click mousedown\" tooltip-append-to-body=\"true\"\n" +
     "                ng-show=\"!layer.get('metadata').placeholder\" tooltip-placement=\"top\" tooltip=\"{{'toggle_visibility' | translate}}\"\n" +
@@ -768,11 +792,6 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "      <div class=\"panel-body layer-inner-panel\">\n" +
     "        <div class=\"btn-group-wrap\">\n" +
     "          <div class=\"btn-group\">\n" +
-    "            <a type=\"button\" ng-init=\"layer.get('metadata').active_btn = 'show_attributes'\" ng-click=\"layer.get('metadata').active_btn = 'show_attributes'\" tooltip-append-to-body=\"true\"\n" +
-    "               tooltip-placement=\"top\" tooltip=\"{{'show_attributes' | translate}}\"\n" +
-    "               class=\"btn btn-sm btn-default\">\n" +
-    "              <i class=\"glyphicon glyphicon-home\"></i>\n" +
-    "            </a>\n" +
     "            <a type=\"button\" ng-show=\"!layer.get('metadata').placeholder\" ng-click=\"zoomToData(layer)\" tooltip-append-to-body=\"true\"\n" +
     "               tooltip-placement=\"top\" tooltip=\"{{'zoom_to_data' | translate}}\"\n" +
     "               class=\"btn btn-sm btn-default\">\n" +
@@ -784,11 +803,6 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "               tooltip-placement=\"top\" tooltip=\"{{'show_table' | translate}}\">\n" +
     "              <div class=\"loom-loading\" spinner-radius=\"16\" spinner-hidden=\"!isLoadingTable(layer)\"></div>\n" +
     "              <i class=\"glyphicon glyphicon-list\"></i>\n" +
-    "            </a>\n" +
-    "              <a type=\"button\" ng-click=\"layer.get('metadata').active_btn = 'style_layer';\" ng-show=\"layer.get('metadata').has_style && layer.get('metadata').editable \"\n" +
-    "               class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\"\n" +
-    "               tooltip-placement=\"top\" tooltip=\"{{'style_layer' | translate}}\" ng-disabled=\"(!layer.get('visible') || !layer.get('metadata').schema || layer.get('metadata').readOnly)\">\n" +
-    "              <i class=\"glyphicon glyphicon-tint\"></i>\n" +
     "            </a>\n" +
     "            <a type=\"button\" ng-click=\"showHeatmap(layer)\" ng-show=\"layer.get('metadata').editable == true\"\n" +
     "               class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\"\n" +
@@ -815,10 +829,10 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "            </a>\n" +
     "          </div>\n" +
     "        </div>\n" +
-    "        <label id=\"attribute-label\" for=\"attributeRow\" ng-show=\"layer.get('metadata').editable && layer.get('metadata').active_btn == 'show_attributes'\">{{'attributes' |\n" +
+    "        <label id=\"attribute-label\" for=\"attributeRow\" ng-show=\"layer.get('metadata').editable\">{{'attributes' |\n" +
     "          translate}}</label>\n" +
     "\n" +
-    "        <div id=\"attributeRow\" class=\"row\" ng-show=\"layer.get('metadata').editable && layer.get('metadata').active_btn == 'show_attributes'\">\n" +
+    "        <div id=\"attributeRow\" class=\"row\" ng-show=\"layer.get('metadata').editable\">\n" +
     "          <ul class=\"list-group\">\n" +
     "            <li class=\"list-group-item\" ng-repeat=\"attribute in getAttrList(layer)\">\n" +
     "              <div class=\"attribute-value ellipsis\">{{attribute._name}}</div>\n" +
@@ -831,12 +845,6 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "              </div>\n" +
     "            </li>\n" +
     "          </ul>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <label id=\"style-label\" for=\"styleRow\" ng-show=\"layer.get('metadata').editable && layer.get('metadata').has_style && layer.get('metadata').active_btn == 'style_layer'\">&nbsp;</label>\n" +
-    "\n" +
-    "          <div id=\"styleRow\" class=\"row\" ng-show=\"layer.get('metadata').editable && layer.get('metadata').active_btn == 'style_layer'\">\n" +
-    "        <style-editor class=\"minheight\" control=\"{carousel:true, default:false}\" layer=\"layer\" ng-show=\"layer.get('metadata').editable\" on-change=\"styleChanged\"></style-editor>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
@@ -873,79 +881,6 @@ angular.module("legend/partial/legend.tpl.html", []).run(["$templateCache", func
     "</div>");
 }]);
 
-angular.module("map/partial/chapterdelete.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("map/partial/chapterdelete.tpl.html",
-    "\n" +
-    "<div class=\"modal-footer\">\n" +
-    "    <button id=\"removeChapter\" type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" ng-click=\"storyService.remove_chapter()\">Yes</button>\n" +
-    "    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("map/partial/mapproperties.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("map/partial/mapproperties.tpl.html",
-    "<div class=\"modal-body\">\n" +
-    "    <form class=\"form-horizontal col-md-12\">\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <label for=\"mapTitle\">{{ 'title' | translate }}</label> <input id=\"mapTitle\" ng-model=\"storyService.title\" type=\"text\" class=\"form-control\" value=\"{{storyService.title}}\" placeholder=\"{{storyService.title || ('title' | translate)}}\">\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <label for=\"mapAbstract\">Summary</label><textarea id=\"mapAbstract\" ng-model=\"storyService.abstract\" class=\"form-control\" rows=\"4\" value=\"{{storyService.abstract}}\" placeholder=\"Summary\"></textarea>\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <label for=\"id_category\" class=\"control-label  \">\n" +
-    "                    Category\n" +
-    "                </label>\n" +
-    "                <div class=\"\">\n" +
-    "                    <select class=\"form-control\" id=\"id_category\" name=\"category\" ng-model=\"storyService.category\">\n" +
-    "                        <option value=\"\" selected=\"selected\">---------</option>\n" +
-    "                        <option value=\"1\">Biography</option>\n" +
-    "                        <option value=\"13\">Crisis</option>\n" +
-    "                        <option value=\"3\">Culture & Ideas</option>\n" +
-    "                        <option value=\"6\">Geopolitics</option>\n" +
-    "                        <option value=\"2\">Health</option>\n" +
-    "                        <option value=\"11\">Human Settlement</option>\n" +
-    "                        <option value=\"9\">Nature & Environment</option>\n" +
-    "                        <option value=\"19\">Science & Industry</option>\n" +
-    "                    </select>\n" +
-    "                    <p class=\"help-block\">high-level geographic data thematic classification to assist in the grouping and search of available geographic data sets.</p>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <label for=\"mapKeywords\">Keywords</label><textarea id=\"mapKeywords\" ng-model=\"storyService.keywords\" class=\"form-control\" value=\"{{storyService.keywords}}\"></textarea>\n" +
-    "                <p class=\"help-block\">commonly used word(s) or formalised word(s) or phrase(s) used to describe the subject (space or comma-separated).</p>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </form>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "  <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">{{'save_btn' | translate}}</button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("map/partial/mapsave.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("map/partial/mapsave.tpl.html",
-    "\n" +
-    "<div class=\"modal-footer\">\n" +
-    "    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">{{'close_btn' | translate }}</button>\n" +
-    "    <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" ng-disabled=\"!configService.username\"\n" +
-    "          ng-click=\"storyService.save()\">Save as Draft</button>\n" +
-    "    <!-- If they pick publish, set the published model to true? -->\n" +
-    "  <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" ng-disabled=\"!configService.username\"\n" +
-    "          ng-click=\"storyService.is_published = true; storyService.save();\">Publish</button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "");
-}]);
-
 angular.module("map/partial/savemap.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("map/partial/savemap.tpl.html",
     "<div class=\"modal-body\">\n" +
@@ -953,11 +888,11 @@ angular.module("map/partial/savemap.tpl.html", []).run(["$templateCache", functi
     "        <div class=\"form-group\">\n" +
     "\n" +
     "            <div class=\"form-group\">\n" +
-    "                <label for=\"mapTitle\">{{ 'title' | translate }}</label> <input id=\"mapTitle\" ng-model=\"storyService.title\" type=\"text\" class=\"form-control\" value=\"{{storyService.title}}\" placeholder=\"{{storyService.title || ('title' | translate)}}\">\n" +
+    "                <label for=\"mapTitle\">{{ 'title' | translate }}</label> <input id=\"mapTitle\" ng-model=\"mapService.title\" type=\"text\" class=\"form-control\" value=\"{{mapService.title}}\" placeholder=\"{{mapService.title || ('title' | translate)}}\">\n" +
     "            </div>\n" +
     "\n" +
     "            <div class=\"form-group\">\n" +
-    "                <label for=\"mapAbstract\">{{ 'abstract' | translate }}</label><textarea id=\"mapAbstract\" ng-model=\"storyService.abstract\" class=\"form-control\" rows=\"4\" value=\"{{storyService.abstract}}\" placeholder=\"{{storyService.abstract || ('abstract' | translate)}}\"></textarea>\n" +
+    "                <label for=\"mapAbstract\">{{ 'abstract' | translate }}</label><textarea id=\"mapAbstract\" ng-model=\"mapService.abstract\" class=\"form-control\" rows=\"4\" value=\"{{mapService.abstract}}\" placeholder=\"{{mapService.abstract || ('abstract' | translate)}}\"></textarea>\n" +
     "            </div>\n" +
     "\n" +
     "        </div>\n" +
@@ -966,9 +901,9 @@ angular.module("map/partial/savemap.tpl.html", []).run(["$templateCache", functi
     "<div class=\"modal-footer\">\n" +
     "    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">{{'close_btn' | translate }}</button>\n" +
     "  <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" ng-disabled=\"!configService.username\"\n" +
-    "          ng-click=\"storyService.save()\" ng-show=\"storyService.id\" >{{'save_copy_btn' | translate}}</button>\n" +
+    "          ng-click=\"mapService.save(true)\" ng-show=\"mapService.id\" >{{'save_copy_btn' | translate}}</button>\n" +
     "  <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" ng-disabled=\"!configService.username\"\n" +
-    "          ng-click=\"storyService.save()\">{{'save_btn' | translate}}</button>\n" +
+    "          ng-click=\"mapService.save()\">{{'save_btn' | translate}}</button>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
@@ -1169,326 +1104,6 @@ angular.module("search/partial/search.tpl.html", []).run(["$templateCache", func
     "</div>");
 }]);
 
-angular.module("sidebarapp/partials/addChapter.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/addChapter.tpl.html",
-    "<a id=\"addchapter\" ng-click=\"addChapter();\"><h2>Add a new chapter</h2></a>");
-}]);
-
-angular.module("sidebarapp/partials/addStoryBox.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/addStoryBox.tpl.html",
-    "<h2>{{ chapter.chapter }}</h2>\n" +
-    "<h2>{{ storyService.active_chapter.title }}</h2>\n" +
-    "<h2>Add a New StoryBox</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('selectedChapter' + chapter.id)\">Back</h2></a>\n" +
-    "<h2>Map Extents</h2>\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"updateMapBounds\">Pan and zoom on the map to set the map\n" +
-    "        sounds.</label>\n" +
-    "    <button class=\"btn btn-default btn-block\" id=\"updateMapBounds\">Update Map\n" +
-    "        Bounds\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "<h2>Time Frame</h2>\n" +
-    "<hr>\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"startTime\">Start Time</label>\n" +
-    "    <input class=\"form-control\" type=\"datetime\" id=\"startTime\"/>\n" +
-    "</div>\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"endTime\">End Time</label>\n" +
-    "    <input class=\"form-control\" type=\"datetime\" id=\"endTime\">\n" +
-    "</div>\n" +
-    "<button class=\"btn btn-default btn-block\">Save StoryBox</button>");
-}]);
-
-angular.module("sidebarapp/partials/addStoryPin.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/addStoryPin.tpl.html",
-    "<a href=\"#\">Add a New StoryPin...</a>\n" +
-    "<h2>Add a New StoryPin</h2>\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinTitle\">StoryPin Title</label>\n" +
-    "    <input type=\"text\" class=\"form-control\" id=\"storyPinTitle\"/>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinContent\">StoryPin Content</label>\n" +
-    "    <textarea class=\"form-control\" id=\"storyPinContent\"></textarea>\n" +
-    "    <button class=\"btn btn-default btn-block\" id=\"linkMedia\">Link Media...\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinLocation\">Pin Location</label>\n" +
-    "    <p>Drop pin on the map to set pin location.</p>\n" +
-    "    <button class=\"btn btn-default btn-block\" id=\"savePinLocation\">Save Pin\n" +
-    "        Location\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinTime\">Time</label>\n" +
-    "    <input type=\"datetime\" class=\"form-control\" id=\"storyPinTime\"/>\n" +
-    "</div>\n" +
-    "\n" +
-    "<button class=\"btn btn-default btn-block\" id=\"saveStoryPin\">Save StoryPin\n" +
-    "</button>");
-}]);
-
-angular.module("sidebarapp/partials/chapterInfo.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/chapterInfo.tpl.html",
-    "<h2><i class=\"fa fa-info-circle\"></i>Chapter Info</h2>\n" +
-    "<h2 id=\"chapterInfoBackButton\" ng-click=\"updateMenuSection('selectedChapter' + chapter.id)\"><a\n" +
-    "        href=\"#\"\n" +
-    "        id=\"chapterInfoBackButton\">Back</a>\n" +
-    "</h2>\n" +
-    "<a href=\"#\">Chapter Title</a>\n" +
-    "<input ng-model=\"storyService.active_chapter.about.title\" class=\"form-control\" type=\"text\" name=\"chapterTitle\"\n" +
-    "       id=\"chapterTitle\"/>\n" +
-    "\n" +
-    "<a href=\"#\">Chapter Summary</a>\n" +
-    "<textarea ng-model=\"storyService.active_chapter.about.abstract\" class=\"form-control\" name=\"chapterSummary\"\n" +
-    "          id=\"chapterSummary\"></textarea>\n" +
-    "\n" +
-    "<button data-target=\"#mapSave\" data-toggle=\"modal\" type=\"button\"\n" +
-    "        class=\"btn btn-default btn-lg center-block\">Save Chapter Info\n" +
-    "</button>");
-}]);
-
-angular.module("sidebarapp/partials/chaptersList.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/chaptersList.tpl.html",
-    "<a href=\"#\"><h2 ng-click=\"storyService.update_active_config(chapter.id);updateMenuSection('selectedChapter' + chapter.id)\">\n" +
-    "    <i class=\"fa fa-plus-square-o\"></i>{{ chapter.chapter }}</h2>\n" +
-    "</a>");
-}]);
-
-angular.module("sidebarapp/partials/editStoryBox.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/editStoryBox.tpl.html",
-    "<h2>{{ chapter.chapter }}</h2>\n" +
-    "<h2>{{ storyService.active_chapter.title }}</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('selectedChapter' + chapter.id)\">Back</h2></a>\n" +
-    "<h2>Map Extents</h2>\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"updateMapBounds\">Pan and zoom on the map to set the map\n" +
-    "        sounds.</label>\n" +
-    "    <button class=\"btn btn-default btn-block\" id=\"updateMapBounds\">Update Map\n" +
-    "        Bounds\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "<h2>Time Frame</h2>\n" +
-    "<hr>\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"startTime\">Start Time</label>\n" +
-    "    <input class=\"form-control\" type=\"datetime\" id=\"startTime\"/>\n" +
-    "</div>\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"endTime\">End Time</label>\n" +
-    "    <input class=\"form-control\" type=\"datetime\" id=\"endTime\">\n" +
-    "</div>\n" +
-    "<button class=\"btn btn-default btn-block\">Save StoryBox</button>");
-}]);
-
-angular.module("sidebarapp/partials/editStoryLayer.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/editStoryLayer.tpl.html",
-    "<h2>{{ chapter.chapter }}</h2>\n" +
-    "<h2>{{ storyService.active_chapter.title }}</h2>\n" +
-    "<h2>{{ storyService.active_layer.get('metadata').title}}</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('storyLayers' + chapter.id)\">Back</h2></a>\n" +
-    "<ul class=\"nav nav-tabs\" data-tabs=\"tabs\">\n" +
-    "    <li class=\"active\"><a data-toggle=\"tab\" href=\"#style\">Style</a>\n" +
-    "    <li><a data-toggle=\"tab\" href=\"#edit\">Edit</a></li>\n" +
-    "    <li><a data-toggle=\"tab\" href=\"#infobox\">Infobox</a></li>\n" +
-    "</ul>\n" +
-    "<div class=\"tab-content\">\n" +
-    "    <div id=\"style\" class=\"tab-pane fade in active\">\n" +
-    "        <p>Carousel</p>\n" +
-    "        <hr>\n" +
-    "        <select class=\"form-control\">\n" +
-    "            <option>Color</option>\n" +
-    "            <option>Red</option>\n" +
-    "            <option>Green</option>\n" +
-    "            <option>Blue</option>\n" +
-    "        </select>\n" +
-    "        <select class=\"form-control\">\n" +
-    "            <option>Symbol Size</option>\n" +
-    "        </select>\n" +
-    "        <select class=\"form-control\">\n" +
-    "            <option>Symbol Style</option>\n" +
-    "        </select>\n" +
-    "        <select class=\"form-control\">\n" +
-    "            <option>Classification</option>\n" +
-    "        </select>\n" +
-    "        <hr>\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\" ng-click=\"storyService.removeLayer()\">Delete this\n" +
-    "            StoryLayer\n" +
-    "        </button>\n" +
-    "\n" +
-    "        <hr>\n" +
-    "    </div>\n" +
-    "    <div id=\"edit\" class=\"tab-pane fade\">\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\">Start Editing</button>\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\" ng-click=\"storyService.showTable()\">View Attribute Table\n" +
-    "        </button>\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\">View History</button>\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\" ng-click=\"storyService.removeLayer()\">Delete This\n" +
-    "            StoryLayer\n" +
-    "        </button>\n" +
-    "    </div>\n" +
-    "    <div id=\"infobox\" class=\"tab-pane fade\">\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <label for=\"layerAlias\">Layer Alias</label>\n" +
-    "            <textarea class=\"form-control\" id=\"layerAlias\" rows=\"2\"></textarea>\n" +
-    "        </div>\n" +
-    "        <hr>\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <label for=\"customizeInfoBox\">Customize Info Box</label>\n" +
-    "            <table class=\"table table-striped table-bordered\"\n" +
-    "                   id=\"customizeInfoBox\">\n" +
-    "                <tr>\n" +
-    "                    <th class=\"text-center\">Attr</th>\n" +
-    "                    <th class=\"text-center\">Mask</th>\n" +
-    "                    <th class=\"text-center\">Show?</th>\n" +
-    "                </tr>\n" +
-    "                <tr>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                </tr>\n" +
-    "                <tr>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                </tr>\n" +
-    "                <tr>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                </tr>\n" +
-    "                <tr>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                    <td></td>\n" +
-    "                </tr>\n" +
-    "            </table>\n" +
-    "        </div>\n" +
-    "        <hr>\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\">Save Settings</button>\n" +
-    "        <button class=\"btn btn-default btn-lg btn-block\" ng-click=\"storyService.removeLayer()\">Delete this\n" +
-    "            StoryLayer\n" +
-    "        </button>\n" +
-    "    </div>\n" +
-    "</div>");
-}]);
-
-angular.module("sidebarapp/partials/editStoryPin.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/editStoryPin.tpl.html",
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinTitle\">StoryPin Title</label>\n" +
-    "    <input type=\"text\" class=\"form-control\" id=\"storyPinTitle\"/>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinContent\">StoryPin Content</label>\n" +
-    "    <textarea class=\"form-control\" id=\"storyPinContent\"></textarea>\n" +
-    "    <button class=\"btn btn-default btn-block\" id=\"linkMedia\">Link Media...\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinLocation\">Pin Location</label>\n" +
-    "    <p>Drop pin on the map to set pin location.</p>\n" +
-    "    <button class=\"btn btn-default btn-block\" id=\"savePinLocation\">Save Pin\n" +
-    "        Location\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"form-group\">\n" +
-    "    <label for=\"storyPinTime\">Time</label>\n" +
-    "    <input type=\"datetime\" class=\"form-control\" id=\"storyPinTime\"/>\n" +
-    "</div>\n" +
-    "\n" +
-    "<button class=\"btn btn-default btn-block\" id=\"saveStoryPin\">Save StoryPin\n" +
-    "</button>");
-}]);
-
-angular.module("sidebarapp/partials/getSkills.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/getSkills.tpl.html",
-    "<a href=\"/getskills\" target=\"_blank\"><h2>Help</h2></a>");
-}]);
-
-angular.module("sidebarapp/partials/mainMenuTop.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/mainMenuTop.tpl.html",
-    "<h2 ng-show=\"menuSection=='mainMenu'\"><i class=\"fa fa-reorder\" ng-click=\"updateMenuSection('None')\"></i>{{ storyService.title }}</h2>\n" +
-    "\n" +
-    "<div class=\"form-group\" ng-show=\"menuSection=='mainMenu'\">\n" +
-    "    <button class=\"btn btn-default btn-md\" data-target=\"#mapProperties\" data-toggle=\"modal\">Summary\n" +
-    "    </button>\n" +
-    "    <button class=\"btn btn-default btn-md\" data-target=\"#mapSave\" data-toggle=\"modal\">Save MapStory...\n" +
-    "    </button>\n" +
-    "    <button class=\"btn btn-default btn-md\" data-target=\"mapPreview\" data-toggle=\"modal\">Preview</button>\n" +
-    "</div>");
-}]);
-
-angular.module("sidebarapp/partials/selectedChapter.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/selectedChapter.tpl.html",
-    "<h2 ng-click=\"\">{{ chapter.chapter }}</h2>\n" +
-    "<h2 ng-click=\"\">{{ storyService.active_chapter.about.title }}</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('mainMenu')\">Back to Chapters List</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('chapterInfo' + chapter.id)\">Chapter Info</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('storyLayers' + chapter.id)\">StoryLayers</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('storyBoxes' + chapter.id)\">StoryBoxes</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('storyPins' + chapter.id)\">StoryPins</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"\">Delete this Chapter</h2></a>");
-}]);
-
-angular.module("sidebarapp/partials/storyBoxes.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/storyBoxes.tpl.html",
-    "<h2>{{ chapter.chapter }}</h2>\n" +
-    "<h2>{{ storyService.active_chapter.title }}</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('selectedChapter' + chapter.id)\">Back</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('addStoryBox' + chapter.id)\">Add a New\n" +
-    "    StoryBox...</h2>\n" +
-    "</a>\n" +
-    "<div ng-repeat=\"storyBox in chapter.storyBoxes\">\n" +
-    "    <a href=\"#\"><h2 ng-click=\"updateMenuSection('editStoryBox' + chapter.id + storyBoxes.id)\">{{\n" +
-    "        storyBox.title }}</h2></a>\n" +
-    "</div>");
-}]);
-
-angular.module("sidebarapp/partials/storyLayers.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/storyLayers.tpl.html",
-    "<h2>{{ chapter.chapter }}</h2>\n" +
-    "<h2>{{ storyService.active_chapter.about.title }}</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('selectedChapter' + chapter.id)\">Back</h2></a>\n" +
-    "<a href=\"#add-layer-dialog\" data-toggle=\"modal\"><h2>Add a New\n" +
-    "    StoryLayer...</h2>\n" +
-    "</a>\n" +
-    "<div ng-repeat=\"storyLayer in storyLayers = storyService.getLayers()\">\n" +
-    "    <a href=\"#\"><h2 ng-click=\"storyService.selectLayer(storyLayer);updateMenuSection('editStoryLayer' + chapter.id + storyLayers.id)\">{{\n" +
-    "        storyLayer.get('metadata').title }}</h2></a>\n" +
-    "</div>");
-}]);
-
-angular.module("sidebarapp/partials/storyPins.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sidebarapp/partials/storyPins.tpl.html",
-    "<h2>{{ chapter.chapter }}</h2>\n" +
-    "<h2>{{ storyService.active_chapter.title }}</h2>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('selectedChapter' + chapter.id)\">Back</h2></a>\n" +
-    "<a href=\"#\"><h2 ng-click=\"updateMenuSection('addStoryPin' + chapter.id)\">Add a New\n" +
-    "    StoryPin...</h2>\n" +
-    "</a>\n" +
-    "<div ng-repeat=\"storyPin in chapter.storyPins\">\n" +
-    "    <a href=\"#\"><h2 ng-click=\"updateMenuSection('editStoryBox' + chapter.id + storyPins.id)\">{{\n" +
-    "        storyPin.title }}</h2></a>\n" +
-    "</div>");
-}]);
-
 angular.module("statistics/partial/statistics.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("statistics/partial/statistics.tpl.html",
     "<div class=\"modal-body\">\n" +
@@ -1571,133 +1186,6 @@ angular.module("statistics/partial/statistics.tpl.html", []).run(["$templateCach
     "");
 }]);
 
-angular.module("storybox/partials/addstorybox.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("storybox/partials/addstorybox.tpl.html",
-    "<div class=\"modal-body\">\n" +
-    "    <form class=\"form-horizontal col-md-12\">\n" +
-    "\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <label for=\"title\">Title</label>\n" +
-    "\n" +
-    "            <div>\n" +
-    "                <input ng-model=\"box.title\" ng-required class=\"form-control\" id=\"title\" placeholder=\"Title\">\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <label for=\"description\">Description</label>\n" +
-    "\n" +
-    "            <div>\n" +
-    "                <textarea ng-model=\"box.description\" class=\"form-control\" id=\"description\"\n" +
-    "                          placeholder=\"Description\"></textarea>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-xs-5\">\n" +
-    "                <div class=\"form-group\">\n" +
-    "                    <label for=\"start_time\">Start Time</label>\n" +
-    "\n" +
-    "                    <div>\n" +
-    "                        <!--input ng-model=\"box.start_time\" class=\"form-control\" id=\"start_time\" placeholder=\"Start time\"-->\n" +
-    "                         <datetimepicker date-object=\"box.start_time\" default-date=\"inserting\"></datetimepicker>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-5 pull-right\">\n" +
-    "                <div class=\"form-group\">\n" +
-    "                    <label for=\"end_time\">End Time</label>\n" +
-    "\n" +
-    "                    <div>\n" +
-    "                        <!--input ng-model=\"box.end_time\" class=\"form-control\" id=\"end_time\" placeholder=\"End time\"-->\n" +
-    "                         <datetimepicker date-object=\"box.end_time\" default-date=\"inserting\"></datetimepicker>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <button type=\"button\" style=\"margin-left:-15px;\"\n" +
-    "                ng-if=\"currentServer.lazy && currentServer.layersConfig.length===0 && !currentServer.populatingLayersConfig\"\n" +
-    "                tooltip=\"This server is configured to lazily load layers.\" tooltip-placement=\"right\"\n" +
-    "                class=\"btn btn-default\"\n" +
-    "                ng-click=\"serverService.populateLayersConfig(serverService.getServerById(currentServerId), true)\">\n" +
-    "            <i class=\"glyphicon glyphicon-save\"></i>\n" +
-    "            <span>{{'fetch_layers_from_server' | translate}}</span>\n" +
-    "        </button>\n" +
-    "        <div class=\"add-layers-loading loom-loading\" spinner-hidden=\"!currentServer.populatingLayersConfig\"></div>\n" +
-    "        <!--pre>box = {{box | json}}</pre-->\n" +
-    "    </form>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" translate=\"close_btn\">Close</button>\n" +
-    "    <button type=\"button\" class=\"btn btn-primary\" ng-click=\"addStoryBox(box)\" data-dismiss=\"modal\"\n" +
-    "            translate=\"add_btn\">Add\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "");
-}]);
-
-angular.module("storybox/partials/boxinfo.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("storybox/partials/boxinfo.tpl.html",
-    "<div class=\"modal-body\">\n" +
-    "    <div ng-show=\"range\">\n" +
-    "        <div class=\"well\">{{range}}</div>\n" +
-    "    </div>\n" +
-    "    <div ng-show=\"title\">\n" +
-    "        <div><h4 translate=\"title\"></h4></div>\n" +
-    "        <div class=\"well\">{{title}}</div>\n" +
-    "    </div>\n" +
-    "    <div ng-show=\"description\">\n" +
-    "        <div><h4 translate=\"description\"></h4></div>\n" +
-    "        <div class=\"well\">{{description}}</div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "</div>");
-}]);
-
-angular.module("storybox/partials/storyboxes.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("storybox/partials/storyboxes.tpl.html",
-    "<div id=\"storyboxpanel-group\" class=\"panel-group loom-arrangeable storybox-container\">\n" +
-    "  <div class=\"panel\"\n" +
-    "       ng-repeat=\"storyBox in layers = boxService.getBoxes()\">\n" +
-    "    <div class=\"panel-heading storybox-heading\" data-toggle=\"collapse\" ng-class=\"{'placeholder-layer': storyBox.title}\"\n" +
-    "         data-parent=\"#storyboxpanel-group\" data-target=\"#{{storyBox.id}}\">\n" +
-    "      <div class=\"row\">\n" +
-    "        <div class=\"layer-title ellipsis\" ng-class=\"{'placeholder-storybox-title': storyBox.title}\">\n" +
-    "          {{storyBox.title }}\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div id=\"{{storyBox.id}}\" class=\"panel-collapse collapse\">\n" +
-    "      <div class=\"panel-body layer-inner-panel\">\n" +
-    "        <div class=\"btn-group-wrap\">\n" +
-    "          <div class=\"btn-group\">\n" +
-    "            <a type=\"button\" ng-show=\"storyBox\" ng-click=\"zoomToBox(storyBox)\" tooltip-append-to-body=\"true\"\n" +
-    "               tooltip-placement=\"top\" tooltip=\"{{'zoom_to_storybox' | translate}}\"\n" +
-    "               class=\"btn btn-sm btn-default\">\n" +
-    "              <div class=\"loom-loading\" spinner-radius=\"16\" spinner-hidden=\"!zooming\"></div>\n" +
-    "              <i class=\"glyphicon glyphicon-resize-small\"></i>\n" +
-    "            </a>\n" +
-    "            <a type=\"button\" ng-show=\"storyBox\"\n" +
-    "               tooltip-append-to-body=\"true\" ng-click=\"getBoxInfo(storyBox)\"\n" +
-    "               tooltip-placement=\"top\" tooltip=\"{{'show_storybox_info' | translate}}\"\n" +
-    "               class=\"btn btn-sm btn-default\">\n" +
-    "              <i class=\"glyphicon glyphicon-info-sign\"></i>\n" +
-    "            </a>\n" +
-    "            <a type=\"button\" ng-click=\"removeBox(storyBox)\" id=\"remove-button\"\n" +
-    "               class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\"\n" +
-    "               tooltip-placement=\"top\" tooltip=\"{{'remove_storybox' | translate}}\">\n" +
-    "              <i class=\"glyphicon glyphicon-trash\"></i>\n" +
-    "            </a>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "");
-}]);
-
 angular.module("sync/partials/addsync.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("sync/partials/addsync.tpl.html",
     "<div id=\"loading\" class=\"hidden\">\n" +
@@ -1755,21 +1243,6 @@ angular.module("sync/partials/addsync.tpl.html", []).run(["$templateCache", func
     "  <button type=\"button\" class=\"btn btn-primary\"\n" +
     "          ng-click=\"createLink(name, selectedRepo, selectedRemote, localBranch, remoteBranch)\"\n" +
     "          ng-disabled=\"!syncform.$valid\" translate=\"add_btn\">Add</button>\n" +
-    "</div>\n" +
-    "");
-}]);
-
-angular.module("sync/partials/remoteselect.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("sync/partials/remoteselect.tpl.html",
-    "<div class=\"modal-body\">\n" +
-    "  <div class=\"row\"><p translate=\"multiple_compatible_repos\"></p></div>\n" +
-    "  <br>\n" +
-    "  <select class=\"form-control\" ng-model=\"selectedRepo\" required ng-options=\"repo for repo in remoteService.compatibleRepos\">\n" +
-    "  </select>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "  <button type=\"button\" class=\"btn btn-primary\" ng-click=\"finish()\"\n" +
-    "          ng-disabled=\"!selectedRepo\" translate=\"continue_btn\">Continue</button>\n" +
     "</div>\n" +
     "");
 }]);
@@ -2064,6 +1537,10 @@ angular.module("tableview/partial/tableview.tpl.html", []).run(["$templateCache"
     "    <!--<button ng-if=\"!advFilters\" type=\"button\" class=\"filter-button btn btn-default table-btn\" ng-click=\"toggleAdvancedFilters()\"-->\n" +
     "            <!--translate=\"advanced_filters\" ng-disabled=\"tableviewform.$visible\">-->\n" +
     "    <!--</button>-->\n" +
+    "  <button id=\"spatial-filter-button\" ng-if=\"spatialFilter.geometryGML\" type=\"button\" class=\"filter-button btn btn-default table-btn\" ng-click=\"toggleSpatialFilters()\"\n" +
+    "          translate=\"spatial_filter\" ng-disabled=\"tableviewform.$visible\" data-toggle=\"button\">\n" +
+    "  </button>\n" +
+    "  {{ spatialFilter.layerName }}\n" +
     "  <form editable-form name=\"tableviewform\" onaftersave=\"saveTable()\">\n" +
     "    <div class=\"panel panel-default\">\n" +
     "      <table class=\"table-striped table-hover\" ng-class=\"{sortable: isSortable}\">\n" +
@@ -2176,13 +1653,13 @@ angular.module("tableview/partial/tableview.tpl.html", []).run(["$templateCache"
 angular.module("timeline/partials/timeline.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("timeline/partials/timeline.tpl.html",
     "<div class=\"timeline-background2\" ng-show=\"timelineServiceEnabled\">\n" +
-    "    <div style=\"margin: auto;\">\n" +
+    "    <div style=\"margin: auto; text-align: center; \">\n" +
     "        <a type=\"button\" ng-click=\"onPlay()\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Play\"\n" +
-    "           class=\"btn btn-md btn-default playback\" ng-if=\"!isPlaying()\">\n" +
+    "           class=\"btn btn-sm btn-default\" ng-if=\"!isPlaying()\">\n" +
     "            <i class=\"glyphicon glyphicon-play\"></i>\n" +
     "        </a>\n" +
     "        <a type=\"button\" ng-click=\"onPause()\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Pause\"\n" +
-    "           class=\"btn btn-md btn-default playback\" ng-if=\"isPlaying()\">\n" +
+    "           class=\"btn btn-sm btn-default\" ng-if=\"isPlaying()\">\n" +
     "            <i class=\"glyphicon glyphicon-pause\"></i>\n" +
     "        </a>\n" +
     "        <input class=\"timeline-slider\" type=\"range\" min=\"0\" max=\"100\" step=\"1\" list=\"timesliderTickDataList\" ng-model=\"timeCurrentPercent\" data-trigger=\"manual focus\" data-toggle=\"popover\" data-placement=\"top\" data-animation=\"false\">\n" +
@@ -2191,28 +1668,23 @@ angular.module("timeline/partials/timeline.tpl.html", []).run(["$templateCache",
     "        </datalist>\n" +
     "        <div class=\"btn-group\">\n" +
     "            <a type=\"button\" ng-class=\"{'active': getRepeat()}\" ng-click=\"setRepeat(!getRepeat())\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Repeat\"\n" +
-    "               class=\"btn btn-md btn-default playback\">\n" +
+    "               class=\"btn btn-sm btn-default\">\n" +
     "                <i class=\"glyphicon glyphicon-repeat\"></i>\n" +
     "            </a>\n" +
     "            <a type=\"button\" ng-click=\"onPrevTick()\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Step Backward\"\n" +
-    "               class=\"btn btn-md btn-default playback\">\n" +
+    "               class=\"btn btn-sm btn-default\">\n" +
     "                <i class=\"glyphicon glyphicon-step-backward\"></i>\n" +
     "            </a>\n" +
     "            <a type=\"button\" ng-click=\"onNextTick()\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Step Forward\"\n" +
-    "               class=\"btn btn-md btn-default playback\">\n" +
+    "               class=\"btn btn-sm btn-default\">\n" +
     "                <i class=\"glyphicon glyphicon-step-forward\"></i>\n" +
     "            </a>\n" +
     "        </div>\n" +
     "        <a type=\"button\" ng-class=\"{'active': getFilterByTime()}\" ng-click=\"setFilterByTime(!getFilterByTime())\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Filter Features By Timeline\"\n" +
-    "           class=\"btn btn-md btn-default playback\">\n" +
+    "           class=\"btn btn-sm btn-default\">\n" +
     "            <i class=\"glyphicon glyphicon-filter\"></i>\n" +
     "        </a>\n" +
-    "        <a type=\"button\" ng-click=\"toggleTimeline()\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"Toggle Timeline\"\n" +
-    "           class=\"btn btn-md btn-default playback\">\n" +
-    "            <i class=\"glyphicon glyphicon-time\"></i>\n" +
-    "        </a>\n" +
     "    </div>\n" +
-    "     <div id=\"timeline\"></div>\n" +
     "</div>");
 }]);
 

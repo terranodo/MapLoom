@@ -140,7 +140,7 @@
       q_ = $q;
 
       // create map on init so that other components can use map on their init
-      this.configuration = angular.copy(configService_.configuration);
+      this.configuration = configService_.configuration;
       this.title = this.configuration.about.title;
       this.abstract = this.configuration.about.abstract;
       this.id = this.configuration.id;
@@ -155,11 +155,8 @@
 
       this.map = this.createMap();
 
-      // now that we have a map, lets try to add layers and servers
-      service_.loadLayers(this.configuration);
-
-      this.chapterLayers = [];
-      this.chapterLayers.push(this.map.getLayerGroup());
+      // now taht we have a map, lets try to add layers and servers
+      service_.loadLayers();
 
       this.editLayer = createVectorEditLayer();
 
@@ -260,29 +257,6 @@
       view.fitExtent(extent, map.getSize());
     };
 
-    this.updateStyle = function(layer) {
-      var style = layer.get('style') || layer.get('metadata').style || '';
-      var isComplete = new storytools.edit.StyleComplete.StyleComplete().isComplete(style);
-      if (isComplete && goog.isDefAndNotNull(layer.getSource)) {
-        var layerSource = layer.getSource();
-        if (goog.isDefAndNotNull(layerSource) && goog.isDefAndNotNull(layerSource.getParams) && goog.isDefAndNotNull(layer.get('styleName'))) {
-          var sld = new storytools.edit.SLDStyleConverter.SLDStyleConverter();
-          var xml = sld.generateStyle(style, layer.getSource().getParams().LAYERS, true);
-          httpService_({
-            url: '/geoserver/rest/styles/' + layer.get('styleName') + '.xml',
-            method: 'PUT',
-            data: xml,
-            headers: {'Content-Type': 'application/vnd.ogc.sld+xml; charset=UTF-8'}
-          }).then(function(result) {
-            if (goog.isDefAndNotNull(layerSource.updateParams)) {
-              layerSource.updateParams({'_dc': new Date().getTime(), '_olSalt': Math.random()});
-            }
-          });
-        }
-      }
-
-    };
-
     this.zoomToLayerFeatures = function(layer) {
       var deferredResponse = q_.defer();
 
@@ -338,18 +312,17 @@
             deferredResponse.resolve();
             return;
           }
-          if (goog.isDefAndNotNull(json.BoundingBox)) {
-            var lower = json.BoundingBox.LowerCorner.toString().split(' ');
-            var upper = json.BoundingBox.UpperCorner.toString().split(' ');
-            var bounds = [JSON.parse(lower[0], 10), JSON.parse(lower[1], 10), JSON.parse(upper[0], 10), JSON.parse(upper[1], 10)];
-            //console.log('------- [[ bounds: ', bounds);
-            var transform = ol.proj.getTransformFromProjections(ol.proj.get(layer.get('metadata').projection), ol.proj.get('EPSG:900913'));
-            var extent900913 = ol.extent.applyTransform(bounds, transform);
-            service_.zoomToExtent(extent900913, null, null, 0.1);
-          }else {
-            console.log('----[ Warning: wps gs:bounds failed, zooming to layer bounds ', data, status, headers, config);
-            service_.zoomToLayerExtent(layer);
-          }
+          var lower = json.BoundingBox.LowerCorner.toString().split(' ');
+          var upper = json.BoundingBox.UpperCorner.toString().split(' ');
+          var bounds = [JSON.parse(lower[0], 10),
+                        JSON.parse(lower[1], 10),
+                        JSON.parse(upper[0], 10),
+                        JSON.parse(upper[1], 10)];
+          //console.log('------- [[ bounds: ', bounds);
+          var transform = ol.proj.getTransformFromProjections(ol.proj.get(layer.get('metadata').projection),
+              ol.proj.get('EPSG:900913'));
+          var extent900913 = ol.extent.applyTransform(bounds, transform);
+          service_.zoomToExtent(extent900913, null, null, 0.1);
           deferredResponse.resolve();
         }).error(function(data, status, headers, config) {
           console.log('----[ Warning: wps gs:bounds failed, zooming to layer bounds ', data, status, headers, config);
@@ -370,6 +343,8 @@
 
       var shrinkExtent = function(extent, shrink) {
         var newExtent = extent;
+
+        // If the extent is null, make a new one while shrinking based on factor
         if (!goog.isDefAndNotNull(extent) && goog.isDefAndNotNull(metadata) &&
             goog.isDefAndNotNull(metadata.bbox.crs)) {
           newExtent = goog.array.clone(metadata.bbox.extent);
@@ -379,39 +354,37 @@
           newExtent[1] += yDelta;
           newExtent[2] -= xDelta;
           newExtent[3] -= yDelta;
-          var transform = ol.proj.getTransformFromProjections(ol.proj.get(metadata.bbox.crs),
-              service_.map.getView().getProjection());
-          newExtent = ol.extent.applyTransform(newExtent, transform);
         }
+
+        // Create transform and project to current map
+        var transform = ol.proj.getTransformFromProjections(ol.proj.get(metadata.bbox.crs),
+            service_.map.getView().getProjection());
+        newExtent = ol.extent.applyTransform(newExtent, transform);
+
         return newExtent;
       };
 
-      var extent900913 = shrinkExtent(layer.getSource().getExtent(), 0);
+      var extent900913;
+      if (goog.isDefAndNotNull(layer.getSource().getExtent)) {
+        extent900913 = shrinkExtent(layer.getSource().getExtent(), 0);
+      } else {
+        extent900913 = shrinkExtent(metadata.bbox.extent, 0);
+      }
 
       if (goog.isDefAndNotNull(extent900913)) {
         for (var index = 0; index < extent900913.length; index++) {
           if (isNaN(parseFloat(extent900913[index])) || !isFinite(extent900913[index])) {
-            extent900913 = shrinkExtent(layer.getSource().getExtent(), 0.001);
+            if (goog.isDefAndNotNull(layer.getSource().getExtent)) {
+              extent900913 = shrinkExtent(layer.getSource().getExtent(), 0.001);
+            } else {
+              extent900913 = shrinkExtent(metadata.bbox.extent, 0.001);
+            }
             break;
           }
         }
       }
 
       service_.zoomToExtent(extent900913);
-    };
-
-    this.zoomToAreaOfIntrestExtent = function(extent) {
-      var deferredResponse = q_.defer();
-
-      if (!goog.isDefAndNotNull(extent)) {
-        deferredResponse.resolve();
-        return deferredResponse.promise;
-      }
-
-      service_.zoomToExtent(extent);
-      deferredResponse.resolve();
-
-      return deferredResponse.promise;
     };
 
     this.getLayers = function(includeHidden, includeEditable) {
@@ -506,7 +479,7 @@
      */
     this.addLayer = function(minimalConfig, opt_layerOrder) {
       var server = serverService_.getServerById(minimalConfig.source);
-      if (goog.isDefAndNotNull(server) && server.ptype === 'gxp_mapquestsource' && minimalConfig.name === 'naip') {
+      if (server.ptype === 'gxp_mapquestsource' && minimalConfig.name === 'naip') {
         minimalConfig.name = 'sat';
       }
 
@@ -577,6 +550,17 @@
         });
       } else {
         if (server.ptype === 'gxp_osmsource') {
+          var osmLocal = {
+            attributions: [
+              new ol.Attribution({
+                html: settings.OsmLocalAttribution
+              }),
+              ol.source.OSM.ATTRIBUTION
+            ],
+            crossOrigin: null,
+            url: settings.OsmLocalUrl
+          };
+          var osmSource = (settings.OsmLocalUrl !== 'default') ? osmLocal : '';
           layer = new ol.layer.Tile({
             metadata: {
               serverId: server.id,
@@ -584,7 +568,7 @@
               title: fullConfig.Title
             },
             visible: minimalConfig.visibility,
-            source: new ol.source.OSM()
+            source: new ol.source.OSM(osmSource)
           });
         } else if (server.ptype === 'gxp_bingsource') {
 
@@ -666,20 +650,6 @@
             }
           }
 
-          var styles = [];
-          if (goog.isDefAndNotNull(fullConfig.Style)) {
-            console.log('config style', fullConfig.Style);
-            for (var index = 0; index < fullConfig.Style.length; index++) {
-              var style = fullConfig.Style[index];
-              styles.push({
-                name: style.Name,
-                title: style.Title,
-                abstract: style.Abstract,
-                legendUrl: style.LegendURL[0].OnlineResource
-              });
-            }
-          }
-
           console.log('config crs', fullConfig.CRS);
           console.log('getCode', service_.getCRSCode(fullConfig.CRS));
           layer = new ol.layer.Tile({
@@ -693,7 +663,6 @@
               workspace: nameSplit.length > 1 ? nameSplit[0] : '',
               readOnly: false,
               editable: false,
-              styles: styles,
               bbox: (goog.isArray(fullConfig.BoundingBox) ? fullConfig.BoundingBox[0] : fullConfig.BoundingBox),
               projection: service_.getCRSCode(fullConfig.CRS),
               savedSchema: minimalConfig.schema,
@@ -803,11 +772,11 @@
 
         var insertIndex = -1;
 
-        for (var idx = 0; idx < mapLayers.length; idx++) {
-          var lyr = mapLayers[idx];
+        for (var index = 0; index < mapLayers.length; index++) {
+          var lyr = mapLayers[index];
           var lyrLayerOrder = lyr.get('metadata').layerOrder;
           if (meta.layerOrder < lyrLayerOrder) {
-            insertIndex = idx;
+            insertIndex = index;
             break;
           }
         }
@@ -842,10 +811,6 @@
       return translate_.instant('new_map');
     };
 
-    this.getMap = function(chapter_index) {
-      return this.maps[chapter_index];
-    };
-
     this.getCenter = function() {
       return this.map.getView().getCenter();
     };
@@ -858,16 +823,16 @@
       return this.map.getView().getZoom();
     };
 
-    this.getSaveURL = function(id) {
-      if (goog.isDefAndNotNull(id) && id) {
-        return '/maps/' + id + '/data';
+    this.getSaveURL = function() {
+      if (goog.isDefAndNotNull(service_.id) && service_.id) {
+        return '/maps/' + service_.id + '/data';
       } else {
         return '/maps/new/data';
       }
     };
 
-    this.getSaveHTTPMethod = function(id) {
-      if (goog.isDefAndNotNull(id) && id) {
+    this.getSaveHTTPMethod = function() {
+      if (goog.isDefAndNotNull(service_.id) && service_.id) {
         return 'PUT';
       } else {
         return 'POST';
@@ -876,52 +841,29 @@
 
     // Update the map after save.
     this.updateMap = function(data) {
-      service_.configuration.map.id = data.id;
+      service_.id = data.id;
     };
 
-    this.updateActiveMap = function(chapter_index, chapter_config) {
-      var activeLayers = this.chapterLayers[chapter_index];
-      this.map.setLayerGroup(activeLayers);
+    this.save = function(copy) {
 
-      //service_.loadMap(chapter_config);
-    };
+      if (goog.isDefAndNotNull(copy) && copy) {
+        // remove current map id so that it is saved as a new map.
+        service_.id = null;
+      }
 
-    //Create the new layergroup for the  new chapter
-    //Parameter currently unused
-    this.create_chapter = function(new_config) {
-
-      //TODO: May have to remove layers from existing layer group instead of creating new one.
-      this.chapterLayers.push(new ol.layer.Group());
-
-      //this.updateActiveMap(new_index,new_config);
-    };
-
-    this.save = function(map_config) {
-
-      //if (goog.isDefAndNotNull(copy) && copy) {
-      // remove current map id so that it is saved as a new map.
-      //service_.configuration.map.id = null;
-      //}
-
-      console.log('------ map_config:', map_config);
       var cfg = {
         about: {
-          abstract: map_config.about.abstract,
-          title: map_config.about.title
+          abstract: service_.abstract,
+          title: service_.title
         },
         map: {
-          id: map_config.map.id || 0,
+          id: service_.id || 0,
           center: service_.getCenter(),
           zoom: service_.getZoom(),
           projection: service_.getProjection(),
-          layers: [],
-          keywords: map_config.map.keywords
+          layers: []
         },
-        sources: [],
-        category: map_config.category,
-        is_published: map_config.is_published,
-        chapter_index: map_config.chapter_index,
-        story_id: map_config.id
+        sources: []
       };
 
       goog.array.forEach(serverService_.getServers(), function(server, key, obj) {
@@ -975,17 +917,15 @@
       console.log('--- save.cfg: ', cfg);
 
       httpService_({
-        url: service_.getSaveURL(cfg.map.id),
-        method: service_.getSaveHTTPMethod(cfg.map.id),
+        url: service_.getSaveURL(),
+        method: service_.getSaveHTTPMethod(),
         data: JSON.stringify(cfg),
         headers: {
           'X-CSRFToken': configService_.csrfToken
         }
       }).success(function(data, status, headers, config) {
+        service_.updateMap(data);
         console.log('----[ map.save success. ', data, status, headers, config);
-        map_config.map.id = data.id;
-        rootScope_.$broadcast('map-saved', map_config);
-
       }).error(function(data, status, headers, config) {
         if (status == 403 || status == 401) {
           dialogService_.error(translate_.instant('save_failed'), translate_.instant('map_save_permission'));
@@ -996,33 +936,26 @@
       });
     };
 
-    this.loadMap = function(config) {
-      //Update map view with new config view information
-      this.map.getView().setCenter(config.map.center);
-      this.map.getView().setZoom(config.map.zoom);
+    this.loadLayers = function() {
+      //TODO: use configService_.configuration instead of saving ref in this service
+      console.log('=======[[ using service_.configuration: ', service_.configuration);
 
-      service_.loadLayers(config);
-    };
-
-    this.loadLayers = function(config) {
-      console.log('=======[[ using parameter config: ', config);
-
-      if (goog.isDefAndNotNull(config) &&
-          goog.isDefAndNotNull(config.sources) &&
-          goog.isDefAndNotNull(config.map) &&
-          goog.isDefAndNotNull(config.map.layers)) {
+      if (goog.isDefAndNotNull(service_.configuration) &&
+          goog.isDefAndNotNull(service_.configuration.sources) &&
+          goog.isDefAndNotNull(service_.configuration.map) &&
+          goog.isDefAndNotNull(service_.configuration.map.layers)) {
 
         // go through each server and if any of them are pointing to a specific layer's wms change it to point to
         // the server. http://ip/geoserver/workspace/name/wms will become http://ip/geoserver/wms
-        goog.object.forEach(config.sources, function(serverInfo, key, obj) {
+        goog.object.forEach(service_.configuration.sources, function(serverInfo, key, obj) {
           if (goog.isDefAndNotNull(serverInfo.url)) {
             serverService_.replaceVirtualServiceUrl(serverInfo);
           }
         });
 
-        var ordered = new Array(config.sources.length);
-        console.log('config.sources: ', config.sources);
-        goog.object.forEach(config.sources, function(serverInfo, key, obj) {
+        var ordered = new Array(service_.configuration.sources.length);
+        console.log('service_.configuration.sources: ', service_.configuration.sources);
+        goog.object.forEach(service_.configuration.sources, function(serverInfo, key, obj) {
           ordered[key] = serverInfo;
         });
 
@@ -1069,8 +1002,8 @@
                   ' serverInfo: ', serverInfo, ', foundServer: ', foundServer);
 
               // update any layer's source that is using this duplicate server to the existing server
-              for (var index2 = 0; index2 < config.map.layers.length; index2++) {
-                var layer = config.map.layers[index2];
+              for (var index2 = 0; index2 < service_.configuration.map.layers.length; index2++) {
+                var layer = service_.configuration.map.layers[index2];
                 if (layer.source === key.toString()) {
                   console.log('====[ Note: updating layer source from old:', layer.source,
                       ', to new: ', foundServerIndex, ', layer: ', layer);
@@ -1084,8 +1017,8 @@
 
             // Ignore lazy loading if a map layer depends on the server.
             if (serverInfo.lazy === true) {
-              for (var layerIndex = 0; layerIndex < config.map.layers.length; layerIndex++) {
-                var mapLayer = config.map.layers[layerIndex];
+              for (var layerIndex = 0; layerIndex < service_.configuration.map.layers.length; layerIndex++) {
+                var mapLayer = service_.configuration.map.layers[layerIndex];
                 if (mapLayer.source === key.toString() && goog.isDefAndNotNull(mapLayer.name)) {
                   console.log('====[ Note: Server is marked as lazy, but a map layer depends on the server.  ' +
                       'Will ignore lazy flag.', serverInfo, mapLayer);
@@ -1106,7 +1039,7 @@
 
           // get all layers that refer to this serverIndex
           var configs = [];
-          goog.array.forEach(config.map.layers, function(layerInfo, index, obj) {
+          goog.array.forEach(service_.configuration.map.layers, function(layerInfo, index, obj) {
             // Note: config.source will be string while serverIndex might be number
             if (layerInfo.source == configServerIndex) {
               layerInfo.temp_layerOrder = index;
@@ -1142,9 +1075,7 @@
             serverService_.addServer(serverInfo, true)
                 .then(function(serverNew) {
                   orderedUniqueLength--;
-                  if (goog.isDefAndNotNull(serverNew)) {
-                    addLayersForServer(serverIndex, serverNew);
-                  }
+                  addLayersForServer(serverIndex, serverNew);
                   if (orderedUniqueLength === 0) {
                     pulldownService_.serversLoading = false;
                     pulldownService_.addLayers = true;
@@ -1180,7 +1111,7 @@
 
         //TODO: once all servers were added, async, then add any missing ones.
       } else {
-        console.log('invalid config object, cannot load map: ', config);
+        console.log('invalid config object, cannot load map: ', service_.configuration);
         alert('invalid config object, cannot load map');
       }
     };
@@ -1224,6 +1155,9 @@
         var precision = settings.DDPrecision;
         this.map.getControls().getArray()[index].setCoordinateFormat(ol.coordinate.createStringXY(precision));
       } else if (settings.coordinateDisplay === coordinateDisplays.DD) {
+        settings.coordinateDisplay = coordinateDisplays.MGRS;
+        this.map.getControls().getArray()[index].setCoordinateFormat(xyToMGRSFormat);
+      } else if (settings.coordinateDisplay === coordinateDisplays.MGRS) {
         settings.coordinateDisplay = coordinateDisplays.DMS;
         this.map.getControls().getArray()[index].setCoordinateFormat(ol.coordinate.toStringHDMS);
       }
@@ -1243,6 +1177,8 @@
         coordDisplay = ol.coordinate.toStringHDMS;
       } else if (settings.coordinateDisplay === coordinateDisplays.DD) {
         coordDisplay = ol.coordinate.createStringXY(settings.DDPrecision);
+      } else if (settings.coordinateDisplay === coordinateDisplays.MGRS) {
+        coordDisplay = xyToMGRSFormat;
       }
       mousePositionControl_ = new ol.control.MousePosition({
         projection: 'EPSG:4326',
@@ -1296,8 +1232,7 @@
         this.getInteractions().getArray()[index].condition_ = ol.events.condition.shiftKeyOnly;
         dragZoomActive = false;
       });
-      // Let everyone know the map has loaded.
-      rootScope_.$broadcast('map-created', service_.configuration);
+
       return map;
     };
 
@@ -1442,8 +1377,13 @@
     };
 
     this.getCRSCode = function(CRS) {
-      //TODO: Update with handling multiple projections per layer if needed.
-      return CRS;
+      var code = 'EPSG:4326';
+      forEachArrayish(CRS, function(_code) {
+        if (_code !== 'CRS:84') {
+          code = _code;
+        }
+      });
+      return code;
     };
   });
 

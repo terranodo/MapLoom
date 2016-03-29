@@ -11,7 +11,7 @@
           config.headers['X-CSRFToken'] = service_.csrfToken;
         }
         if (goog.isDefAndNotNull(config) && goog.isDefAndNotNull(config.url) && config.url.indexOf('http') === 0 &&
-            config.url.indexOf('http://' + $location.host()) !== 0) {
+            config.url.indexOf($location.protocol() + '://' + $location.host()) !== 0) {
           var server = service_.getServerByURL(config.url);
           if (goog.isDefAndNotNull(server)) {
             if (!goog.isDefAndNotNull(server.authentication)) {
@@ -50,10 +50,6 @@
           abstract: ''
         },
         map: {
-          about: {
-            title: $translate.instant('new_map'),
-            abstract: ''
-          },
           center: [-9707182.048613328, 1585691.7893914054],
           zoom: 14,
           layers: [
@@ -73,7 +69,7 @@
         },
         sources: [
           {
-            'url': ('http://' + $location.host() + '/geoserver/wms'),
+            'url': ('http://demo.geonode.org/geoserver/wms'),
             'restUrl': '/gs/rest',
             'ptype': 'gxp_wmscsource',
             'name': 'local geoserver'
@@ -89,13 +85,15 @@
         userprofileemail: '',
         authStatus: 401,
         id: 0,
-        nominatimUrl: 'http://nominatim.openstreetmap.org'
+        //proxy: '/proxy/?url=',
+        nominatimUrl: 'http://nominatim.openstreetmap.org',
+        fileserviceUrlTemplate: '/api/fileservice/view/{}',
+        fileserviceUploadUrl: '/api/fileservice/'
       };
 
       if (goog.isDefAndNotNull($window.config)) {
         goog.object.extend(this.configuration, $window.config, {});
       }
-      this.initial_config = this.configuration;
       this.username = this.configuration.username;
       this.currentLanguage = this.configuration.currentLanguage;
       this.user_profile_name = this.configuration.userprofilename;

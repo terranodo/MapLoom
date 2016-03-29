@@ -7,6 +7,8 @@
         return {
           templateUrl: 'addlayers/partials/addlayers.tpl.html',
           link: function(scope, element) {
+            var searchFavorites = false;
+            var searchHyper = false;
             scope.serverService = serverService;
             scope.currentServerId = -1;
             scope.currentServer = null;
@@ -16,6 +18,12 @@
               text: null
             };
 
+            var resetText = function() {
+              scope.filterOptions.text = null;
+            };
+            var resetOwner = function() {
+              scope.filterOptions.owner = null;
+            };
             //angular.element('#layer-filter')[0].attributes.placeholder.value = $translate.instant('filter_layers');
             scope.setCurrentServerId = function(serverId) {
               var server = serverService.getServerById(serverId);
@@ -37,12 +45,47 @@
               scope.setCurrentServerId(server.id);
             }
 
-            scope.clearFilters = function() {
+            var clearFilters = function() {
+              resetText();
+              resetOwner();
+              searchFavorites = false;
+              searchHyper = false;
+            };
 
+            scope.defaultSearch = function() {
+              clearFilters();
+              scope.search();
+            };
+
+            scope.searchMyUploads = function() {
+              clearFilters();
+              scope.filterOptions.owner = true;
+              scope.search();
+            };
+
+            scope.searchHyper = function() {
+              clearFilters();
+              searchHyper = true;
+              scope.search();
+            };
+
+            scope.searchMyFavorites = function() {
+              clearFilters();
+              searchFavorites = true;
+              scope.search();
             };
 
             scope.applyFilters = function() {
-              serverService.populateLayersConfigElastic(serverService.getServerLocalGeoserver(), scope.filterOptions);
+            };
+
+            scope.search = function() {
+              if (searchFavorites) {
+                serverService.addSearchResultsForFavorites(serverService.getServerLocalGeoserver(), scope.filterOptions);
+              } else if (searchHyper) {
+                serverService.addSearchResultsForHyper(serverService.getServerLocalGeoserver(), scope.filterOptions);
+              } else {
+                serverService.populateLayersConfigElastic(serverService.getServerLocalGeoserver(), scope.filterOptions);
+              }
             };
 
             scope.getCurrentServerName = function() {
@@ -56,7 +99,6 @@
 
             scope.addLayers = function(layerConfig) {
               console.log(layerConfig);
-
               if (layerConfig.add) {
                 // NOTE: minimal config is the absolute bare minimum info that will be send to webapp containing
                 //       maploom such as geonode. At this point, only source (server id), and name are used. If you
@@ -70,9 +112,6 @@
                   source: scope.currentServerId
                 };
                 mapService.addLayer(minimalConfig);
-                layerConfig.add = false;
-
-                //TODO: Call AddStoryLayerToMenu from here.
               }
             };
 

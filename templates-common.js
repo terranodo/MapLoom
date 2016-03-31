@@ -7,10 +7,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"defaultSearch();\">Search</a></li>\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"searchMyUploads();\">My Uploads</a></li>\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"searchMyFavorites();\">My Favorites</a></li>\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"searchHyper();\">Hyper</a></li>\n" +
+    "                    <li><a data-toggle=\"tab\" ng-click=\"searchHyper();\">Search</a></li>\n" +
     "                </ul>\n" +
     "            </div>\n" +
     "            <div class=\"tab-content col-md-12\" style=\"min-height:270px;\">\n" +
@@ -28,7 +25,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                            <div class=\"clearfix search-results\">\n" +
     "                                    <div class = \"col-sm-4 panel panel-default\" ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
     "                                        <div class = \"panel-body\">\n" +
-    "                                          <img class = \"img-responsive\" src = \"{{layer.thumbnail_url}}\" height=\"150\" width=\"200\">\n" +
+    "                                          <img ng-show=\"layer.thumbnail_url\" class = \"img-responsive\" src = \"{{layer.thumbnail_url}}\" height=\"150\" width=\"200\">\n" +
     "                                            <h4>{{ layer.Title }}</h4>\n" +
     "                                            <i class = \"icon-user\"></i><h4>{{ layer.author }}</h4>\n" +
     "                                            <button class = \"btn btn-default center-block\" ng-click = \"addLayers(layer)\" data-dismiss=\"modal\">Use</button>\n" +

@@ -524,7 +524,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         Title: layerInfo.LayerTitle,
         CRS: ['EPSG:4326'],
         detail_url: 'http://52.38.116.143/layer/' + layerInfo.LayerId,
-        thumbnail_url: '',
+        thumbnail_url: layerInfo.ThumbnailURL ? ('http://52.38.116.143' + layerInfo.ThumbnailURL) : null,
         author: '',
         type: 'mapproxy_tms'
       };
@@ -640,7 +640,7 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.addSearchResultsForHyper = function(server, filterOptions) {
-      var searchUrl = 'http://geoshape.geointservices.io/search/_search?';
+      var searchUrl = 'http://geoshape.geointservices.io/search/hypermap/_search?';
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);
       }

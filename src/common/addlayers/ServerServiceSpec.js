@@ -124,13 +124,19 @@ describe('addLayers/ServerService', function() {
               Abstract: '',
               LayerId: '60',
               LayerName: 'geonode:oceanbeach',
-              LayerUrl: '/layers/OceanBeach'
+              LayerUrl: '/layers/OceanBeach',
+              ThumbnailURL: '/test.jpg'
             }
           }
         ];
       });
       it('returns one formatted layer', function() {
         expect(serverService.reformatLayerHyperConfigs(layers, '').length).toEqual(1);
+      });
+      it('has a thumbnail image', function() {
+        expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
+          thumbnail_url: 'http://52.38.116.143/test.jpg'
+        }));
       });
       it('has a Title', function() {
         expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
@@ -289,7 +295,7 @@ describe('addLayers/ServerService', function() {
     });
     describe('server is available and returns results', function() {
       beforeEach(function() {
-        $httpBackend.expect('GET', 'http://geoshape.geointservices.io/search/_search?').respond(200, []);
+        $httpBackend.expect('GET', 'http://geoshape.geointservices.io/search/hypermap/_search?').respond(200, []);
       });
       it('reformats the Layer configs based on the server data', function() {
         spyOn(serverService, 'reformatLayerHyperConfigs');

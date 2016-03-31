@@ -136,7 +136,7 @@ var SERVER_SERVICE_USE_PROXY = true;
     this.getServerLocalGeoserver = function() {
       var server = null;
       for (var index = 0; index < servers.length; index += 1) {
-        if (servers[index].isLocal === true && servers[index].isVirtualService !== true) {
+        if ((servers[index].isLocal === true && servers[index].isVirtualService !== true) || servers[index].isPrimaryGeoserver === true) {
           server = servers[index];
           break;
         }
@@ -201,7 +201,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                 server.config.alwaysAnonymous = false;
 
                 // remove the 'wms endpoint'
-                var serverBaseUrl = removeUrlLastRoute(server.url);
+                var serverBaseUrl = urlRemoveLastRoute(server.url);
                 var serverAuthenticationUrl = serverBaseUrl + '/rest/settings.json';
                 serverAuthenticationUrl = serverAuthenticationUrl.replace('http://', 'http://null:null@');
                 ignoreNextScriptError = true;
@@ -314,7 +314,7 @@ var SERVER_SERVICE_USE_PROXY = true;
                   server.config.alwaysAnonymous = false;
 
                   // remove the 'wms endpoint'
-                  var serverBaseUrl = removeUrlLastRoute(server.url);
+                  var serverBaseUrl = urlRemoveLastRoute(server.url);
                   var serverAuthenticationUrl = serverBaseUrl + '/rest/settings.json';
                   serverAuthenticationUrl = serverAuthenticationUrl.replace('http://', 'http://null:null@');
                   ignoreNextScriptError = true;
@@ -463,7 +463,15 @@ var SERVER_SERVICE_USE_PROXY = true;
         if (layersConfig[index].Name === layerName || (typeof layerName.split != 'undefined' &&
             layersConfig[index].Name === layerName.split(':')[1])) {
           layerConfig = layersConfig[index];
-          //TODO: Update with handling multiple projections per layer if needed.
+
+          if (goog.isDefAndNotNull(layerConfig.CRS)) {
+            for (var code in layerConfig.CRS) {
+              if (layerConfig.CRS[code] !== 'CRS:84') {
+                layerConfig.CRS = layerConfig.CRS[code];
+                break;
+              }
+            }
+          }
           console.log('getting layer config, crs', layerConfig.CRS);
           break;
         }
@@ -514,10 +522,11 @@ var SERVER_SERVICE_USE_PROXY = true;
         Abstract: layerInfo.Abstract,
         Name: layerInfo.LayerName,
         Title: layerInfo.LayerTitle,
-        CRS: 'EPSG:4326',
+        CRS: ['EPSG:4326'],
         detail_url: 'http://52.38.116.143/layer/' + layerInfo.LayerId,
         thumbnail_url: '',
-        author: ''
+        author: '',
+        type: 'mapproxy_tms'
       };
     };
 

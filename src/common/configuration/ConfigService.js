@@ -21,10 +21,10 @@
             }
           }
           var configCopy = $.extend(true, {}, config);
-          var proxy = service_.configuration.proxy;
-          if (goog.isDefAndNotNull(proxy)) {
-            configCopy.url = proxy + encodeURIComponent(configCopy.url);
-          }
+          // var proxy = service_.configuration.proxy;
+          // if (goog.isDefAndNotNull(proxy)) {
+          //   configCopy.url = proxy + encodeURIComponent(configCopy.url);
+          // }
           return configCopy;
         }
         return config;
@@ -69,10 +69,13 @@
         },
         sources: [
           {
-            'url': ('http://demo.geonode.org/geoserver/wms'),
+            'url': ('http://geoshape.geointservices.io/geoserver/web/'),
             'restUrl': '/gs/rest',
             'ptype': 'gxp_wmscsource',
-            'name': 'local geoserver'
+            'name': 'local geoserver',
+            'alwaysAnonymous': true,
+            'isPrimaryGeoserver': true,
+            'lazy': true
           },
           {
             'ptype': 'gxp_osmsource',
@@ -85,7 +88,7 @@
         userprofileemail: '',
         authStatus: 401,
         id: 0,
-        //proxy: '/proxy/?url=',
+        proxy: '/proxy/?url=',
         nominatimUrl: 'http://nominatim.openstreetmap.org',
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/'
@@ -146,4 +149,3 @@
     };
   });
 }());
-

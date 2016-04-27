@@ -3,8 +3,11 @@ angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'ad
 angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayers.tpl.html",
     "<div>\n" +
-    "    <div class=\"modal-body explorer-mini\">\n" +
+    "    <div class=\"modal-body explorer\">\n" +
     "        <div class=\"row\">\n" +
+    "            <div class=\"col-md-12\">\n" +
+    "              <div loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
+    "            </div>\n" +
     "            <div class=\"col-md-12\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +
     "                    <li><a data-toggle=\"tab\" ng-click=\"searchHyper();\">Search</a></li>\n" +
@@ -15,23 +18,25 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                    <div>\n" +
     "                        <div>\n" +
     "                            <nav class=\"filter\">\n" +
-    "                                <div class=\"input-group search-bar\" >\n" +
-    "                                    <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for StoryLayers ...\" ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
+    "                                <div class=\"input-group search-bar\" > <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for StoryLayers ...\" ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
     "                                    <span class=\"input-group-btn\">\n" +
     "                                        <button class=\"btn btn-primary search-btn\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\" type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> Search</button>\n" +
     "                                    </span>\n" +
     "                                </div>\n" +
     "                            </nav>\n" +
     "                            <div class=\"clearfix search-results\">\n" +
-    "                                    <div class = \"col-sm-4 panel panel-default\" ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
-    "                                        <div class = \"panel-body\">\n" +
-    "                                          <img ng-show=\"layer.thumbnail_url\" class = \"img-responsive\" src = \"{{layer.thumbnail_url}}\" height=\"150\" width=\"200\">\n" +
-    "                                            <h4>{{ layer.Title }}</h4>\n" +
-    "                                            <i class = \"icon-user\"></i><h4>{{ layer.author }}</h4>\n" +
-    "                                            <button class = \"btn btn-default center-block\" ng-click = \"addLayers(layer)\" data-dismiss=\"modal\">Use</button>\n" +
-    "                                            <a ng-href=\"{{ layer.detail_url }}\" target = \"_blank\"><button class = \"btn btn-default center-block\">View</button></a>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
+    "                              <table class=\"list-results\">\n" +
+    "                                <tr>\n" +
+    "                                  <th>Title</th>\n" +
+    "                                  <th>Region</th>\n" +
+    "                                  <th>Owner</th>\n" +
+    "                                </tr>\n" +
+    "                                <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
+    "                                  <td>{{ layer.Title }}</td>\n" +
+    "                                  <td>{{ layer.domain }}</td>\n" +
+    "                                  <td>{{ layer.author }}</td>\n" +
+    "                                </tr>\n" +
+    "                              </table>\n" +
     "\n" +
     "                            </div>\n" +
     "                            <div class=\"search-pagination\">\n" +

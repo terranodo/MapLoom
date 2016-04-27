@@ -7689,7 +7689,6 @@ button.authors-shown {
   display: inline-block;
   width: auto;
   margin-left: 0;
-  overflow: hidden;
   background-color: transparent;
 }
 
@@ -7711,6 +7710,11 @@ button.authors-shown {
   max-height: 100%;
   overflow-y: visible;
   background-color: #97b3cd;
+}
+
+.modal .modal-body .search-grid {
+  max-width: 80px;
+  max-height: 80px;
 }
 
 .modal.custom {
@@ -7811,6 +7815,7 @@ button.authors-shown {
   min-height: 200px;
   overflow: hidden;
   overflow-y: auto;
+  background-color: rgba(151, 179, 205, 0.2);
 }
 
 .add-layers-loading.loom-loading {
@@ -9211,7 +9216,10 @@ body {
 }
 
 .panel-body {
-  padding: 0 15px;
+  padding: 10px 10px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
 
 .map-title-text {
@@ -9267,6 +9275,18 @@ body.modal-open,
   width: 414px;
 }
 
+@media (min-width: 960px) {
+  #add-layer-dialog .modal-dialog {
+    width: 95%;
+  }
+}
+
+@media (max-width: 600px) and (min-width: 959px) {
+  #add-layer-dialog .modal-dialog {
+    width: 98% !important;
+  }
+}
+
 #layerInfoDialog .modal-dialog {
   width: 450px;
 }
@@ -9299,10 +9319,21 @@ body.modal-open,
   background-color: #4977a3 !important;
 }
 
+.whiteframe-2dp {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+.alert-warning-mp {
+  color: #42351E;
+  background-color: #FFAD2F;
+  border-color: #FFAD2F;
+}
+
 .panel {
+  padding-top: 15px;
   margin: 0;
   font-weight: normal;
-  background-color: #97b3cd;
+  background-color: rgba(151, 179, 205, 0);
   border: 0;
 }
 

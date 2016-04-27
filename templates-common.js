@@ -6,44 +6,71 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "    <div class=\"modal-body explorer\">\n" +
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
-    "              <div zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
     "            </div>\n" +
     "            <div class=\"col-md-12\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +
     "                    <li><a data-toggle=\"tab\" ng-click=\"searchHyper();\">Search</a></li>\n" +
     "                </ul>\n" +
     "            </div>\n" +
-    "            <div class=\"tab-content col-md-12\" style=\"min-height:270px;\">\n" +
+    "            <div class=\"tab-content col-md-5\" style=\"min-height:270px;\">\n" +
     "                <div class=\"tab-pane active\" id=\"Explore\">\n" +
     "                    <div>\n" +
     "                        <div>\n" +
-    "                            <nav class=\"filter\">\n" +
-    "                                <div class=\"input-group search-bar\" > <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for StoryLayers ...\" ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
+    "                            <nav class=\"filter panel panel-default\">\n" +
+    "                                <div class=\"panel-body\">\n" +
+    "                                <div class=\"input-group search-bar\" >\n" +
+    "                                    <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for StoryLayers ...\" ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
     "                                    <span class=\"input-group-btn\">\n" +
     "                                        <button class=\"btn btn-primary search-btn\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\" type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> Search</button>\n" +
     "                                    </span>\n" +
     "                                </div>\n" +
+    "                                </div>\n" +
     "                            </nav>\n" +
-    "                            <div class=\"clearfix search-results\">\n" +
-    "                              <table class=\"list-results\">\n" +
-    "                                <tr>\n" +
-    "                                  <th>Title</th>\n" +
-    "                                  <th>Region</th>\n" +
-    "                                  <th>Owner</th>\n" +
-    "                                </tr>\n" +
-    "                                <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
-    "                                  <td>{{ layer.Title }}</td>\n" +
-    "                                  <td>{{ layer.domain }}</td>\n" +
-    "                                  <td>{{ layer.author }}</td>\n" +
-    "                                </tr>\n" +
-    "                              </table>\n" +
-    "\n" +
-    "                            </div>\n" +
-    "                            <div class=\"search-pagination\">\n" +
-    "                            </div>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
+    "\n" +
+    "                <div class=\"filter panel panel-default\">\n" +
+    "                    <div class=\"panel-body\">\n" +
+    "                        <h3>Title 3</h3>\n" +
+    "                        <h4>Abstract</h4>\n" +
+    "                        <p>\n" +
+    "                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus blanditiis obcaecati quaerat at, dicta, numquam neque laboriosam suscipit error repellat eos voluptatum minima unde itaque voluptates vel in ratione laborum.\n" +
+    "                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis quibusdam totam velit eius alias sed, tempora debitis perspiciatis. Porro, ipsa veritatis tenetur velit perspiciatis aliquid, placeat ab iusto omnis quas.\n" +
+    "                        </p>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"whiteframe-2dp\" id=\"mapreview\" style=\"margin-top: 20px;\">\n" +
+    "                    <div class=\"alert alert-warning-mp\" style=\"margin-bottom: 0;\">\n" +
+    "                        Refine Search Limit the search to data that includes features in the displayed area.\n" +
+    "                    </div>\n" +
+    "                    <div zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
+    "                </div>\n" +
+    "                <div class=\"search-pagination\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-md-7 clearfix search-results\">\n" +
+    "                <div class=\"row\">\n" +
+    "                  <div class=\"col-lg-4 col-md-6 col-sm-6 clearfix search-results\">\n" +
+    "                    <table class=\"list-results\">\n" +
+    "                      <tr>\n" +
+    "                        <th>Title</th>\n" +
+    "                        <th>Region</th>\n" +
+    "                        <th>Owner</th>\n" +
+    "                      </tr>\n" +
+    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
+    "                        <td>{{ layer.Title }}</td>\n" +
+    "                        <td>{{ layer.domain }}</td>\n" +
+    "                        <td>{{ layer.author }}</td>\n" +
+    "                      </tr>\n" +
+    "                    </table>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\" style=\"text-align: right;margin-right: 20px;\">\n" +
+    "                    <button type=\"button\" class=\"btn btn-default btn-lg\">CLEAR</button>\n" +
+    "                    <button type=\"button\" class=\"btn btn-default btn-lg\">ADD MAP</button>\n" +
+    "                </div>\n" +
+    "\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +

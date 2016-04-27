@@ -6,7 +6,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "    <div class=\"modal-body explorer\">\n" +
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
-    "              <div loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
+    "              <div zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
     "            </div>\n" +
     "            <div class=\"col-md-12\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +

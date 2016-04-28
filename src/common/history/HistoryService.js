@@ -1,7 +1,5 @@
-(function() {
+(function () {
   var module = angular.module('loom_history_service', []);
-
-  // Private Variables
   var rootScope_ = null;
   var service_ = null;
   var geogigService_ = null;
@@ -9,8 +7,7 @@
   var dialogService_ = null;
   var translate_ = null;
   var q_ = null;
-
-  module.provider('historyService', function() {
+  module.provider('historyService', function () {
     this.log = [];
     this.title = 'History';
     this.nextPage = false;
@@ -20,19 +17,25 @@
     this.pathFilter = null;
     this.fetchingHistory = false;
     this.historyTransaction = 0;
-
-    this.$get = function($q, $rootScope, $translate, geogigService, pulldownService, dialogService) {
-      rootScope_ = $rootScope;
-      service_ = this;
-      geogigService_ = geogigService;
-      pulldownService_ = pulldownService;
-      dialogService_ = dialogService;
-      translate_ = $translate;
-      q_ = $q;
-      return this;
-    };
-
-    this.getHistory = function(layer, pathFilter) {
+    this.$get = [
+      '$q',
+      '$rootScope',
+      '$translate',
+      'geogigService',
+      'pulldownService',
+      'dialogService',
+      function ($q, $rootScope, $translate, geogigService, pulldownService, dialogService) {
+        rootScope_ = $rootScope;
+        service_ = this;
+        geogigService_ = geogigService;
+        pulldownService_ = pulldownService;
+        dialogService_ = dialogService;
+        translate_ = $translate;
+        q_ = $q;
+        return this;
+      }
+    ];
+    this.getHistory = function (layer, pathFilter) {
       if (service_.fetchingHistory === false) {
         service_.historyTransaction++;
         service_.clearHistory();
@@ -45,15 +48,13 @@
       }
       return null;
     };
-
-    this.getMoreHistory = function() {
+    this.getMoreHistory = function () {
       if (service_.fetchingHistory === false) {
         service_.fetchingHistory = true;
         getHistoryInternal();
       }
     };
-
-    this.refreshHistory = function(layerName) {
+    this.refreshHistory = function (layerName) {
       if (goog.isDefAndNotNull(service_.layer) && service_.fetchingHistory === false) {
         if (goog.isDefAndNotNull(layerName) && service_.layer.get('metadata').uniqueID !== layerName) {
           return;
@@ -62,8 +63,7 @@
         getHistoryInternal(true);
       }
     };
-
-    this.clearHistory = function() {
+    this.clearHistory = function () {
       service_.fetchingHistory = false;
       service_.log = [];
       service_.nextPage = false;
@@ -72,12 +72,10 @@
       service_.pathFilter = null;
       rootScope_.$broadcast('history_cleared');
     };
-
-    this.setTitle = function(title) {
+    this.setTitle = function (title) {
       service_.title = title;
     };
   });
-
   function getHistoryInternal(_refresh) {
     var deferredResponse = q_.defer();
     var refresh = _refresh;
@@ -87,12 +85,10 @@
     if (goog.isDefAndNotNull(service_.layer)) {
       var logOptions = new GeoGigLogOptions();
       if (refresh && service_.log.length > 0) {
-        // for refresh we will limit the log by specifying since and until
         logOptions.show = 1000;
       } else {
         logOptions.show = service_.entriesPerPage;
       }
-
       logOptions.countChanges = true;
       var thisTransaction = service_.historyTransaction;
       var metadata = service_.layer.get('metadata');
@@ -112,14 +108,13 @@
             service_.pathFilter = metadata.nativeName;
           }
           logOptions.path = service_.pathFilter;
-          geogigService_.command(metadata.repoId, 'log', logOptions).then(function(response) {
+          geogigService_.command(metadata.repoId, 'log', logOptions).then(function (response) {
             if (service_.fetchingHistory === false || thisTransaction != service_.historyTransaction) {
-              // History was cleared, we don't want this data anymore
               deferredResponse.reject();
               return;
             }
             if (goog.isDefAndNotNull(response.commit)) {
-              forEachArrayish(response.commit, function(commit) {
+              forEachArrayish(response.commit, function (commit) {
                 var added = 0;
                 var modified = 0;
                 var removed = 0;
@@ -139,15 +134,15 @@
                   commit.visible = true;
                   if (totalChanges === 0) {
                     commit.summary = {
-                      added: {width: '0%'},
-                      modified: {width: '0%'},
-                      removed: {width: '0%'}
+                      added: { width: '0%' },
+                      modified: { width: '0%' },
+                      removed: { width: '0%' }
                     };
                   } else {
                     commit.summary = {
-                      added: {width: added / totalChanges * 100 + '%'},
-                      modified: {width: modified / totalChanges * 100 + '%'},
-                      removed: {width: removed / totalChanges * 100 + '%'}
+                      added: { width: added / totalChanges * 100 + '%' },
+                      modified: { width: modified / totalChanges * 100 + '%' },
+                      removed: { width: removed / totalChanges * 100 + '%' }
                     };
                   }
                 }
@@ -155,8 +150,10 @@
               var numCommits = 0;
               if (goog.isArray(response.commit)) {
                 if (refresh) {
-                  // Insert the array at the beginning of the log
-                  Array.prototype.splice.apply(service_.log, [0, 0].concat(response.commit));
+                  Array.prototype.splice.apply(service_.log, [
+                    0,
+                    0
+                  ].concat(response.commit));
                   numCommits = response.commit.length;
                 } else {
                   service_.log = service_.log.concat(response.commit);
@@ -185,9 +182,8 @@
             }
             service_.fetchingHistory = false;
             deferredResponse.resolve(0);
-          }, function(reject) {
+          }, function (reject) {
             if (service_.fetchingHistory === false || thisTransaction != service_.historyTransaction) {
-              // History was cleared, we don't want this data anymore
               deferredResponse.reject();
               return;
             }
@@ -207,7 +203,6 @@
     }
     return deferredResponse.promise;
   }
-
   function getFirstParent(commit) {
     if (goog.isDefAndNotNull(commit.parents) && goog.isDefAndNotNull(commit.parents.id)) {
       if (goog.isArray(commit.parents.id)) {
@@ -218,5 +213,4 @@
     }
     return null;
   }
-
 }());

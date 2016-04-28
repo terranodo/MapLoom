@@ -31,13 +31,12 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                </div>\n" +
     "\n" +
     "                <div class=\"filter panel panel-default\">\n" +
+    "                  <div class=\"alert alert-title alert-warning-mp\">\n" +
+    "                    <h3 style=\"text-overflow: ellipsis;white-space: nowrap;overflow: hidden;\">{{layerConfig.Title}}</h3>\n" +
+    "                  </div>\n" +
     "                    <div class=\"panel-body\">\n" +
-    "                        <h3>Title 3</h3>\n" +
     "                        <h4>Abstract</h4>\n" +
-    "                        <p>\n" +
-    "                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus blanditiis obcaecati quaerat at, dicta, numquam neque laboriosam suscipit error repellat eos voluptatum minima unde itaque voluptates vel in ratione laborum.\n" +
-    "                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis quibusdam totam velit eius alias sed, tempora debitis perspiciatis. Porro, ipsa veritatis tenetur velit perspiciatis aliquid, placeat ab iusto omnis quas.\n" +
-    "                        </p>\n" +
+    "                        <p style=\"height: 200px;overflow-y: auto;\">{{layerConfig.Abstract}}</p>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"whiteframe-2dp\" id=\"mapreview\" style=\"margin-top: 20px;\">\n" +
@@ -50,15 +49,16 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"col-md-7 clearfix search-results\">\n" +
-    "                <div class=\"row\">\n" +
-    "                  <div class=\"col-lg-4 col-md-6 col-sm-6 clearfix search-results\">\n" +
-    "                    <table class=\"list-results\">\n" +
+    "                <div class=\"row\" style=\"padding-right: 15px;\">\n" +
+    "                  <div class=\"clearfix search-results panel\" style=\"height: 75vh;overflow-y: auto;\">\n" +
+    "                    <table class=\"table table-hover list-results panel-body\">\n" +
     "                      <tr>\n" +
     "                        <th>Title</th>\n" +
     "                        <th>Region</th>\n" +
     "                        <th>Owner</th>\n" +
     "                      </tr>\n" +
-    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
+    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{orangehover: selLayerConfig.Name === layer.Name}\"\n" +
+    "                        ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
     "                        <td>{{ layer.Title }}</td>\n" +
     "                        <td>{{ layer.domain }}</td>\n" +
     "                        <td>{{ layer.author }}</td>\n" +
@@ -66,9 +66,9 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                    </table>\n" +
     "                  </div>\n" +
     "                </div>\n" +
-    "                <div class=\"row\" style=\"text-align: right;margin-right: 20px;\">\n" +
+    "                <div class=\"row\" style=\"text-align: right;margin: 20px 0 0px 0px;\">\n" +
     "                    <button type=\"button\" class=\"btn btn-default btn-lg\">CLEAR</button>\n" +
-    "                    <button type=\"button\" class=\"btn btn-default btn-lg\">ADD MAP</button>\n" +
+    "                    <button type=\"button\" ng-click = \"addLayers(selLayerConfig)\" ng-disabled=\"!selLayerConfig.add\" class=\"btn btn-default btn-lg\">ADD</button>\n" +
     "                </div>\n" +
     "\n" +
     "            </div>\n" +

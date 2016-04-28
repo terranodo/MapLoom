@@ -1,20 +1,12 @@
-(function() {
+(function () {
   var module = angular.module('loom_geogig_service', []);
-
-  // Private Variables
   var nextRepoId = 0;
-
-  // services
   var q, http, rootScope, dialogService_, translate_;
-
   var service_ = null;
-
-  var issueRequest = function(URL, deferredResponse) {
-    http.get(URL).then(function(response) {
+  var issueRequest = function (URL, deferredResponse) {
+    http.get(URL).then(function (response) {
       if (!goog.isDef(response.data.response.success) || response.data.response.success === true) {
-        // Check for merge conflicts
         if (goog.isDef(response.data.response.Merge) && goog.isDef(response.data.response.Merge.conflicts)) {
-          // Handle Merge Conflicts
           deferredResponse.reject(response.data.response.Merge);
         } else {
           deferredResponse.resolve(response.data.response);
@@ -22,31 +14,34 @@
       } else {
         deferredResponse.reject(response.data.response.error);
       }
-    }, function(reject, status, headers, config) {
+    }, function (reject, status, headers, config) {
       console.log('Issue Request was rejected', reject, status, headers, config);
       deferredResponse.reject(reject);
-    }, function(update) {
+    }, function (update) {
       deferredResponse.update(update);
     });
   };
-
-  module.provider('geogigService', function() {
-    // public variables
+  module.provider('geogigService', function () {
     this.repos = [];
     this.adminRepos = [];
-
-    this.$get = function($q, $http, $rootScope, dialogService, $translate) {
-      service_ = this;
-      q = $q;
-      http = $http;
-      rootScope = $rootScope;
-      dialogService_ = dialogService;
-      translate_ = $translate;
-      rootScope.$on('layerRemoved', service_.removedLayer);
-      return service_;
-    };
-
-    this.getRepoById = function(repoId) {
+    this.$get = [
+      '$q',
+      '$http',
+      '$rootScope',
+      'dialogService',
+      '$translate',
+      function ($q, $http, $rootScope, dialogService, $translate) {
+        service_ = this;
+        q = $q;
+        http = $http;
+        rootScope = $rootScope;
+        dialogService_ = dialogService;
+        translate_ = $translate;
+        rootScope.$on('layerRemoved', service_.removedLayer);
+        return service_;
+      }
+    ];
+    this.getRepoById = function (repoId) {
       for (var index = 0; index < service_.repos.length; index++) {
         if (service_.repos[index].id == repoId) {
           return service_.repos[index];
@@ -54,32 +49,28 @@
       }
       return null;
     };
-
-    this.beginTransaction = function(repoId) {
+    this.beginTransaction = function (repoId) {
       var deferredResponse = q.defer();
-
-      service_.command(repoId, 'beginTransaction').then(function(response) {
+      service_.command(repoId, 'beginTransaction').then(function (response) {
         if (response.success === true) {
           var transaction = new GeoGigTransaction(service_.command, repoId, response.Transaction);
           deferredResponse.resolve(transaction);
         } else {
           deferredResponse.reject(response.error);
         }
-      }, function(reject) {
+      }, function (reject) {
         deferredResponse.reject(reject);
-      }, function(update) {
+      }, function (update) {
         deferredResponse.update(update);
       });
-
       return deferredResponse.promise;
     };
-
-    this.command = function(repoId, command, options) {
+    this.command = function (repoId, command, options) {
       var deferredResponse = q.defer();
       var repo = service_.getRepoById(repoId);
       if (goog.isDefAndNotNull(repo)) {
         var URL = repo.url + '/' + command + '?output_format=JSON';
-        URL += '&_dc=' + new Date().getTime(); // Disable caching of responses.
+        URL += '&_dc=' + new Date().getTime();
         if (goog.isDefAndNotNull(options)) {
           for (var property in options) {
             if (property !== null && options.hasOwnProperty(property) && options[property] !== null) {
@@ -105,25 +96,23 @@
       }
       return deferredResponse.promise;
     };
-
-    this.post = function(repoId, command, data) {
+    this.post = function (repoId, command, data) {
       var deferredResponse = q.defer();
       var repo = service_.getRepoById(repoId);
       if (goog.isDefAndNotNull(repo)) {
         var URL = repo.url + '/' + command;
-        URL += '&_dc=' + new Date().getTime(); // Disable caching of responses.
-        http.post(URL, data).then(function(response) {
+        URL += '&_dc=' + new Date().getTime();
+        http.post(URL, data).then(function (response) {
           deferredResponse.resolve(response);
-        }, function(reject) {
+        }, function (reject) {
           deferredResponse.reject(reject);
-        }, function(update) {
+        }, function (update) {
           deferredResponse.update(update);
         });
       }
       return deferredResponse.promise;
     };
-
-    this.addRepo = function(newRepo, admin) {
+    this.addRepo = function (newRepo, admin) {
       if (!goog.isDefAndNotNull(admin)) {
         admin = false;
       }
@@ -154,36 +143,40 @@
       if (admin) {
         service_.adminRepos.push(newRepo);
       }
-      service_.commitChanged(newRepo.id).then(function() {
+      service_.commitChanged(newRepo.id).then(function () {
         service_.loadRemotesAndBranches(newRepo, result);
       });
-
       return result.promise;
     };
-
-    this.loadRemotesAndBranches = function(repo, result) {
+    this.loadRemotesAndBranches = function (repo, result) {
       if (repo.remotes.length > 0) {
         goog.array.clear(repo.remotes);
       }
       if (repo.branches.length > 0) {
         goog.array.clear(repo.branches);
       }
-      var loadBranches = function(response) {
+      var loadBranches = function (response) {
         if (goog.isDefAndNotNull(response) && goog.isDefAndNotNull(response.Remote)) {
           var remoteId = 0;
-          forEachArrayish(response.Remote, function(remote) {
-            repo.remotes.push({name: remote.name, url: remote.url, username: remote.username, branches: [],
-              id: remoteId, active: false});
+          forEachArrayish(response.Remote, function (remote) {
+            repo.remotes.push({
+              name: remote.name,
+              url: remote.url,
+              username: remote.username,
+              branches: [],
+              id: remoteId,
+              active: false
+            });
             remoteId++;
           });
         }
         var branchOptions = new GeoGigBranchOptions();
         branchOptions.list = true;
         branchOptions.remotes = goog.isDefAndNotNull(response);
-        service_.command(repo.id, 'branch', branchOptions).then(function(response) {
+        service_.command(repo.id, 'branch', branchOptions).then(function (response) {
           var remoteIndex;
           if (goog.isDefAndNotNull(response.Local.Branch)) {
-            forEachArrayish(response.Local.Branch, function(branch) {
+            forEachArrayish(response.Local.Branch, function (branch) {
               repo.branches.push(branch.name);
             });
           } else {
@@ -193,7 +186,7 @@
             return;
           }
           if (goog.isDefAndNotNull(response.Remote.Branch)) {
-            forEachArrayish(response.Remote.Branch, function(branch) {
+            forEachArrayish(response.Remote.Branch, function (branch) {
               if (branch.name !== 'HEAD') {
                 for (remoteIndex = 0; remoteIndex < repo.remotes.length; remoteIndex++) {
                   if (repo.remotes[remoteIndex].name === branch.remoteName) {
@@ -204,7 +197,7 @@
             });
           }
           result.resolve(repo);
-        }, function(reject) {
+        }, function (reject) {
           console.log('Unable to get the repository\'s branches:', repo, reject);
           service_.removeRepo(repo.id);
           result.reject(translate_.instant('unable_to_get_branches'));
@@ -214,7 +207,7 @@
         var remoteOptions = new GeoGigRemoteOptions();
         remoteOptions.list = true;
         remoteOptions.verbose = true;
-        service_.command(repo.id, 'remote', remoteOptions).then(loadBranches, function(reject) {
+        service_.command(repo.id, 'remote', remoteOptions).then(loadBranches, function (reject) {
           console.log('Unable to get the repository\'s remotes:', repo, reject);
           service_.removeRepo(repo.id);
           result.reject(translate_.instant('unable_to_get_remotes'));
@@ -223,8 +216,7 @@
         loadBranches(null);
       }
     };
-
-    this.removeRepo = function(id) {
+    this.removeRepo = function (id) {
       var index = -1, i;
       var uuid = null;
       var repo = null;
@@ -259,8 +251,7 @@
         service_.adminRepos.splice(index, 1);
       }
     };
-
-    this.removedLayer = function(event, removedLayer) {
+    this.removedLayer = function (event, removedLayer) {
       if (removedLayer.get('metadata').isGeoGig) {
         var repoId = removedLayer.get('metadata').repoId;
         var repo = service_.getRepoById(repoId);
@@ -271,14 +262,11 @@
         }
       }
     };
-
-    this.parseWorkspaceRoute = function(featureType) {
+    this.parseWorkspaceRoute = function (featureType) {
       if (featureType) {
         var split = featureType.split(':');
         if (split.length === 1) {
-          return {
-            typeName: split[0]
-          };
+          return { typeName: split[0] };
         }
         return {
           workspace: split[0],
@@ -287,23 +275,18 @@
       }
       return null;
     };
-
-    this.getFeatureType = function(layer) {
+    this.getFeatureType = function (layer) {
       var featureType = layer.get('metadata').name;
       var workspaceRoute = service_.parseWorkspaceRoute(featureType);
       var deferredResponse = q.defer();
-
-      var url = layer.get('metadata').url + '/wfs?version=' + settings.WFSVersion +
-          '&request=DescribeFeatureType&typeName=' + workspaceRoute.typeName;
-
-      http.get(url).then(function(response) {
-        // TODO: Use the OpenLayers parser once it is done
+      var url = layer.get('metadata').url + '/wfs?version=' + settings.WFSVersion + '&request=DescribeFeatureType&typeName=' + workspaceRoute.typeName;
+      http.get(url).then(function (response) {
         var x2js = new X2JS();
         var json = x2js.xml_str2json(response.data);
         var schema = [];
         if (goog.isDefAndNotNull(json.schema)) {
           var savedSchema = layer.get('metadata').savedSchema;
-          forEachArrayish(json.schema.complexType.complexContent.extension.sequence.element, function(obj) {
+          forEachArrayish(json.schema.complexType.complexContent.extension.sequence.element, function (obj) {
             schema[obj._name] = obj;
             schema[obj._name].visible = true;
             if (goog.isDefAndNotNull(savedSchema)) {
@@ -317,63 +300,46 @@
               schema[obj._name]._type = 'simpleType';
             }
           });
-
           layer.get('metadata').schema = schema;
           layer.get('metadata').editable = true;
           layer.get('metadata').workspaceURL = json.schema._targetNamespace;
         }
         deferredResponse.resolve();
-      }, function(reject) {
+      }, function (reject) {
         deferredResponse.reject(reject);
       });
       return deferredResponse.promise;
     };
-
-    this.getRepoInfo = function(geogigUrl) {
+    this.getRepoInfo = function (geogigUrl) {
       var deferredResponse = q.defer();
       geogigUrl = urlRemoveTrailingSlash(geogigUrl);
-
-      http.get(geogigUrl + '.json').then(function(response) {
+      http.get(geogigUrl + '.json').then(function (response) {
         if (goog.isDefAndNotNull(response.data.repository)) {
           deferredResponse.resolve(response.data.repository);
         } else {
           deferredResponse.reject();
         }
-      }, function(error) {
+      }, function (error) {
         deferredResponse.reject();
       });
-
       return deferredResponse.promise;
     };
-
-    //gets the current commit id of a repository
-    this.commitChanged = function(repoId) {
+    this.commitChanged = function (repoId) {
       var repo = service_.getRepoById(repoId);
       var url = repo.url + '/repo/manifest';
       var deferredResponse = q.defer();
-      http.get(url).then(function(response) {
+      http.get(url).then(function (response) {
         var branchArray = response.data.split('\n');
         var branchData;
         var commitId = -1;
-
         for (var branch in branchArray) {
           branchData = branchArray[branch].split(' ');
-
-          // > 2 elements means that this one is a sym ref, so we'll skip it
-          // < 2  means that it's an empty array created by splitting the new line at the end of the response
           if (branchData.length != 2) {
             continue;
           }
-
-          //get the index of the branch name to see if we're on the right branch
-          //  the '/' is so that a search for 'master' won't leave us on a branch called '*_master'
           var branchNameIndex = branchData[0].indexOf('/' + repo.branch);
-
-          //extract the branch name so that we can check the length and ensure we don't end up with 'master_*'
           var branchNameSubString = branchData[0].slice(branchNameIndex + 1);
-
           if (branchNameIndex !== -1 && branchNameSubString.length === repo.branch.length) {
-            //these are the droids we're looking for
             commitId = branchData[1];
             break;
           }
@@ -386,29 +352,20 @@
           newId: repo.commitId,
           changed: oldCommit !== repo.commitId
         });
-      }, function(reject) {
+      }, function (reject) {
         deferredResponse.reject(reject);
       });
       return deferredResponse.promise;
     };
-
-    this.isGeoGig = function(layer, server, fullConfig) {
+    this.isGeoGig = function (layer, server, fullConfig) {
       var deferredResponse = q.defer();
-      // This should always be the last thing that gets done.
-      var getFeatureType = function() {
-        service_.getFeatureType(layer).then(function() {
+      var getFeatureType = function () {
+        service_.getFeatureType(layer).then(function () {
           ol.proj.getTransform(metadata.projection, 'EPSG:4326');
           rootScope.$broadcast('layerInfoLoaded', layer);
           deferredResponse.resolve();
-        }, function(rejected) {
-          console.log('====[ ', translate_.instant('error'), ': ', translate_.instant('unable_to_get_feature_type'),
-              ', Status Code: ', rejected.status);
-          // Suppressing error so that when arbitrary wms layers are added from a url like the following, the user is
-          // not given a harsh dialog:
-          //http://ebolamaps.who.int/arcgis/services/OPENDATA/Laboratories/MapServer/WMSServer
-          //dialogService_.error(
-          //    translate_.instant('error'), translate_.instant('unable_to_get_feature_type') +
-          //        ' (' + rejected.status + ')');
+        }, function (rejected) {
+          console.log('====[ ', translate_.instant('error'), ': ', translate_.instant('unable_to_get_feature_type'), ', Status Code: ', rejected.status);
           deferredResponse.reject();
         });
       };
@@ -430,12 +387,11 @@
               if (server.isVirtualService === true) {
                 geogigURL = server.url.replace('wms', 'geogig') + '/' + repoUUID;
               }
-              service_.getRepoInfo(geogigURL).then(function(info) {
-                http.get(geogigURL + '/repo/manifest').then(function() {
-                  var addRepo = function(admin) {
-                    var promise = service_.addRepo(
-                        new GeoGigRepo(geogigURL, repoUUID, metadata.branchName, info.name), admin);
-                    promise.then(function(repo) {
+              service_.getRepoInfo(geogigURL).then(function (info) {
+                http.get(geogigURL + '/repo/manifest').then(function () {
+                  var addRepo = function (admin) {
+                    var promise = service_.addRepo(new GeoGigRepo(geogigURL, repoUUID, metadata.branchName, info.name), admin);
+                    promise.then(function (repo) {
                       if (goog.isDef(repo.id)) {
                         rootScope.$broadcast('repoAdded', repo);
                         metadata.repoId = repo.id;
@@ -443,27 +399,25 @@
                         metadata.repoId = repo;
                       }
                       getFeatureType();
-                    }, function(reject) {
+                    }, function (reject) {
                       dialogService_.error(translate_.instant('error'), translate_.instant('unable_to_add_remote') + reject);
                       getFeatureType();
                     });
                     metadata.isGeoGig = true;
                     metadata.geogigStore = repoUUID;
                   };
-                  // see if we have admin access
-                  // HACK see if the merge endpoint is available.
-                  http.get(geogigURL + '/merge').then(function() {
+                  http.get(geogigURL + '/merge').then(function () {
                     metadata.isGeoGigAdmin = true;
                     addRepo(true);
-                  }, function(reject) {
+                  }, function (reject) {
                     metadata.isGeoGigAdmin = false;
                     addRepo(false);
                   });
-                }, function() {
+                }, function () {
                   metadata.isGeoGig = false;
                   getFeatureType();
                 });
-              }, function() {
+              }, function () {
                 metadata.isGeoGig = false;
                 getFeatureType();
               });

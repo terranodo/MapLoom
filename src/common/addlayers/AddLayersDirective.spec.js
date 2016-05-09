@@ -149,7 +149,7 @@ describe('StoryLegendDirective', function() {
     describe('with results', function() {
       beforeEach(function() {
         var layerConfig = { Title: 'Test', add: true, extent: [], CRS: 'EPSG:4326' };
-        spyOn(serverService, 'getLayersConfigByName').andReturn([layerConfig]);
+        spyOn(serverService, 'getLayersConfigByName').and.returnValue([layerConfig]);
         scope.$digest();
       });
       it('click on a result adds it to cart', function() {

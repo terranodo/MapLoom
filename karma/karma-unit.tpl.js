@@ -12,15 +12,13 @@ module.exports = function ( karma ) {
       <% scripts.forEach( function ( file ) { %>'<%= file %>',
       <% }); %>
       'src/**/*.js',
-      'src/**/*.coffee',
     ],
     exclude: [
       'src/assets/**/*.js'
     ],
     frameworks: [ 'jasmine' ],
-    plugins: [ 'karma-jasmine', 'karma-firefox-launcher', 'karma-chrome-launcher', 'karma-phantomjs-launcher', 'karma-coffee-preprocessor', 'karma-coverage' ],
+    plugins: [ 'karma-jasmine', 'karma-phantomjs-launcher', 'karma-coverage' ],
     preprocessors: {
-      '**/*.coffee': 'coffee',
       'src/**/*.js': ['coverage']
     },
 
@@ -67,4 +65,3 @@ module.exports = function ( karma ) {
     ]
   });
 };
-

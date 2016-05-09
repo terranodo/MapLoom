@@ -56,7 +56,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                        <th>Title</th>\n" +
     "                        <th>Domain</th>\n" +
     "                      </tr>\n" +
-    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': selectedLayer.Name === layer.Name}\"\n" +
+    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': isInCart(layer)}\"\n" +
     "                        ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
     "                        <td>{{ layer.Title }}</td>\n" +
     "                        <td>{{ layer.domain }}</td>\n" +
@@ -65,7 +65,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                  </div>\n" +
     "                </div>\n" +
     "                <div class=\"row actions\" style=\"\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-default btn-lg\">CLEAR</button>\n" +
+    "                    <button type=\"button\" ng-clik=\"clearCart();\" class=\"btn btn-default btn-lg\">CLEAR</button>\n" +
     "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!selectedLayer.add\" class=\"btn btn-default btn-lg\">ADD</button>\n" +
     "                </div>\n" +
     "\n" +

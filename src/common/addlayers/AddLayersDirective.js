@@ -1,9 +1,12 @@
 (function() {
 
-  var module = angular.module('loom_addlayers_directive', []);
+  var module = angular.module('loom_addlayers_directive', [
+    'rzModule',
+    'loom_addlayersfilter_directive'
+  ]);
 
   module.directive('loomAddlayers',
-      function($rootScope, serverService, mapService, geogigService, $translate, dialogService) {
+      function($rootScope, serverService, mapService, geogigService, $translate, dialogService, $timeout) {
         return {
           templateUrl: 'addlayers/partials/addlayers.tpl.html',
           link: function(scope, element) {
@@ -15,7 +18,9 @@
             scope.filterLayers = null;
             scope.filterOptions = {
               owner: null,
-              text: null
+              text: null,
+              from: null,
+              size: 10
             };
             scope.previewCenter = [40, 30];
             scope.previewZoom = 1;
@@ -28,11 +33,37 @@
             scope.selectedLayer = {};
             scope.cart = [];
 
+            scope.slider = {
+              minValue: 1900,
+              maxValue: 2014,
+              options: {
+                floor: 1500,
+                ceil: 2016,
+                step: 1,
+                noSwitching: true, hideLimitLabels: true,
+                getSelectionBarColor: function() {
+                  return '#77d5d5';
+                },
+                translate: function() {
+                  return '';
+                }
+              }
+            };
+
+            $('#add-layer-dialog').on('shown.bs.modal', function() {
+              $timeout(function() {
+                scope.$broadcast('rzSliderForceRender');
+              });
+            });
+
             var resetText = function() {
               scope.filterOptions.text = null;
             };
             var resetOwner = function() {
               scope.filterOptions.owner = null;
+            };
+            var resetFrom = function() {
+              scope.filterOptions.from = null;
             };
             //angular.element('#layer-filter')[0].attributes.placeholder.value = $translate.instant('filter_layers');
             scope.setCurrentServerId = function(serverId) {
@@ -58,6 +89,7 @@
             var clearFilters = function() {
               resetText();
               resetOwner();
+              resetFrom();
               searchFavorites = false;
               searchHyper = false;
             };
@@ -86,6 +118,34 @@
             };
 
             scope.applyFilters = function() {
+            };
+
+            scope.getResults = function() {
+              return serverService.getLayersConfigByName('Local Geoserver');
+            };
+
+            scope.nextPage = function() {
+              if (scope.filterOptions.from !== null) {
+                scope.filterOptions.from += scope.filterOptions.size;
+              } else {
+                scope.filterOptions.from = scope.filterOptions.size;
+              }
+              scope.search();
+            };
+            scope.hasNext = function() {
+              return scope.getResults().length === scope.filterOptions.size;
+            };
+            scope.hasPrevious = function() {
+              return scope.filterOptions.from !== null;
+            };
+            scope.previousPage = function() {
+              if (scope.filterOptions.from !== null) {
+                scope.filterOptions.from -= scope.filterOptions.size;
+                if (scope.filterOptions.from < 1) {
+                  scope.filterOptions.from = null;
+                }
+              }
+              scope.search();
             };
 
             scope.search = function() {

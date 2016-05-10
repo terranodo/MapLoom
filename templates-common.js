@@ -1,4 +1,4 @@
-angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
+angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addlayersfilter.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
 
 angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayers.tpl.html",
@@ -14,42 +14,10 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "            </div>\n" +
     "            <div class=\"tab-content col-md-5 explorer-content\">\n" +
     "                <div class=\"tab-pane active\" id=\"explore\">\n" +
-    "                    <div>\n" +
-    "                        <div>\n" +
-    "                            <nav class=\"filter panel panel-default\">\n" +
-    "                                <div class=\"panel-body\">\n" +
-    "                                <div class=\"input-group search-bar\" >\n" +
-    "                                    <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for ...\" ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
-    "                                    <span class=\"input-group-btn\">\n" +
-    "                                        <button class=\"btn btn-primary search-btn\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\" type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> Search</button>\n" +
-    "                                    </span>\n" +
-    "                                </div>\n" +
-    "                                </div>\n" +
-    "                            </nav>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
+    "                  <div loom-addlayersfilter></div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div class=\"filter panel panel-default\">\n" +
-    "                  <div class=\"alert alert-title alert-warning-mp\">\n" +
-    "                    <h3>{{currentLayer.Title}}</h3>\n" +
-    "                  </div>\n" +
-    "                    <div class=\"panel-body\">\n" +
-    "                        <h4>Abstract</h4>\n" +
-    "                        <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"whiteframe-2dp\" id=\"mapreview\">\n" +
-    "                    <div class=\"alert alert-warning-mp\">\n" +
-    "                        Refine Search Limit the search to data that includes features in the displayed area.\n" +
-    "                    </div>\n" +
-    "                    <div zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
-    "                </div>\n" +
-    "                <div class=\"search-pagination\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-md-7 clearfix result-panel\">\n" +
-    "                <div class=\"row result-table\">\n" +
+    "                <div class=\"result-table\">\n" +
     "                  <div class=\"clearfix search-results panel\">\n" +
     "                    <table class=\"table table-hover list-results panel-body\">\n" +
     "                      <tr>\n" +
@@ -57,22 +25,127 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                        <th>Domain</th>\n" +
     "                      </tr>\n" +
     "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': isInCart(layer)}\"\n" +
-    "                        ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
+    "                        ng-repeat=\"layer in layersConfig = getResults() | filter:filterLayers | filter:filterAddedLayers\">\n" +
     "                        <td>{{ layer.Title }}</td>\n" +
     "                        <td>{{ layer.domain }}</td>\n" +
     "                      </tr>\n" +
     "                    </table>\n" +
+    "                    <div class=\"actions\">\n" +
+    "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default btn-lg\">Previous</button>\n" +
+    "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default btn-lg\">Next</button>\n" +
+    "                    </div>\n" +
     "                  </div>\n" +
     "                </div>\n" +
+    "\n" +
+    "                <div class=\"search-pagination\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-md-7 clearfix result-panel\">\n" +
+    "                <div class=\"panel panel-default\" id=\"mapreview\" name=\"loom-map-panel\">\n" +
+    "                  <div class=\"alert alert-title alert-layer-mp\">\n" +
+    "                      Refine Search Limit the search to data that includes features in the displayed area.\n" +
+    "                  </div>\n" +
+    "                  <div class=\"panel-body\">\n" +
+    "                    <div class=\"loom-map\" zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"filter panel panel-default\" name=\"layer-information-panel\">\n" +
+    "                  <div class=\"alert alert-title alert-warning-mp\">\n" +
+    "                    <h3>{{currentLayer.Title}}</h3>\n" +
+    "                  </div>\n" +
+    "                    <div class=\"panel-body\">\n" +
+    "                      <div class=\"row\">\n" +
+    "                        <div class=\"col-md-6 col-sm-6\">\n" +
+    "                          <h4>Abstract</h4>\n" +
+    "                          <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
+    "                        </div>\n" +
+    "                        <div class=\"col-md-6 col-sm-6 row\">\n" +
+    "                          <div class=\"col-sm-5 col-xs-5 text-right layer-info-right\">\n" +
+    "                            <div>DATA</div>\n" +
+    "                            <div>DATE</div>\n" +
+    "                            <div>OWNER</div>\n" +
+    "                            <div>CATEGORY</div>\n" +
+    "                          </div>\n" +
+    "                          <div class=\"col-sm-7 col-xs-7 layer-info-left\">\n" +
+    "                            <div class=\"ellipsis\">{{currentLayer.Name || 'Raster'}}</div>\n" +
+    "                            <div>dd/mm/yy</div>\n" +
+    "                            <div>{{currentLayer.author || 'admin'}}</div>\n" +
+    "                            <div>{{currentLayer.type || 'Society'}}</div>\n" +
+    "                          </div>\n" +
+    "                        </div>\n" +
+    "                      </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"panel panel-cart\">\n" +
+    "                  <div class=\"panel-heading\">\n" +
+    "                    <h3 class=\"panel-title\">Cart</h3>\n" +
+    "                  </div>\n" +
+    "                  <div class=\"panel-body\">\n" +
+    "                    <table class=\"table table-hover list-results\">\n" +
+    "                      <tr class=\"result\" ng-repeat=\"layer in cart\">\n" +
+    "                        <td>{{layer.Title}}</td>\n" +
+    "                      </tr>\n" +
+    "                    </table>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
     "                <div class=\"row actions\" style=\"\">\n" +
-    "                    <button type=\"button\" ng-clik=\"clearCart();\" class=\"btn btn-default btn-lg\">CLEAR</button>\n" +
-    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!selectedLayer.add\" class=\"btn btn-default btn-lg\">ADD</button>\n" +
+    "                    <button type=\"button\" ng-click=\"clearCart();\" class=\"btn btn-cart btn-lg\">CLEAR</button>\n" +
+    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!selectedLayer.add\" class=\"btn btn-cart btn-lg\">ADD</button>\n" +
     "                </div>\n" +
     "\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
+    "");
+}]);
+
+angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("addlayers/partials/addlayersfilter.tpl.html",
+    "<nav class=\"filter panel panel-default\">\n" +
+    "    <div class=\"panel-body\">\n" +
+    "      <div class=\"col-md-12\">\n" +
+    "        <div class=\"row\">\n" +
+    "          <div class=\"search-bar col-md-6 col-xs-6\">\n" +
+    "            <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for ...\"\n" +
+    "              ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input input-lg\">\n" +
+    "          </div>\n" +
+    "          <div class=\"form-group col-md-6 col-xs-6\">\n" +
+    "            <select class=\"form-control input-lg search-input select-search\">\n" +
+    "              <option>Catalog 1</option>\n" +
+    "              <option>Catalog 2</option>\n" +
+    "            </select>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"row range-search\">\n" +
+    "          <div class=\"col-lg-2 col-lg-offset-1  col-sm-3  col-xs-3 text-right range-search-label\">FROM</div>\n" +
+    "          <div class=\"col-lg-3 col-sm-3 col-xs-7\"><input type=\"text\" name=\"name\" ng-model=\"slider.minValue\" class=\"form-control search-input input-sm\"></div>\n" +
+    "          <div class=\"col-lg-1 col-sm-3 col-xs-3 text-right range-search-label\">TO</div>\n" +
+    "          <div class=\"col-lg-3 col-sm-3 col-xs-7\"><input type=\"text\" name=\"name\" ng-model=\"slider.maxValue\" class=\"form-control search-input input-sm\"></div>\n" +
+    "          <div class=\"col-md-12\">\n" +
+    "            <rzslider  rz-slider-model=\"slider.minValue\" rz-slider-high=\"slider.maxValue\" rz-slider-options=\"slider.options\"></rzslider>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-md-6 col-xs-6\">\n" +
+    "              <div class=\"pull-right\">\n" +
+    "                <button type=\"button\" name=\"button\" class=\"btn btn-search btn-lg\">RESET</button>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-md-6 col-xs-6\">\n" +
+    "              <div class=\"pull-left\">\n" +
+    "                <button class=\"btn btn-search btn-lg\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\"\n" +
+    "                  type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> SEARCH</button>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "</nav>\n" +
     "");
 }]);
 

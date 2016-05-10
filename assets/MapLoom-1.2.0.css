@@ -127,6 +127,8 @@ Build date: 2014-01-10
 */
 
 .editable-wrap{display:inline-block;white-space:nowrap;margin:0}.editable-wrap .editable-controls,.editable-wrap .editable-error{margin-bottom:0}.editable-wrap .editable-controls>input,.editable-wrap .editable-controls>select,.editable-wrap .editable-controls>textarea{margin-bottom:0}.editable-wrap .editable-input{display:inline-block}.editable-buttons{display:inline-block;vertical-align:top}.editable-buttons button{margin-left:5px}.editable-input.editable-has-buttons{width:auto}.editable-bstime .editable-input input[type=text]{width:46px}.editable-bstime .well-small{margin-bottom:0;padding:10px}.editable-range output{display:inline-block;min-width:30px;vertical-align:top;text-align:center}.editable-color input[type=color]{width:50px}.editable-checkbox label span,.editable-checklist label span,.editable-radiolist label span{margin-left:7px;margin-right:10px}.editable-hide{display:none!important}.editable-click,a.editable-click{text-decoration:none;color:#428bca;border-bottom:dashed 1px #428bca}.editable-click:hover,a.editable-click:hover{text-decoration:none;color:#2a6496;border-bottom-color:#2a6496}.editable-empty,.editable-empty:hover,.editable-empty:focus,a.editable-empty,a.editable-empty:hover,a.editable-empty:focus{font-style:italic;color:#D14;text-decoration:none}
+/*! angularjs-slider - v2.13.0 -  (c) Rafal Zajac <rzajac@gmail.com>, Valentin Hervieu <valentin@hervieu.me>, Jussi Saarivirta <jusasi@gmail.com>, Angelin Sirbu <angelin.sirbu@gmail.com> -  https://github.com/angular-slider/angularjs-slider -  2016-04-24 */
+rzslider{position:relative;display:inline-block;width:100%;height:4px;margin:35px 0 15px 0;vertical-align:middle;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}rzslider.with-legend{margin-bottom:40px}rzslider[disabled]{cursor:not-allowed}rzslider[disabled] .rz-pointer{cursor:not-allowed;background-color:#d8e0f3}rzslider span{position:absolute;display:inline-block;white-space:nowrap}rzslider .rz-base{width:100%;height:100%;padding:0}rzslider .rz-bar-wrapper{left:0;z-index:1;width:100%;height:32px;padding-top:16px;margin-top:-16px;box-sizing:border-box}rzslider .rz-bar-wrapper.rz-draggable{cursor:move}rzslider .rz-bar{left:0;z-index:1;width:100%;height:4px;background:#d8e0f3;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px}rzslider .rz-bar.rz-selection{z-index:2;background:#0db9f0;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px}rzslider .rz-pointer{top:-14px;z-index:3;width:32px;height:32px;cursor:pointer;background-color:#0db9f0;-webkit-border-radius:16px;-moz-border-radius:16px;border-radius:16px}rzslider .rz-pointer:after{position:absolute;top:12px;left:12px;width:8px;height:8px;background:#fff;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;content:''}rzslider .rz-pointer:hover:after{background-color:#fff}rzslider .rz-pointer.rz-active{z-index:4}rzslider .rz-pointer.rz-active:after{background-color:#451aff}rzslider .rz-bubble{bottom:16px;padding:1px 3px;color:#55637d;cursor:default}rzslider .rz-bubble.rz-selection{top:16px}rzslider .rz-bubble.rz-limit{color:#55637d}rzslider .rz-ticks{position:absolute;top:-3px;left:0;z-index:1;display:-webkit-flex;display:-ms-flexbox;display:flex;width:100%;height:0;padding:0 11px;margin:0;list-style:none;box-sizing:border-box;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between}rzslider .rz-ticks .rz-tick{width:10px;height:10px;text-align:center;cursor:pointer;background:#d8e0f3;border-radius:50%}rzslider .rz-ticks .rz-tick.rz-selected{background:#0db9f0}rzslider .rz-ticks .rz-tick .rz-tick-value{position:absolute;top:-30px;transform:translate(-50%,0)}rzslider .rz-ticks .rz-tick .rz-tick-legend{position:absolute;top:24px;max-width:50px;white-space:normal;transform:translate(-50%,0)}rzslider .rz-ticks.rz-ticks-values-under .rz-tick-value{top:initial;bottom:-40px}rzslider.rz-vertical{position:relative;width:4px;height:100%;padding:0;margin:0 20px;vertical-align:baseline}rzslider.rz-vertical .rz-base{width:100%;height:100%;padding:0}rzslider.rz-vertical .rz-bar-wrapper{top:auto;left:0;width:32px;height:100%;padding:0 0 0 16px;margin:0 0 0 -16px}rzslider.rz-vertical .rz-bar{bottom:0;left:auto;width:4px;height:100%}rzslider.rz-vertical .rz-pointer{top:auto;bottom:0;left:-14px!important}rzslider.rz-vertical .rz-bubble{bottom:0;left:16px!important;margin-left:3px}rzslider.rz-vertical .rz-bubble.rz-selection{top:auto;left:16px!important}rzslider.rz-vertical .rz-ticks{top:0;left:-3px;z-index:1;width:0;height:100%;padding:11px 0;-webkit-flex-direction:column-reverse;-ms-flex-direction:column-reverse;flex-direction:column-reverse}rzslider.rz-vertical .rz-ticks .rz-tick{vertical-align:middle}rzslider.rz-vertical .rz-ticks .rz-tick .rz-tick-value{top:initial;left:22px;transform:translate(0,-28%)}rzslider.rz-vertical .rz-ticks .rz-tick .rz-tick-legend{top:initial;right:24px;max-width:none;white-space:nowrap;transform:translate(0,-28%)}rzslider.rz-vertical .rz-ticks.rz-ticks-values-under .rz-tick-value{right:12px;bottom:initial;left:initial}
 /**
  * This is the main application stylesheet. It should include or import all
  * stylesheets used throughout the application as this is the only stylesheet in
@@ -7815,7 +7817,7 @@ button.authors-shown {
   min-height: 200px;
   overflow: hidden;
   overflow-y: auto;
-  background-color: rgba(151, 179, 205, 0.2);
+  background-color: #dbdbdb;
 }
 
 .add-layers-loading.loom-loading {
@@ -7879,24 +7881,64 @@ button.authors-shown {
 
 .alert-title {
   min-height: 60px;
-  padding: 0 15px;
   margin-bottom: 0;
   border-radius: 4px 4px 0 0;
+}
+
+.alert-title h3 {
+  margin: 0;
 }
 
 .explorer-content {
   min-height: 270px;
 }
 
-.filter .alert-title h3 {
+.filter.panel .panel-body {
+  padding: 15px !important;
+}
+
+.filter .alert-title h3,
+.ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .filter .abstract {
-  height: 200px;
+  height: 100px;
   overflow-y: auto;
+}
+
+.layer-info-left {
+  margin-top: 20px;
+}
+
+.layer-info-left div {
+  padding: 8px;
+  margin-bottom: 4px;
+  font-style: italic;
+  background: rgba(255, 173, 47, 0.25);
+}
+
+.layer-info-right {
+  margin-top: 20px;
+}
+
+.layer-info-right div {
+  padding: 8px;
+  margin-bottom: 4px;
+}
+
+.alert-warning-mp {
+  color: #42351E;
+  background-color: #FFAD2F;
+  border-color: #FFAD2F;
+}
+
+.alert-layer-mp {
+  color: white;
+  background-color: #54bcbc;
+  border-color: #54bcbc;
 }
 
 .explorer #mappreview {
@@ -7921,8 +7963,140 @@ button.authors-shown {
   text-align: right;
 }
 
+.table.list-results tbody > tr > td {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.table.list-results tr > th {
+  padding: 12px;
+  font-size: 24px;
+  font-weight: normal;
+  color: white;
+  background-color: #54bcbc;
+}
+
+.list-results.table-hover > tbody > tr:hover > th {
+  background-color: #54bcbc;
+}
+
 .preview-hover {
   background-color: orange;
+}
+
+.btn-search {
+  color: #ffffff;
+  background-color: #2e9c9c;
+  border: 1px solid #168c8c;
+}
+
+.btn-search:hover,
+.btn-search:focus,
+.btn-search:active,
+.btn-search.active,
+.open .dropdown-toggle.btn-search {
+  color: #ffffff;
+  background-color: #168c8c;
+  border-color: #168c8c;
+}
+
+.btn-cart {
+  color: white;
+  background-color: #fe7652;
+  border: 1px solid: #FE5252;
+}
+
+.btn-cart:hover,
+.btn-cart:focus,
+.btn-cart:active,
+.btn-cart.active,
+.open .dropdown-toggle.btn-cart {
+  color: #ffffff;
+  background-color: #FE5252;
+  border-color: #FE5252;
+}
+
+.search-input {
+  border: 1px solid #168c8c;
+}
+
+.select-search {
+  color: white;
+  background-color: #4ebaba;
+  border: 1px solid #168c8c;
+}
+
+.select-search option {
+  margin: 40px;
+  border: 0 solid transparent;
+}
+
+.range-search {
+  margin-top: 25px;
+  margin-bottom: 36px;
+}
+
+.range-search .range-search-label {
+  padding-top: 8px;
+}
+
+.loom-map div {
+  max-height: 250px;
+}
+
+.panel-cart .panel-heading {
+  padding: 15px;
+  color: #ffffff;
+  background-color: #ff714c;
+  border-radius: 4px 4px 0 0;
+}
+
+.panel-cart .panel-title {
+  font-size: 24px;
+}
+
+.panel-cart .table {
+  margin-bottom: 0;
+}
+
+.panel-cart .panel-body {
+  height: 160px;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.range-search rzslider {
+  margin-top: 20px;
+}
+
+rzslider .rz-pointer {
+  top: -6px;
+  width: 20px;
+  height: 20px;
+  background-color: #2e9c9c;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+rzslider .rz-pointer:focus {
+  background-color: #268282;
+  outline: none;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+rzslider .rz-bar {
+  height: 10px;
+}
+
+rzslider .rz-pointer:after {
+  position: static;
+}
+
+rzslider .rz-pointer:hover:after {
+  background-color: rgba(255, 255, 255, 0);
+}
+
+rzslider .rz-pointer.rz-active:after {
+  background-color: rgba(255, 255, 255, 0);
 }
 
 .loom-arrangeable body.dragging,
@@ -9320,7 +9494,7 @@ body.modal-open,
 }
 
 #add-layer-dialog .modal-dialog {
-  width: 414px;
+  width: 95%;
 }
 
 @media (min-width: 960px) {
@@ -9333,11 +9507,6 @@ body.modal-open,
   #add-layer-dialog .modal-dialog {
     width: 98% !important;
   }
-}
-
-.table.list-results tbody > tr > td {
-  padding: 15px;
-  cursor: pointer;
 }
 
 .table-hover > tbody > tr:hover > td,
@@ -9379,12 +9548,6 @@ body.modal-open,
 
 .whiteframe-2dp {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
-}
-
-.alert-warning-mp {
-  color: #42351E;
-  background-color: #FFAD2F;
-  border-color: #FFAD2F;
 }
 
 .panel {

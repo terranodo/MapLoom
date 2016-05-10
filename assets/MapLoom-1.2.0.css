@@ -7815,6 +7815,7 @@ button.authors-shown {
 
 [loom-addlayers] .modal-body {
   min-height: 200px;
+  padding-top: 5px;
   overflow: hidden;
   overflow-y: auto;
   background-color: #dbdbdb;

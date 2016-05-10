@@ -25,15 +25,11 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                        <th>Domain</th>\n" +
     "                      </tr>\n" +
     "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': isInCart(layer)}\"\n" +
-    "                        ng-repeat=\"layer in layersConfig = getResults() | filter:filterLayers | filter:filterAddedLayers\">\n" +
+    "                        ng-repeat=\"layer in layersConfig = serverService.getLayersConfigByName('Local Geoserver') | filter:filterLayers | filter:filterAddedLayers\">\n" +
     "                        <td>{{ layer.Title }}</td>\n" +
     "                        <td>{{ layer.domain }}</td>\n" +
     "                      </tr>\n" +
     "                    </table>\n" +
-    "                    <div class=\"actions\">\n" +
-    "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default btn-lg\">Previous</button>\n" +
-    "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default btn-lg\">Next</button>\n" +
-    "                    </div>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +

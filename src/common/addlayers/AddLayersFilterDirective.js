@@ -2,7 +2,7 @@
 
   var module = angular.module('loom_addlayersfilter_directive', []);
 
-  module.directive('loomAddlayersfilter', function($rootScope, $timeout) {
+  module.directive('loomAddlayersfilter', function($timeout) {
     return {
       templateUrl: 'addlayers/partials/addlayersfilter.tpl.html',
       link: function(scope, element) {
@@ -18,11 +18,11 @@
         scope.maxValue = scope.sliderValues[scope.sliderValues.length - 1];
 
         scope.slider = {
-          minValue: 3,
-          maxValue: 6,
+          minValue: 0,
+          maxValue: sliderValues.length - 1,
           options: {
             floor: 0,
-            ceil: scope.sliderValues.length - 1,
+            ceil: sliderValues.length - 1,
             step: 1,
             noSwitching: true, hideLimitLabels: true,
             getSelectionBarColor: function() {

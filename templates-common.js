@@ -7,7 +7,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
     "            </div>\n" +
-    "            <div class=\"tab-content col-md-5 explorer-content\">\n" +
+    "            <div class=\"tab-content col-md-7 explorer-content\">\n" +
     "                <div class=\"tab-pane active\" id=\"explore\">\n" +
     "                  <div loom-addlayersfilter></div>\n" +
     "                </div>\n" +
@@ -35,7 +35,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                <div class=\"search-pagination\">\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-md-7 clearfix result-panel\">\n" +
+    "            <div class=\"col-md-5 clearfix result-panel\">\n" +
     "                <div class=\"panel panel-default\" id=\"mapreview\" name=\"loom-map-panel\">\n" +
     "                  <div class=\"alert alert-title alert-layer-mp\">\n" +
     "                      Refine Search Limit the search to data that includes features in the displayed area.\n" +
@@ -52,20 +52,15 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                    <div class=\"panel-body\">\n" +
     "                      <div class=\"row\">\n" +
     "                        <div class=\"col-md-6 col-sm-6\">\n" +
-    "                          <h4>Abstract</h4>\n" +
     "                          <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
     "                        </div>\n" +
     "                        <div class=\"col-md-6 col-sm-6 row\">\n" +
-    "                          <div class=\"col-sm-5 col-xs-5 text-right layer-info-right\">\n" +
-    "                            <div>DATA</div>\n" +
+    "                          <div class=\"col-sm-5 col-xs-5 layer-info-right\">\n" +
     "                            <div>DATE</div>\n" +
-    "                            <div>OWNER</div>\n" +
     "                            <div>CATEGORY</div>\n" +
     "                          </div>\n" +
     "                          <div class=\"col-sm-7 col-xs-7 layer-info-left\">\n" +
-    "                            <div class=\"ellipsis\">{{currentLayer.Name || 'Raster'}}</div>\n" +
     "                            <div>dd/mm/yy</div>\n" +
-    "                            <div>{{currentLayer.author || 'admin'}}</div>\n" +
     "                            <div>{{currentLayer.type || 'Society'}}</div>\n" +
     "                          </div>\n" +
     "                        </div>\n" +

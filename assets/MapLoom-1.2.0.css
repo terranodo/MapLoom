@@ -7881,17 +7881,17 @@ button.authors-shown {
 }
 
 .alert-title {
-  min-height: 60px;
   margin-bottom: 0;
   border-radius: 4px 4px 0 0;
 }
 
 .alert-title h3 {
-  margin: 0;
+  margin: -8px 0 0 0;
+  font-size: 18px;
 }
 
 .explorer-content {
-  min-height: 270px;
+  min-height: 20px;
 }
 
 .filter.panel .panel-body {
@@ -7911,7 +7911,7 @@ button.authors-shown {
 }
 
 .layer-info-left {
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .layer-info-left div {
@@ -7922,7 +7922,7 @@ button.authors-shown {
 }
 
 .layer-info-right {
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .layer-info-right div {
@@ -7931,12 +7931,15 @@ button.authors-shown {
 }
 
 .alert-warning-mp {
+  height: 35px;
   color: #42351E;
   background-color: #FFAD2F;
   border-color: #FFAD2F;
 }
 
 .alert-layer-mp {
+  padding: 8px 15px;
+  font-size: 12px;
   color: white;
   background-color: #54bcbc;
   border-color: #54bcbc;
@@ -7964,14 +7967,23 @@ button.authors-shown {
   text-align: right;
 }
 
+.explorer .result-table .actions {
+  margin: 20px 0 0px 0px;
+  text-align: left;
+}
+
+.list-results {
+  margin-bottom: 20px;
+}
+
 .table.list-results tbody > tr > td {
-  padding: 15px;
+  padding: 8px 15px;
   cursor: pointer;
 }
 
 .table.list-results tr > th {
-  padding: 12px;
-  font-size: 24px;
+  padding: 5px 12px;
+  font-size: 18px;
   font-weight: normal;
   color: white;
   background-color: #54bcbc;
@@ -8033,8 +8045,8 @@ button.authors-shown {
 }
 
 .range-search {
-  margin-top: 25px;
-  margin-bottom: 36px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .range-search .range-search-label {
@@ -8042,18 +8054,18 @@ button.authors-shown {
 }
 
 .loom-map div {
-  max-height: 250px;
+  max-height: 195px;
 }
 
 .panel-cart .panel-heading {
-  padding: 15px;
+  padding: 8px 15px;
   color: #ffffff;
   background-color: #ff714c;
   border-radius: 4px 4px 0 0;
 }
 
 .panel-cart .panel-title {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .panel-cart .table {
@@ -8061,7 +8073,7 @@ button.authors-shown {
 }
 
 .panel-cart .panel-body {
-  height: 160px;
+  height: 178px;
   padding: 0;
   overflow-y: auto;
 }
@@ -9500,7 +9512,8 @@ body.modal-open,
 
 @media (min-width: 960px) {
   #add-layer-dialog .modal-dialog {
-    width: 95%;
+    width: 90%;
+    height: 768px;
   }
 }
 

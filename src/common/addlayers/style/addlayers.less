@@ -152,6 +152,10 @@
   margin: 20px 0 0px 0px;
 }
 
+.table.list-results {
+  table-layout: fixed;
+}
+
 .table.list-results tbody > tr > td {
   padding: 15px;
 	cursor: pointer;
@@ -272,4 +276,20 @@ rzslider .rz-pointer:hover:after {
 }
 rzslider .rz-pointer.rz-active:after {
   background-color: rgba(255, 255, 255, 0);
+}
+
+.remove-button{
+  span {
+    visibility: hidden;
+    padding: 4px;
+  }
+
+  span:hover {
+     color: #ff714c;
+  }
+}
+.remove-button:hover{
+  span {
+    visibility: visible;
+  }
 }

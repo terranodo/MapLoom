@@ -7,11 +7,6 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
     "            </div>\n" +
-    "            <!--div class=\"col-md-12\">\n" +
-    "                <ul class=\"nav nav-tabs\">\n" +
-    "                    <li><a data-toggle=\"tab\" ng-click=\"searchHyper();\">Search</a></li>\n" +
-    "                </ul>\n" +
-    "      </div-->\n" +
     "            <div class=\"tab-content col-md-5 explorer-content\">\n" +
     "                <div class=\"tab-pane active\" id=\"explore\">\n" +
     "                  <div loom-addlayersfilter></div>\n" +

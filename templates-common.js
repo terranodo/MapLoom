@@ -75,7 +75,10 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                  <div class=\"panel-body\">\n" +
     "                    <table class=\"table table-hover list-results\">\n" +
     "                      <tr class=\"result\" ng-repeat=\"layer in cart\">\n" +
-    "                        <td>{{layer.Title}}</td>\n" +
+    "                        <td class=\"remove-button\">\n" +
+    "                          {{layer.Title}}\n" +
+    "                          <span ng-click=\"addToCart(layer)\" class=\"glyphicon glyphicon-remove pull-right\"></span>\n" +
+    "                        </td>\n" +
     "                      </tr>\n" +
     "                    </table>\n" +
     "                  </div>\n" +
@@ -83,7 +86,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "\n" +
     "                <div class=\"row actions\" style=\"\">\n" +
     "                    <button type=\"button\" ng-click=\"clearCart();\" class=\"btn btn-cart btn-lg\">CLEAR</button>\n" +
-    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!selectedLayer.add\" class=\"btn btn-cart btn-lg\">ADD</button>\n" +
+    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!cart.length\" class=\"btn btn-cart btn-lg\">ADD</button>\n" +
     "                </div>\n" +
     "\n" +
     "            </div>\n" +

@@ -8112,6 +8112,19 @@ rzslider .rz-pointer.rz-active:after {
   background-color: rgba(255, 255, 255, 0);
 }
 
+.remove-button span {
+  padding: 4px;
+  visibility: hidden;
+}
+
+.remove-button span:hover {
+  color: #ff714c;
+}
+
+.remove-button:hover span {
+  visibility: visible;
+}
+
 .loom-arrangeable body.dragging,
 .loom-arrangeable body.dragging * {
   cursor: move !important;

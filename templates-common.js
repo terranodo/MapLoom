@@ -21,7 +21,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                      </tr>\n" +
     "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': isInCart(layer)}\"\n" +
     "                        ng-repeat=\"layer in layersConfig = getResults() | filter:filterLayers | filter:filterAddedLayers\">\n" +
-    "                        <td>{{ layer.Title }}</td>\n" +
+    "                        <td class=\"ellipsis\">{{ layer.Title }}</td>\n" +
     "                        <td>{{ layer.domain }}</td>\n" +
     "                      </tr>\n" +
     "                    </table>\n" +

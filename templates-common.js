@@ -112,12 +112,14 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "        </div>\n" +
     "        <div class=\"row range-search\">\n" +
     "          <div class=\"col-lg-2 col-lg-offset-1  col-sm-3  col-xs-3 text-right range-search-label\">FROM</div>\n" +
-    "          <div class=\"col-lg-3 col-sm-3 col-xs-7\"><input type=\"text\" name=\"name\" ng-model=\"slider.minValue\" class=\"form-control search-input input-sm\"></div>\n" +
-    "          <div class=\"col-lg-1 col-sm-3 col-xs-3 text-right range-search-label\">TO</div>\n" +
-    "          <div class=\"col-lg-3 col-sm-3 col-xs-7\"><input type=\"text\" name=\"name\" ng-model=\"slider.maxValue\" class=\"form-control search-input input-sm\"></div>\n" +
-    "          <div class=\"col-md-12\">\n" +
-    "            <rzslider  rz-slider-model=\"slider.minValue\" rz-slider-high=\"slider.maxValue\" rz-slider-options=\"slider.options\"></rzslider>\n" +
+    "          <div class=\"col-lg-3 col-sm-3 col-xs-7\">\n" +
+    "            <input type=\"text\" name=\"name\" id=\"inputMinValue\" ng-change=\"setRange('inputMinValue')\" ng-model=\"sliderValues[slider.minValue]\" class=\"form-control search-input input-sm\">\n" +
     "          </div>\n" +
+    "          <div class=\"col-lg-1 col-sm-3 col-xs-3 text-right range-search-label\">TO</div>\n" +
+    "          <div class=\"col-lg-3 col-sm-3 col-xs-7\">\n" +
+    "            <input type=\"text\" name=\"name\" id=\"inputMaxValue\" ng-change=\"setRange('inputMaxValue')\" ng-model=\"sliderValues[slider.maxValue]\" class=\"form-control search-input input-sm\">\n" +
+    "          </div>\n" +
+    "          <rzslider  rz-slider-model=\"slider.minValue\" rz-slider-high=\"slider.maxValue\" rz-slider-options=\"slider.options\"></rzslider>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"row\">\n" +

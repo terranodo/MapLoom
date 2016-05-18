@@ -28,6 +28,9 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                    <div class=\"actions\">\n" +
     "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default btn-lg\">Previous</button>\n" +
     "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default btn-lg\">Next</button>\n" +
+    "                      <span class=\"text-muted\">\n" +
+    "                        Showing {{filterOptions.size}} of {{pagination.sizeDocuments}} (Page {{filterOptions.from/filterOptions.size + 1}} / {{pagination.pages}})\n" +
+    "                      </span>\n" +
     "                    </div>\n" +
     "                  </div>\n" +
     "                </div>\n" +

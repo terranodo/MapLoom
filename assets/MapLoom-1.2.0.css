@@ -7888,6 +7888,8 @@ button.authors-shown {
 .alert-title h3 {
   margin: -8px 0 0 0;
   font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.033em;
 }
 
 .explorer-content {
@@ -7908,6 +7910,7 @@ button.authors-shown {
 .filter .abstract {
   height: 100px;
   overflow-y: auto;
+  font-weight: 300;
 }
 
 .layer-info-left {
@@ -7917,7 +7920,7 @@ button.authors-shown {
 .layer-info-left div {
   padding: 8px;
   margin-bottom: 4px;
-  font-style: italic;
+  font-weight: 300;
   background: rgba(255, 173, 47, 0.25);
 }
 
@@ -7928,6 +7931,7 @@ button.authors-shown {
 .layer-info-right div {
   padding: 8px;
   margin-bottom: 4px;
+  font-weight: 300;
 }
 
 .alert-warning-mp {
@@ -7965,6 +7969,7 @@ button.authors-shown {
 .explorer .result-panel .actions {
   margin: 20px 0 0px 0px;
   text-align: right;
+  border-bottom: 0;
 }
 
 .table.list-results {
@@ -7974,6 +7979,7 @@ button.authors-shown {
 .explorer .result-table .actions {
   margin: 20px 0 0px 0px;
   text-align: left;
+  text-transform: uppercase;
 }
 
 .list-results {
@@ -7982,15 +7988,21 @@ button.authors-shown {
 
 .table.list-results tbody > tr > td {
   padding: 8px 15px;
+  font-weight: 300;
   cursor: pointer;
 }
 
 .table.list-results tr > th {
   padding: 5px 12px;
   font-size: 18px;
-  font-weight: normal;
+  font-weight: 300;
+  letter-spacing: 0.033em;
   color: white;
   background-color: #54bcbc;
+}
+
+.table tbody > tr > td {
+  border-bottom: 1px solid #dddddd;
 }
 
 .list-results.table-hover > tbody > tr:hover > th {
@@ -8002,6 +8014,8 @@ button.authors-shown {
 }
 
 .btn-search {
+  font-weight: 300;
+  letter-spacing: 0.033em;
   color: #ffffff;
   background-color: #2e9c9c;
   border: 1px solid #168c8c;
@@ -8017,7 +8031,18 @@ button.authors-shown {
   border-color: #168c8c;
 }
 
+.actions .btn-lg {
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.text-muted {
+  font-weight: 300;
+  text-transform: lowercase;
+}
+
 .btn-cart {
+  font-weight: 300;
   color: white;
   background-color: #fe7652;
   border: 1px solid: #FE5252;
@@ -8034,6 +8059,9 @@ button.authors-shown {
 }
 
 .search-input {
+  padding: 0 15px;
+  font-weight: 300;
+  letter-spacing: 0.033em;
   border: 1px solid #168c8c;
 }
 
@@ -8054,7 +8082,8 @@ button.authors-shown {
 }
 
 .range-search .range-search-label {
-  padding-top: 8px;
+  padding-top: 6px;
+  padding-right: 0px;
 }
 
 .loom-map div {
@@ -8070,6 +8099,8 @@ button.authors-shown {
 
 .panel-cart .panel-title {
   font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.033em;
 }
 
 .panel-cart .table {
@@ -9587,6 +9618,7 @@ body.modal-open,
   font-weight: normal;
   background-color: rgba(151, 179, 205, 0);
   border: 0;
+  -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
 }
 
 .panel-group .panel-heading + .panel-collapse .panel-body {

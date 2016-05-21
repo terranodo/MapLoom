@@ -110,9 +110,8 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "              ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input input-lg\">\n" +
     "          </div>\n" +
     "          <div class=\"form-group col-md-6 col-xs-6\">\n" +
-    "            <select class=\"form-control input-lg search-input select-search\">\n" +
-    "              <option>Catalog 1</option>\n" +
-    "              <option>Catalog 2</option>\n" +
+    "            <select class=\"form-control input-lg search-input select-search\" ng-model=\"catalogKey\" ng-change=\"searchHyper()\">\n" +
+    "              <option ng-repeat=\"(catalogKey, catalog) in serverService.catalogList\" value=\"{{catalogKey}}\">{{catalog.name}}</option>\n" +
     "            </select>\n" +
     "          </div>\n" +
     "        </div>\n" +

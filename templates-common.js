@@ -11,7 +11,6 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                <div class=\"tab-pane active\" id=\"explore\">\n" +
     "                  <div loom-addlayersfilter></div>\n" +
     "                </div>\n" +
-    "\n" +
     "                <div class=\"result-table\">\n" +
     "                  <div class=\"clearfix search-results panel\">\n" +
     "                    <table class=\"table table-hover list-results panel-body\">\n" +

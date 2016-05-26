@@ -62,8 +62,8 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                            <div>CATEGORY</div>\n" +
     "                          </div>\n" +
     "                          <div class=\"col-sm-7 col-xs-7 layer-info-left\">\n" +
-    "                            <div>dd/mm/yy</div>\n" +
-    "                            <div>{{currentLayer.type || 'Society'}}</div>\n" +
+    "                            <div>{{currentLayer.LayerDate || 'dd/mm/yy' | date : 'd/MM/y'}}</div>\n" +
+    "                            <div>{{currentLayer.LayerCategory || 'Unknown'}}</div>\n" +
     "                          </div>\n" +
     "                        </div>\n" +
     "                      </div>\n" +

@@ -25,8 +25,8 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                      </tr>\n" +
     "                    </table>\n" +
     "                    <div class=\"actions\">\n" +
-    "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default btn-lg\">Previous</button>\n" +
-    "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default btn-lg\">Next</button>\n" +
+    "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default\">Previous</button>\n" +
+    "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default\">Next</button>\n" +
     "                      <span class=\"text-muted\">\n" +
     "                        Showing {{filterOptions.size}} of {{pagination.sizeDocuments}} - Page {{filterOptions.from/filterOptions.size + 1}} / {{pagination.pages}}\n" +
     "                      </span>\n" +
@@ -40,7 +40,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "            <div class=\"col-md-5 clearfix result-panel\">\n" +
     "                <div class=\"panel panel-default\" id=\"mapreview\" name=\"loom-map-panel\">\n" +
     "                  <div class=\"alert alert-title alert-layer-mp\">\n" +
-    "                      Refine Search Limit the search to data that includes features in the displayed area.\n" +
+    "                      Limit the search to data that includes features in the displayed area.\n" +
     "                  </div>\n" +
     "                  <div class=\"panel-body\">\n" +
     "                    <div class=\"loom-map\" zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
@@ -53,17 +53,14 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                  </div>\n" +
     "                    <div class=\"panel-body\">\n" +
     "                      <div class=\"row\">\n" +
-    "                        <div class=\"col-md-6 col-sm-6\">\n" +
+    "                        <div class=\"col-md-8 col-sm-8\">\n" +
     "                          <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
     "                        </div>\n" +
-    "                        <div class=\"col-md-6 col-sm-6 row\">\n" +
-    "                          <div class=\"col-sm-5 col-xs-5 layer-info-right\">\n" +
-    "                            <div>DATE</div>\n" +
-    "                            <div>CATEGORY</div>\n" +
-    "                          </div>\n" +
-    "                          <div class=\"col-sm-7 col-xs-7 layer-info-left\">\n" +
-    "                            <div>{{currentLayer.LayerDate || 'dd/mm/yy' | date : 'd/MM/y'}}</div>\n" +
-    "                            <div>{{currentLayer.LayerCategory || 'Unknown'}}</div>\n" +
+    "\n" +
+    "                        <div class=\"col-md-4 col-sm-4 row\">\n" +
+    "                          <div class=\"layer-info-left\">\n" +
+    "                            <div>{{currentLayer.LayerDate || 'Date' | date : 'd/MM/y'}}</div>\n" +
+    "                            <div>{{currentLayer.LayerCategory || 'Category'}}</div>\n" +
     "                          </div>\n" +
     "                        </div>\n" +
     "                      </div>\n" +
@@ -87,8 +84,8 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                </div>\n" +
     "\n" +
     "                <div class=\"row actions\" style=\"\">\n" +
-    "                    <button type=\"button\" ng-click=\"clearCart();\" class=\"btn btn-cart btn-lg\">CLEAR</button>\n" +
-    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!cart.length\" class=\"btn btn-cart btn-lg\">ADD</button>\n" +
+    "                    <button type=\"button\" ng-click=\"clearCart();\" class=\"btn btn-cart\">CLEAR</button>\n" +
+    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!cart.length\" class=\"btn btn-cart\">ADD</button>\n" +
     "                </div>\n" +
     "\n" +
     "            </div>\n" +
@@ -106,10 +103,10 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "        <div class=\"row\">\n" +
     "          <div class=\"search-bar col-md-6 col-xs-6\">\n" +
     "            <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for ...\"\n" +
-    "              ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input input-lg\">\n" +
+    "              ng-model=\"filterOptions.text\" type=\"text\" class=\"form-control search-input\">\n" +
     "          </div>\n" +
     "          <div class=\"form-group col-md-6 col-xs-6\">\n" +
-    "            <select class=\"form-control input-lg search-input select-search\" ng-model=\"catalogKey\" ng-change=\"searchHyper()\">\n" +
+    "            <select class=\"form-control search-input select-search\" ng-model=\"catalogKey\" ng-change=\"searchHyper()\">\n" +
     "              <option ng-repeat=\"(catalogKey, catalog) in serverService.catalogList\" value=\"{{catalogKey}}\">{{catalog.name}}</option>\n" +
     "            </select>\n" +
     "          </div>\n" +
@@ -129,12 +126,12 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-6 col-xs-6\">\n" +
     "              <div class=\"pull-right\">\n" +
-    "                <button type=\"button\" name=\"button\" class=\"btn btn-search btn-lg\">RESET</button>\n" +
+    "                <button type=\"button\" name=\"button\" class=\"btn btn-search\">RESET</button>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "            <div class=\"col-md-6 col-xs-6\">\n" +
     "              <div class=\"pull-left\">\n" +
-    "                <button class=\"btn btn-search btn-lg\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\"\n" +
+    "                <button class=\"btn btn-search\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\"\n" +
     "                  type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> SEARCH</button>\n" +
     "              </div>\n" +
     "            </div>\n" +

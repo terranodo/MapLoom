@@ -7695,6 +7695,7 @@ button.authors-shown {
 }
 
 .modal .modal-header {
+  padding: 5px 15px;
   color: #ffffff;
   background-color: #155481;
   border-bottom: 0;
@@ -7815,7 +7816,7 @@ button.authors-shown {
 
 [loom-addlayers] .modal-body {
   min-height: 200px;
-  padding-top: 5px;
+  padding-top: 0px;
   overflow: hidden;
   overflow-y: auto;
   background-color: #dbdbdb;
@@ -7882,7 +7883,7 @@ button.authors-shown {
 
 .alert-title {
   margin-bottom: 0;
-  border-radius: 4px 4px 0 0;
+  border-radius: 2px 2px 0 0;
 }
 
 .alert-title h3 {
@@ -7908,7 +7909,7 @@ button.authors-shown {
 }
 
 .filter .abstract {
-  height: 100px;
+  height: 110px;
   overflow-y: auto;
   font-weight: 300;
 }
@@ -7939,6 +7940,7 @@ button.authors-shown {
   color: #42351E;
   background-color: #FFAD2F;
   border-color: #FFAD2F;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
 
 .alert-layer-mp {
@@ -7947,6 +7949,7 @@ button.authors-shown {
   color: white;
   background-color: #54bcbc;
   border-color: #54bcbc;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
 
 .explorer #mappreview {
@@ -7967,7 +7970,7 @@ button.authors-shown {
 }
 
 .explorer .result-panel .actions {
-  margin: 20px 0 0px 0px;
+  margin: 10px 0 0px 0px;
   text-align: right;
   border-bottom: 0;
 }
@@ -7977,7 +7980,7 @@ button.authors-shown {
 }
 
 .explorer .result-table .actions {
-  margin: 20px 0 0px 0px;
+  margin: 10px 0 0px 0px;
   text-align: left;
   text-transform: uppercase;
 }
@@ -7987,7 +7990,7 @@ button.authors-shown {
 }
 
 .table.list-results tbody > tr > td {
-  padding: 8px 15px;
+  padding: 7px 15px;
   font-weight: 300;
   cursor: pointer;
 }
@@ -8010,7 +8013,7 @@ button.authors-shown {
 }
 
 .preview-hover {
-  background-color: orange;
+  background-color: rgba(255, 173, 47, 0.25);
 }
 
 .btn-search {
@@ -8077,8 +8080,8 @@ button.authors-shown {
 }
 
 .range-search {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .range-search .range-search-label {
@@ -8087,14 +8090,15 @@ button.authors-shown {
 }
 
 .loom-map div {
-  max-height: 195px;
+  max-height: 160px;
 }
 
 .panel-cart .panel-heading {
   padding: 8px 15px;
   color: #ffffff;
   background-color: #ff714c;
-  border-radius: 4px 4px 0 0;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
 
 .panel-cart .panel-title {
@@ -8108,7 +8112,7 @@ button.authors-shown {
 }
 
 .panel-cart .panel-body {
-  height: 178px;
+  height: 150px;
   padding: 0;
   overflow-y: auto;
 }
@@ -9499,7 +9503,7 @@ body {
 }
 
 .panel-body {
-  padding: 10px 10px;
+  padding: 0px;
   background: white;
   border-radius: 2px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);

@@ -1,5 +1,5 @@
 module.exports = function ( karma ) {
-  karma.set({
+  karma.configure({
     /** 
      * From where to look for files, starting with the location of this file.
      */
@@ -15,6 +15,7 @@ module.exports = function ( karma ) {
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/bootstrap/dist/js/bootstrap.js',
+      'vendor/bootstrap-filestyl/src/bootstrap-filestyle.js',
       'vendor/moment/min/moment.min.js',
       'vendor/bootstrap3-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'vendor/bootstrap3-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js',
@@ -24,6 +25,7 @@ module.exports = function ( karma ) {
       'vendor/ol3/ol-debug.js',
       'vendor/d3/d3.min.js',
       'vendor/proj4/dist/proj4-src.js',
+      'vendor/mgrs/dist/mgrs.js',
       'vendor/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
       'vendor/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.min.js',
       'vendor/bootstrap-sortable/Scripts/bootstrap-sortable.js',

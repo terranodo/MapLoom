@@ -1,10 +1,9 @@
-describe('StoryLegendDirective', function() {
+describe('StoryLegendDirective', function () {
   var element, scope, compiledElement, serverService, mapService;
   beforeEach(module('MapLoom'));
   beforeEach(module('loom_addlayers'));
   beforeEach(module('addlayers/partials/addlayers.tpl.html'));
-
-  beforeEach(inject(function($rootScope, $compile, $templateCache, _serverService_, _mapService_) {
+  beforeEach(inject(function ($rootScope, $compile, $templateCache, _serverService_, _mapService_) {
     scope = $rootScope.$new();
     element = angular.element('<div loom-addlayers></div>');
     compiledElement = $compile(element)(scope);
@@ -12,22 +11,20 @@ describe('StoryLegendDirective', function() {
     serverService = _serverService_;
     mapService = _mapService_;
   }));
-  describe('default search', function() {
-    it('changes the filterOptions', function() {
+  describe('default search', function () {
+    it('changes the filterOptions', function () {
       compiledElement.find('ul.nav-tabs li:nth-child(2) a').click();
       compiledElement.find('ul.nav-tabs li:nth-child(1) a').click();
-      expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
-        owner: null
-      }));
+      expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({ owner: null }));
     });
   });
-  describe('search', function() {
+  describe('search', function () {
     var searchSpy;
-    beforeEach(function() {
+    beforeEach(function () {
       searchSpy = spyOn(compiledElement.scope(), 'search');
     });
-    describe('#searchMyFavorites', function() {
-      it('resets filterOptions', function() {
+    describe('#searchMyFavorites', function () {
+      it('resets filterOptions', function () {
         compiledElement.scope().filterOptions.text = 'Ocean Beach';
         compiledElement.scope().searchMyFavorites();
         expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
@@ -36,96 +33,76 @@ describe('StoryLegendDirective', function() {
         }));
       });
     });
-    describe('#defaultSearch', function() {
-      it('resets text in the filterOptions', function() {
+    describe('#defaultSearch', function () {
+      it('resets text in the filterOptions', function () {
         compiledElement.scope().filterOptions.text = 'Ocean Beach';
         compiledElement.scope().defaultSearch();
-        expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
-          text: null
-        }));
+        expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({ text: null }));
       });
-      it('resets owner in the filterOptions', function() {
+      it('resets owner in the filterOptions', function () {
         compiledElement.scope().filterOptions.owner = 'Djikstra';
         compiledElement.scope().defaultSearch();
-        expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
-          owner: null
-        }));
+        expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({ owner: null }));
       });
-      it('calls search', function() {
+      it('calls search', function () {
         compiledElement.scope().defaultSearch();
         expect(searchSpy).toHaveBeenCalled();
       });
     });
   });
-  describe('#search', function() {
-    describe('#searchMyFavorites', function() {
-      it('calls addSearchResultsForFavorites', function() {
+  describe('#search', function () {
+    describe('#searchMyFavorites', function () {
+      it('calls addSearchResultsForFavorites', function () {
         var spy = spyOn(serverService, 'addSearchResultsForFavorites');
         compiledElement.scope().searchMyFavorites();
         expect(spy).toHaveBeenCalled();
       });
     });
-    describe('#defaultSearch', function() {
-      it('calls populateLayersConfigElastic', function() {
+    describe('#defaultSearch', function () {
+      it('calls populateLayersConfigElastic', function () {
         var spy = spyOn(serverService, 'populateLayersConfigElastic');
         compiledElement.scope().defaultSearch();
         expect(spy).toHaveBeenCalled();
       });
     });
-    describe('#searchMyUploads', function() {
-      it('calls populateLayersConfigElastic', function() {
+    describe('#searchMyUploads', function () {
+      it('calls populateLayersConfigElastic', function () {
         var spy = spyOn(serverService, 'populateLayersConfigElastic');
         compiledElement.scope().searchMyUploads();
         expect(spy).toHaveBeenCalled();
       });
     });
   });
-  describe('#resetOwner', function() {
+  describe('#resetOwner', function () {
   });
-  describe('#previewLayer', function() {
-    it('calls createLayer', function() {
+  describe('#previewLayer', function () {
+    it('calls createLayer', function () {
       var spy = spyOn(mapService, 'createLayerWithFullConfig');
-      var layerConfig = { CRS: 'Test', Name: 'Test' };
+      var layerConfig = {
+          CRS: 'Test',
+          Name: 'Test'
+        };
       compiledElement.scope().previewLayer(layerConfig);
       expect(spy).toHaveBeenCalled();
     });
-    it('previewLayers includes the created layer', function() {
+    it('previewLayers includes the created layer', function () {
       var createdLayer = { name: 'Test' };
-      compiledElement.scope().currentServerId = 0;
       spyOn(mapService, 'createLayerWithFullConfig').andReturn(createdLayer);
-      var layerConfig = { CRS: 'Test', Name: 'Test' };
+      var layerConfig = {
+          CRS: 'Test',
+          Name: 'Test'
+        };
       compiledElement.scope().previewLayer(layerConfig);
       expect(compiledElement.scope().previewLayers).toContain(createdLayer);
     });
-    it('resets the CRS to an array', function() {
+    it('resets the CRS to an array', function () {
       spyOn(mapService, 'createLayerWithFullConfig');
-      var layerConfig = { CRS: 'Test', Name: 'Test' };
+      var layerConfig = {
+          CRS: 'Test',
+          Name: 'Test'
+        };
       compiledElement.scope().previewLayer(layerConfig);
       expect(layerConfig.CRS).toEqual(['EPSG:4326']);
-    });
-  });
-  describe('#addLayers', function() {
-    var layerConfig;
-    beforeEach(function() {
-      layerConfig = { add: true, extent: [], CRS: 'EPSG:4326' };
-    });
-    it('adds the layer via mapSerice addLayer', function() {
-      var spy = spyOn(mapService, 'addLayer');
-      spyOn(mapService, 'zoomToExtentForProjection');
-      compiledElement.scope().addLayers(layerConfig);
-      expect(spy).toHaveBeenCalled();
-    });
-    it('zooms to extent via mapService zoomToExtentForProjection', function() {
-      spyOn(mapService, 'addLayer');
-      var spy = spyOn(mapService, 'zoomToExtentForProjection');
-      compiledElement.scope().addLayers(layerConfig);
-      expect(spy).toHaveBeenCalled();
-    });
-    it('layer should have extent and CRS', function() {
-      spyOn(mapService, 'addLayer');
-      var spy = spyOn(mapService, 'zoomToExtentForProjection');
-      compiledElement.scope().addLayers(layerConfig);
-      expect(spy).toHaveBeenCalledWith([], ol.proj.get('EPSG:4326'));
     });
   });
 });

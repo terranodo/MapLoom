@@ -1,4 +1,4 @@
-(function () {
+(function() {
   angular.module('loom', [
     'loom_configuration',
     'loom_map',

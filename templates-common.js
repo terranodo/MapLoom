@@ -28,7 +28,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default\">Previous</button>\n" +
     "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default\">Next</button>\n" +
     "                      <span class=\"text-muted\">\n" +
-    "                        Showing {{filterOptions.size}} of {{pagination.sizeDocuments}} - Page {{filterOptions.from/filterOptions.size + 1}} / {{pagination.pages}}\n" +
+    "                        Showing {{pagination.showdocs}} of {{pagination.sizeDocuments}} - Page {{pagination.currentPage}} / {{pagination.pages}}\n" +
     "                      </span>\n" +
     "                    </div>\n" +
     "                  </div>\n" +
@@ -99,7 +99,7 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
   $templateCache.put("addlayers/partials/addlayersfilter.tpl.html",
     "<nav class=\"filter panel panel-default\">\n" +
     "    <div class=\"panel-body\">\n" +
-    "      <div class=\"col-md-12\">\n" +
+    "      <form class=\"col-md-12\" ng-submit=\"search()\">\n" +
     "        <div class=\"row\">\n" +
     "          <div class=\"search-bar col-md-6 col-xs-6\">\n" +
     "            <input name=\"text_search_input_exp\" id=\"text_search_input_exp\" placeholder=\"Search for ...\"\n" +
@@ -126,17 +126,18 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-6 col-xs-6\">\n" +
     "              <div class=\"pull-right\">\n" +
-    "                <button type=\"button\" name=\"button\" class=\"btn btn-search\">RESET</button>\n" +
+    "                <button type=\"button\" ng-click=\"searchHyper()\" name=\"button\" class=\"btn btn-search\">RESET</button>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "            <div class=\"col-md-6 col-xs-6\">\n" +
     "              <div class=\"pull-left\">\n" +
-    "                <button class=\"btn btn-search\" ng-disabled=\"!filterOptions.text\" ng-click=\"search()\"\n" +
-    "                  type=\"submit\" id=\"text_search_btn\"><i class=\"glyphicon glyphicon-search\"></i> SEARCH</button>\n" +
+    "                <button class=\"btn btn-search\" ng-disabled=\"!filterOptions.text\" type=\"submit\" id=\"text_search_btn\">\n" +
+    "                  <i class=\"glyphicon glyphicon-search\"></i> SEARCH\n" +
+    "                </button>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "      </div>\n" +
+    "      </form>\n" +
     "    </div>\n" +
     "</nav>\n" +
     "");

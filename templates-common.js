@@ -73,7 +73,7 @@ angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache
     "                  </div>\n" +
     "                  <div class=\"panel-body\">\n" +
     "                    <table class=\"table table-hover list-results\">\n" +
-    "                      <tr class=\"result\" ng-repeat=\"layer in cart\">\n" +
+    "                      <tr class=\"result\" ng-repeat=\"layer in cart.slice().reverse()\">\n" +
     "                        <td class=\"remove-button\">\n" +
     "                          {{layer.Title}}\n" +
     "                          <span ng-click=\"addToCart(layer)\" class=\"glyphicon glyphicon-remove pull-right\"></span>\n" +

@@ -1,138 +1,133 @@
-(function() {
+(function () {
   var module = angular.module('loom_config_service', []);
-
   var service_ = null;
-
-  module.factory('httpRequestInterceptor', function($cookieStore, $location) {
-    return {
-      request: function(config) {
-        if (goog.isDefAndNotNull(config) &&
-            (config.method.toLowerCase() === 'post' || config.method.toLowerCase() === 'put')) {
-          config.headers['X-CSRFToken'] = service_.csrfToken;
-        }
-        if (goog.isDefAndNotNull(config) && goog.isDefAndNotNull(config.url) && config.url.indexOf('http') === 0 &&
-            config.url.indexOf($location.protocol() + '://' + $location.host()) !== 0) {
-          var server = service_.getServerByURL(config.url);
-          if (goog.isDefAndNotNull(server)) {
-            if (!goog.isDefAndNotNull(server.authentication)) {
-              config.headers['Authorization'] = '';
-            } else {
-              config.headers['Authorization'] = 'Basic ' + server.authentication;
-            }
+  module.factory('httpRequestInterceptor', [
+    '$cookieStore',
+    '$location',
+    function ($cookieStore, $location) {
+      return {
+        request: function (config) {
+          if (goog.isDefAndNotNull(config) && (config.method.toLowerCase() === 'post' || config.method.toLowerCase() === 'put')) {
+            config.headers['X-CSRFToken'] = service_.csrfToken;
           }
-          var configCopy = $.extend(true, {}, config);
-          // var proxy = service_.configuration.proxy;
-          // if (goog.isDefAndNotNull(proxy)) {
-          //   configCopy.url = proxy + encodeURIComponent(configCopy.url);
-          // }
-          return configCopy;
-        }
-        return config;
-      }
-    };
-  });
-
-  module.config(function($httpProvider) {
-    $httpProvider.interceptors.push('httpRequestInterceptor');
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-  });
-
-  module.provider('configService', function() {
-    this.configuration = {};
-    // This is to avoid a ciruclar dependency with the server service.
-    this.serverList = null;
-
-    this.$get = function($window, $http, $cookies, $location, $translate) {
-      service_ = this;
-      this.configuration = {
-        about: {
-          title: $translate.instant('new_map'),
-          abstract: ''
-        },
-        map: {
-          center: [-9707182.048613328, 1585691.7893914054],
-          zoom: 1,
-          layers: [
-            {
-              'opacity': 1,
-              'selected': true,
-              'group': 'background',
-              'name': 'world-light',
-              'title': 'MapBoxWorldLight',
-              'args': ['world-light'],
-              'visibility': true,
-              'source': 1,
-              'fixed': true,
-              'type': 'OpenLayers.Layer.OSM',
-              'sourceParams': { 'layer': 'world-light' }
+          if (goog.isDefAndNotNull(config) && goog.isDefAndNotNull(config.url) && config.url.indexOf('http') === 0 && config.url.indexOf($location.protocol() + '://' + $location.host()) !== 0) {
+            var server = service_.getServerByURL(config.url);
+            if (goog.isDefAndNotNull(server)) {
+              if (!goog.isDefAndNotNull(server.authentication)) {
+                config.headers['Authorization'] = '';
+              } else {
+                config.headers['Authorization'] = 'Basic ' + server.authentication;
+              }
             }
-          ]
-        },
-        sources: [
-          {
-            'url': ('http://geoshape.geointservices.io/geoserver/web/'),
-            'restUrl': '/gs/rest',
-            'ptype': 'gxp_wmscsource',
-            'name': 'local geoserver',
-            'alwaysAnonymous': true,
-            'isPrimaryGeoserver': true,
-            'lazy': true
-          },
-          {
-            'ptype': 'gxp_mapboxsource',
-            'name': 'Mapbox'
+            var configCopy = $.extend(true, {}, config);
+            return configCopy;
           }
-        ],
-        currentLanguage: 'en',
-        username: 'anonymous',
-        userprofilename: 'Anonymous',
-        userprofileemail: '',
-        authStatus: 401,
-        id: 0,
-        proxy: '/proxy/?url=',
-        nominatimUrl: 'http://nominatim.openstreetmap.org',
-        fileserviceUrlTemplate: '/api/fileservice/view/{}',
-        fileserviceUploadUrl: '/api/fileservice/'
+          return config;
+        }
       };
-
-      if (goog.isDefAndNotNull($window.config)) {
-        goog.object.extend(this.configuration, $window.config, {});
+    }
+  ]);
+  module.config([
+    '$httpProvider',
+    function ($httpProvider) {
+      $httpProvider.interceptors.push('httpRequestInterceptor');
+      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    }
+  ]);
+  module.provider('configService', function () {
+    this.configuration = {};
+    this.serverList = null;
+    this.$get = [
+      '$window',
+      '$http',
+      '$cookies',
+      '$location',
+      '$translate',
+      function ($window, $http, $cookies, $location, $translate) {
+        service_ = this;
+        this.configuration = {
+          about: {
+            title: $translate.instant('new_map'),
+            abstract: ''
+          },
+          map: {
+            center: [
+              -9707182.048613328,
+              1585691.7893914054
+            ],
+            zoom: 1,
+            layers: [{
+                'opacity': 1,
+                'selected': true,
+                'group': 'background',
+                'name': 'world-light',
+                'title': 'MapBoxWorldLight',
+                'args': ['world-light'],
+                'visibility': true,
+                'source': 1,
+                'fixed': true,
+                'type': 'OpenLayers.Layer.OSM',
+                'sourceParams': { 'layer': 'world-light' }
+              }]
+          },
+          sources: [
+            {
+              'url': 'http://geoshape.geointservices.io/geoserver/web/',
+              'restUrl': '/gs/rest',
+              'ptype': 'gxp_wmscsource',
+              'name': 'local geoserver',
+              'alwaysAnonymous': true,
+              'isPrimaryGeoserver': true,
+              'lazy': true
+            },
+            {
+              'ptype': 'gxp_mapboxsource',
+              'name': 'Mapbox'
+            }
+          ],
+          currentLanguage: 'en',
+          username: 'anonymous',
+          userprofilename: 'Anonymous',
+          userprofileemail: '',
+          authStatus: 401,
+          id: 0,
+          proxy: '/proxy/?url=',
+          nominatimUrl: 'http://nominatim.openstreetmap.org',
+          fileserviceUrlTemplate: '/api/fileservice/view/{}',
+          fileserviceUploadUrl: '/api/fileservice/'
+        };
+        if (goog.isDefAndNotNull($window.config)) {
+          goog.object.extend(this.configuration, $window.config, {});
+        }
+        this.username = this.configuration.username;
+        this.currentLanguage = this.configuration.currentLanguage;
+        this.user_profile_name = this.configuration.userprofilename;
+        this.user_profile_email = this.configuration.userprofileemail;
+        this.user_name = this.configuration.username;
+        this.proxy = this.configuration.proxy;
+        this.csrfToken = $cookies.csrftoken;
+        if (goog.isDefAndNotNull(this.configuration.map.zoom) && this.configuration.map.zoom === 0) {
+          this.configuration.map.zoom = 0;
+        }
+        $translate.use(this.currentLanguage);
+        return this;
       }
-      this.username = this.configuration.username;
-      this.currentLanguage = this.configuration.currentLanguage;
-      this.user_profile_name = this.configuration.userprofilename;
-      this.user_profile_email = this.configuration.userprofileemail;
-      this.user_name = this.configuration.username;
-      this.proxy = this.configuration.proxy;
-      this.csrfToken = $cookies.csrftoken;
-
-      if (goog.isDefAndNotNull(this.configuration.map.zoom) && this.configuration.map.zoom === 0) {
-        this.configuration.map.zoom = 0;
-      }
-
-      $translate.use(this.currentLanguage);
-
-      return this;
-    };
-
-    this.isAuthenticated = function() {
+    ];
+    this.isAuthenticated = function () {
       return service_.configuration.authStatus == 200;
     };
-
-    this.getServerByURL = function(url) {
+    this.getServerByURL = function (url) {
       var server = null;
-
       if (!goog.isDefAndNotNull(url)) {
-        throw ({
+        throw {
           name: 'configService',
           level: 'High',
           message: 'undefined server url.',
-          toString: function() {
+          toString: function () {
             return this.name + ': ' + this.message;
           }
-        });
+        };
       }
-
       for (var index = 0; index < service_.serverList.length; index += 1) {
         var subURL = service_.serverList[index].url;
         if (goog.isDefAndNotNull(subURL)) {
@@ -145,7 +140,6 @@
           }
         }
       }
-
       return server;
     };
   });

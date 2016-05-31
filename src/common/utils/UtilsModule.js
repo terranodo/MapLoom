@@ -1,47 +1,46 @@
-(function() {
-  var module = angular.module('loom_utils', [
-    'loom_loading_directive'
+(function () {
+  var module = angular.module('loom_utils', ['loom_loading_directive']);
+  module.directive('customOnChange', [function () {
+      return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+          var onChangeHandler = scope.$eval(attrs.customOnChange);
+          element.bind('change', onChangeHandler);
+        }
+      };
+    }]);
+  module.service('fileUpload', [
+    '$http',
+    '$q',
+    function ($http, $q) {
+      this.uploadFileToUrl = function (file, uploadUrl, csrfToken) {
+        var deferredResponse = $q.defer();
+        var formData = new FormData();
+        formData.append('file', file);
+        $http.post(uploadUrl, formData, {
+          transformRequest: angular.identity,
+          headers: {
+            'Content-Type': undefined,
+            'X-CSRFToken': csrfToken
+          }
+        }).success(function (response) {
+          if (goog.isDefAndNotNull(response.name)) {
+            deferredResponse.resolve(response);
+          } else {
+            deferredResponse.reject(response);
+          }
+        }).error(function () {
+          deferredResponse.reject('There was problem uploading the file. Please check your network connectivity and try again.');
+        });
+        return deferredResponse.promise;
+      };
+    }
   ]);
-
-  module.directive('customOnChange', [function() {
+  module.directive('stopEvent', function () {
     return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        var onChangeHandler = scope.$eval(attrs.customOnChange);
-        element.bind('change', onChangeHandler);
-      }
-    };
-  }]);
-
-  module.service('fileUpload', ['$http', '$q', function($http, $q) {
-    this.uploadFileToUrl = function(file, uploadUrl, csrfToken) {
-      var deferredResponse = $q.defer();
-      var formData = new FormData();
-      formData.append('file', file);
-      $http.post(uploadUrl, formData, {
-        transformRequest: angular.identity,
-        headers: {
-          'Content-Type': undefined,
-          'X-CSRFToken': csrfToken
-        }
-      }).success(function(response) {
-        if (goog.isDefAndNotNull(response.name)) {
-          deferredResponse.resolve(response);
-        } else {
-          deferredResponse.reject(response);
-        }
-      }).error(function() {
-        deferredResponse.reject('There was problem uploading the file. Please check your network connectivity and try again.');
-      });
-      return deferredResponse.promise;
-    };
-  }]);
-
-  module.directive('stopEvent', function() {
-    return {
-      link: function(scope, element, attr) {
+      link: function (scope, element, attr) {
         var events = attr.stopEvent.split(' ');
-        var stopFunction = function(e) {
+        var stopFunction = function (e) {
           e.stopPropagation();
         };
         for (var i = 0; i < events.length; i++) {
@@ -51,34 +50,31 @@
       }
     };
   });
-
-  module.directive('autotextarea', function() {
+  module.directive('autotextarea', function () {
     return {
       restrict: 'E',
       template: '<textarea rows="1" style="height:34px;"></textarea>',
       replace: true,
       scope: true,
-      link: function(scope, element) {
+      link: function (scope, element) {
         var observe;
         if (window.attachEvent) {
-          observe = function(element, event, handler) {
+          observe = function (element, event, handler) {
             element.attachEvent('on' + event, handler);
           };
-        }
-        else {
-          observe = function(element, event, handler) {
+        } else {
+          observe = function (element, event, handler) {
             element.addEventListener(event, handler, false);
           };
         }
         scope.prevHeight = 0;
-
         function resize() {
           var clone = element[0].cloneNode();
           element[0].parentNode.insertBefore(clone, element[0]);
           clone.style.height = 'auto';
           clone.style.width = element[0].style.width;
           clone.value = element[0].value;
-          var height = (clone.scrollHeight + 2);
+          var height = clone.scrollHeight + 2;
           clone.value = 'single';
           height += 34 - (clone.scrollHeight + 2);
           if (height !== scope.prevHeight) {
@@ -92,14 +88,10 @@
           }
           element[0].parentNode.removeChild(clone);
         }
-
-        /* 0-timeout to get the already changed text*/
         function delayedResize() {
           window.setTimeout(resize, 0);
         }
-
         window.setTimeout(resize, 250);
-
         observe(element[0], 'change', resize);
         observe(element[0], 'cut', delayedResize);
         observe(element[0], 'paste', delayedResize);
@@ -108,273 +100,224 @@
       }
     };
   });
-
-  module.directive('datetimepicker', function($rootScope, $translate) {
-    return {
-      restrict: 'E',
-      template: '<div class="row">' +
-          '<div ng-show="(editable !== \'false\') && (date === \'true\')"' +
-          ' ng-class="{\'col-md-6\': (time === \'true\'),' +
-          ' \'col-md-12\': (time === \'false\') || (seperateTime === \'false\')}">' +
-          '<div class="form-group">' +
-          '<div class="input-group date datepicker">' +
-          '<input type="text" class="form-control"/>' +
-          '<span class="input-group-addon">' +
-          '<span class="glyphicon glyphicon-calendar"></span>' +
-          '</span>' +
-          '</div>' +
-          '</div>' +
-          '</div>' +
-          '<div ng-show="(editable !== \'false\') && (time === \'true\') && ((seperateTime === \'true\') ||' +
-          ' (date === \'false\'))" ng-class="{\'col-md-6\': (date === \'true\' && seperateTime === \'true\'),' +
-          ' \'col-md-12\': (date === \'false\')}">' +
-          '<div class="form-group">' +
-          '<div class="input-group date timepicker">' +
-          '<input type="text" class="form-control"/>' +
-          '<span class="input-group-addon">' +
-          '<span class="glyphicon glyphicon-time"></span>' +
-          '</span>' +
-          '</div>' +
-          '</div>' +
-          '</div>' +
-          '<div ng-show="(editable === \'false\')">' +
-          '<input type="text" ng-model="disabledText" disabled class="disabled-date form-control"/>' +
-          '</div>' +
-          '</div>',
-      replace: true,
-      scope: {
-        dateObject: '=dateObject',
-        editable: '@editable',
-        defaultDate: '=defaultDate'
-      },
-      link: function(scope, element, attrs) {
-        if (!goog.isDefAndNotNull(scope.editable)) {
-          scope.editable = 'true';
-        }
-        if (!goog.isDefAndNotNull(attrs.time)) {
-          scope.time = 'true';
-        } else {
-          scope.time = attrs.time;
-        }
-        if (!goog.isDefAndNotNull(attrs.date)) {
-          scope.date = 'true';
-        } else {
-          scope.date = attrs.date;
-        }
-        if (!goog.isDefAndNotNull(attrs.seperateTime)) {
-          scope.seperateTime = 'true';
-        } else {
-          scope.seperateTime = attrs.seperateTime;
-        }
-
-        var hasValidDate = false;
-
-        var updateDateTime = function() {
-          if (!hasValidDate) {
-            scope.dateObject = '';
-            return;
+  module.directive('datetimepicker', [
+    '$rootScope',
+    '$translate',
+    function ($rootScope, $translate) {
+      return {
+        restrict: 'E',
+        template: '<div class="row">' + '<div ng-show="(editable !== \'false\') && (date === \'true\')"' + ' ng-class="{\'col-md-6\': (time === \'true\'),' + ' \'col-md-12\': (time === \'false\') || (seperateTime === \'false\')}">' + '<div class="form-group">' + '<div class="input-group date datepicker">' + '<input type="text" class="form-control"/>' + '<span class="input-group-addon">' + '<span class="glyphicon glyphicon-calendar"></span>' + '</span>' + '</div>' + '</div>' + '</div>' + '<div ng-show="(editable !== \'false\') && (time === \'true\') && ((seperateTime === \'true\') ||' + ' (date === \'false\'))" ng-class="{\'col-md-6\': (date === \'true\' && seperateTime === \'true\'),' + ' \'col-md-12\': (date === \'false\')}">' + '<div class="form-group">' + '<div class="input-group date timepicker">' + '<input type="text" class="form-control"/>' + '<span class="input-group-addon">' + '<span class="glyphicon glyphicon-time"></span>' + '</span>' + '</div>' + '</div>' + '</div>' + '<div ng-show="(editable === \'false\')">' + '<input type="text" ng-model="disabledText" disabled class="disabled-date form-control"/>' + '</div>' + '</div>',
+        replace: true,
+        scope: {
+          dateObject: '=dateObject',
+          editable: '@editable',
+          defaultDate: '=defaultDate'
+        },
+        link: function (scope, element, attrs) {
+          if (!goog.isDefAndNotNull(scope.editable)) {
+            scope.editable = 'true';
           }
-
-          var newDate = new Date();
-          var date = element.find('.datepicker').data('DateTimePicker');
-          if (goog.isDefAndNotNull(date) && goog.isDefAndNotNull(date.getDate())) {
-            date = date.getDate();
-            newDate.setFullYear(date.year(), date.month(), date.date());
-            newDate.setHours(date.hour(), date.minute(), date.second(), date.millisecond());
+          if (!goog.isDefAndNotNull(attrs.time)) {
+            scope.time = 'true';
+          } else {
+            scope.time = attrs.time;
           }
-          var time = element.find('.timepicker').data('DateTimePicker');
-          if (goog.isDefAndNotNull(time) && goog.isDefAndNotNull(time.getDate())) {
-            time = time.getDate();
-            newDate.setHours(time.hour(), time.minute(), time.second(), time.millisecond());
+          if (!goog.isDefAndNotNull(attrs.date)) {
+            scope.date = 'true';
+          } else {
+            scope.date = attrs.date;
           }
-
-          var applyDate = function() {
-            var momentDate = moment(new Date(dateOptions.defaultDate));
-            momentDate.lang($translate.use());
-            if (scope.time === 'true' && scope.date === 'true') {
-              scope.dateObject = newDate.toISOString();
-              scope.disabledText = momentDate.format('L') + ' ' + momentDate.format('LT');
-            } else if (scope.time === 'true') {
-              scope.dateObject = newDate.toISOString().split('T')[1];
-              scope.disabledText = momentDate.format('LT');
-            } else if (scope.date === 'true') {
-              scope.dateObject = newDate.toISOString().split('T')[0];
-              scope.disabledText = momentDate.format('L');
+          if (!goog.isDefAndNotNull(attrs.seperateTime)) {
+            scope.seperateTime = 'true';
+          } else {
+            scope.seperateTime = attrs.seperateTime;
+          }
+          var hasValidDate = false;
+          var updateDateTime = function () {
+            if (!hasValidDate) {
+              scope.dateObject = '';
+              return;
+            }
+            var newDate = new Date();
+            var date = element.find('.datepicker').data('DateTimePicker');
+            if (goog.isDefAndNotNull(date) && goog.isDefAndNotNull(date.getDate())) {
+              date = date.getDate();
+              newDate.setFullYear(date.year(), date.month(), date.date());
+              newDate.setHours(date.hour(), date.minute(), date.second(), date.millisecond());
+            }
+            var time = element.find('.timepicker').data('DateTimePicker');
+            if (goog.isDefAndNotNull(time) && goog.isDefAndNotNull(time.getDate())) {
+              time = time.getDate();
+              newDate.setHours(time.hour(), time.minute(), time.second(), time.millisecond());
+            }
+            var applyDate = function () {
+              var momentDate = moment(new Date(dateOptions.defaultDate));
+              momentDate.lang($translate.use());
+              if (scope.time === 'true' && scope.date === 'true') {
+                scope.dateObject = newDate.toISOString();
+                scope.disabledText = momentDate.format('L') + ' ' + momentDate.format('LT');
+              } else if (scope.time === 'true') {
+                scope.dateObject = newDate.toISOString().split('T')[1];
+                scope.disabledText = momentDate.format('LT');
+              } else if (scope.date === 'true') {
+                scope.dateObject = newDate.toISOString().split('T')[0];
+                scope.disabledText = momentDate.format('L');
+              }
+            };
+            if (!scope.$$phase && !$rootScope.$$phase) {
+              scope.$apply(function () {
+                applyDate();
+              });
+            } else {
+              applyDate();
             }
           };
-
-          if (!scope.$$phase && !$rootScope.$$phase) {
-            scope.$apply(function() {
-              applyDate();
-            });
-          } else {
-            applyDate();
+          var dateOptions = {
+              pickTime: scope.time === 'true' && scope.seperateTime === 'false',
+              language: $translate.use()
+            };
+          var timeOptions = {
+              pickDate: false,
+              language: $translate.use()
+            };
+          if (scope.defaultDate) {
+            var defaultDate = new Date();
+            dateOptions.defaultDate = defaultDate;
+            timeOptions.defaultDate = defaultDate;
           }
-        };
-
-        var dateOptions = {
-          pickTime: (scope.time === 'true' && scope.seperateTime === 'false'),
-          language: $translate.use()
-        };
-
-        var timeOptions = {
-          pickDate: false,
-          language: $translate.use()
-        };
-
-        if (scope.defaultDate) {
-          var defaultDate = new Date();
-          dateOptions.defaultDate = defaultDate;
-          timeOptions.defaultDate = defaultDate;
-        }
-
-        var updateDate = function() {
-          if (goog.isDefAndNotNull(scope.dateObject) && scope.dateObject !== '') {
-            hasValidDate = true;
-            if (scope.date === 'false') {
-              var testDate = new Date(scope.dateObject);
-              if ('Invalid Date' == testDate) {
-                timeOptions.defaultDate = '2014-03-10T' + scope.dateObject;
+          var updateDate = function () {
+            if (goog.isDefAndNotNull(scope.dateObject) && scope.dateObject !== '') {
+              hasValidDate = true;
+              if (scope.date === 'false') {
+                var testDate = new Date(scope.dateObject);
+                if ('Invalid Date' == testDate) {
+                  timeOptions.defaultDate = '2014-03-10T' + scope.dateObject;
+                } else {
+                  timeOptions.defaultDate = scope.dateObject;
+                }
+                if (scope.seperateTime === 'false') {
+                  dateOptions.defaultDate = timeOptions.defaultDate;
+                }
+              } else if (scope.time === 'false') {
+                dateOptions.defaultDate = scope.dateObject.replace('Z', '');
               } else {
+                if (scope.dateObject.search('Z') === -1) {
+                  scope.dateObject += 'Z';
+                }
+                dateOptions.defaultDate = scope.dateObject;
                 timeOptions.defaultDate = scope.dateObject;
               }
-              if (scope.seperateTime === 'false') {
-                dateOptions.defaultDate = timeOptions.defaultDate;
-              }
-            } else if (scope.time === 'false') {
-              dateOptions.defaultDate = scope.dateObject.replace('Z', '');
             } else {
-              if (scope.dateObject.search('Z') === -1) {
-                scope.dateObject += 'Z';
-              }
-              dateOptions.defaultDate = scope.dateObject;
-              timeOptions.defaultDate = scope.dateObject;
+              hasValidDate = false;
             }
-          } else {
-            hasValidDate = false;
-          }
-        };
-        updateDate();
-
-        var handleInvalidDate = function(e) {
-          e.stopPropagation();
-
-          if (e.date._i === '') {
-            element.find('.form-control').val('');
-          }
-        };
-        var onChange = function(e) {
-          if (!goog.isDefAndNotNull(e.date)) {
-            return;
-          }
-          if (e.date.isSame(e.oldDate)) {
-            hasValidDate = false;
-          } else {
-            hasValidDate = true;
-          }
-          updateDateTime();
-        };
-        var setUpPickers = function() {
-          if (scope.date === 'true') {
-            element.find('.datepicker').datetimepicker(dateOptions);
-            //element.find('.datepicker').on('change.dp', updateDateTime);
-            element.find('.datepicker').on('change.dp', onChange);
-            element.find('.datepicker').on('error.dp', handleInvalidDate);
-          }
-          if (scope.time === 'true' && (scope.seperateTime === 'true' || scope.date === 'false')) {
-            element.find('.timepicker').datetimepicker(timeOptions);
-            element.find('.timepicker').on('change.dp', onChange);
-            //element.find('.timepicker').on('change.dp', updateDateTime);
-            element.find('.timepicker').on('error.dp', handleInvalidDate);
-          }
-          if (goog.isDefAndNotNull(dateOptions.defaultDate) || goog.isDefAndNotNull(timeOptions.defaultDate)) {
-            hasValidDate = true;
-            updateDateTime();
-            var date;
-            if (scope.date === 'true' && scope.time === 'true') {
-              date = moment(dateOptions.defaultDate);
-              date.lang($translate.use());
-              scope.disabledText = date.format('L') + ' ' + date.format('LT');
-            } else if (scope.time === 'true') {
-              date = moment(new Date(timeOptions.defaultDate));
-              date.lang($translate.use());
-              scope.disabledText = date.format('LT');
-            } else if (scope.date === 'true') {
-              date = moment.utc(dateOptions.defaultDate);
-              date.lang($translate.use());
-              scope.disabledText = date.format('L');
-            }
-          } else {
-            hasValidDate = false;
-            scope.disabledText = '';
-          }
-        };
-        setUpPickers();
-
-        var dateObjectChanged = function() {
+          };
           updateDate();
-          if (scope.date === 'true' && hasValidDate) {
-            element.find('.datepicker').data('DateTimePicker').setDate(dateOptions.defaultDate);
-          }
-          if (scope.time === 'true' && (scope.seperateTime === 'true' || scope.date === 'false') && hasValidDate) {
-            element.find('.timepicker').data('DateTimePicker').setDate(dateOptions.defaultDate);
-          }
-          updateDateTime();
-        };
-
-        scope.$watch('dateObject', dateObjectChanged);
-
-        scope.$on('translation_change', function(event, lang) {
-          dateOptions.language = lang;
-          timeOptions.language = lang;
-        });
-      }
-    };
-  });
-
-  module.directive('latloneditor', function() {
+          var handleInvalidDate = function (e) {
+            e.stopPropagation();
+            if (e.date._i === '') {
+              element.find('.form-control').val('');
+            }
+          };
+          var onChange = function (e) {
+            if (!goog.isDefAndNotNull(e.date)) {
+              return;
+            }
+            if (e.date.isSame(e.oldDate)) {
+              hasValidDate = false;
+            } else {
+              hasValidDate = true;
+            }
+            updateDateTime();
+          };
+          var setUpPickers = function () {
+            if (scope.date === 'true') {
+              element.find('.datepicker').datetimepicker(dateOptions);
+              element.find('.datepicker').on('change.dp', onChange);
+              element.find('.datepicker').on('error.dp', handleInvalidDate);
+            }
+            if (scope.time === 'true' && (scope.seperateTime === 'true' || scope.date === 'false')) {
+              element.find('.timepicker').datetimepicker(timeOptions);
+              element.find('.timepicker').on('change.dp', onChange);
+              element.find('.timepicker').on('error.dp', handleInvalidDate);
+            }
+            if (goog.isDefAndNotNull(dateOptions.defaultDate) || goog.isDefAndNotNull(timeOptions.defaultDate)) {
+              hasValidDate = true;
+              updateDateTime();
+              var date;
+              if (scope.date === 'true' && scope.time === 'true') {
+                date = moment(dateOptions.defaultDate);
+                date.lang($translate.use());
+                scope.disabledText = date.format('L') + ' ' + date.format('LT');
+              } else if (scope.time === 'true') {
+                date = moment(new Date(timeOptions.defaultDate));
+                date.lang($translate.use());
+                scope.disabledText = date.format('LT');
+              } else if (scope.date === 'true') {
+                date = moment.utc(dateOptions.defaultDate);
+                date.lang($translate.use());
+                scope.disabledText = date.format('L');
+              }
+            } else {
+              hasValidDate = false;
+              scope.disabledText = '';
+            }
+          };
+          setUpPickers();
+          var dateObjectChanged = function () {
+            updateDate();
+            if (scope.date === 'true' && hasValidDate) {
+              element.find('.datepicker').data('DateTimePicker').setDate(dateOptions.defaultDate);
+            }
+            if (scope.time === 'true' && (scope.seperateTime === 'true' || scope.date === 'false') && hasValidDate) {
+              element.find('.timepicker').data('DateTimePicker').setDate(dateOptions.defaultDate);
+            }
+            updateDateTime();
+          };
+          scope.$watch('dateObject', dateObjectChanged);
+          scope.$on('translation_change', function (event, lang) {
+            dateOptions.language = lang;
+            timeOptions.language = lang;
+          });
+        }
+      };
+    }
+  ]);
+  module.directive('latloneditor', function () {
     return {
       restrict: 'E',
-      template: '<div ng-class="{\'has-error\': !geom.valid}" class="form-group">' +
-          '<div class="input-group">' +
-          '<div class="input-group-btn">' +
-          '<button type="button" class="btn btn-default dropdown-toggle custom-width-100" data-toggle="dropdown">' +
-          '<span class="caret"></span>' +
-          '</button>' +
-          '<ul id="display-list" class="dropdown-menu">' +
-          '<li ng-repeat="display in coordinateDisplays">' +
-          '<a ng-click="selectDisplay(display)" translate="{{display}}"></a></li>' +
-          '</ul>' +
-          '</div>' +
-          '<input ng-model="coordinates" type="text" class="form-control" ng-change="validate()"/>' +
-          '</div>' +
-          '</div>',
+      template: '<div ng-class="{\'has-error\': !geom.valid}" class="form-group">' + '<div class="input-group">' + '<div class="input-group-btn">' + '<button type="button" class="btn btn-default dropdown-toggle custom-width-100" data-toggle="dropdown">' + '<span class="caret"></span>' + '</button>' + '<ul id="display-list" class="dropdown-menu">' + '<li ng-repeat="display in coordinateDisplays">' + '<a ng-click="selectDisplay(display)" translate="{{display}}"></a></li>' + '</ul>' + '</div>' + '<input ng-model="coordinates" type="text" class="form-control" ng-change="validate()"/>' + '</div>' + '</div>',
       replace: true,
       scope: {
         geom: '=',
         coordDisplay: '=coordDisplay'
       },
-      link: function(scope) {
+      link: function (scope) {
         if (scope.geom.projection === 'EPSG:4326') {
-          scope.coordinateDisplays = [coordinateDisplays.DMS, coordinateDisplays.DD, coordinateDisplays.MGRS];
+          scope.coordinateDisplays = [
+            coordinateDisplays.DMS,
+            coordinateDisplays.DD,
+            coordinateDisplays.MGRS
+          ];
         } else {
-          scope.coordinateDisplays = [coordinateDisplays.DMS, coordinateDisplays.DD, coordinateDisplays.MGRS, scope.geom.projection];
+          scope.coordinateDisplays = [
+            coordinateDisplays.DMS,
+            coordinateDisplays.DD,
+            coordinateDisplays.MGRS,
+            scope.geom.projection
+          ];
         }
-
-        var transformCoords = function(coords, srcPrjName, dstPrjName) {
+        var transformCoords = function (coords, srcPrjName, dstPrjName) {
           var point = new ol.geom.Point(coords);
           point.transform(ol.proj.get(srcPrjName), ol.proj.get(dstPrjName));
           return point.flatCoordinates;
         };
-
-        var updateCoords4326 = function(geom) {
+        var updateCoords4326 = function (geom) {
           geom.coords4326 = goog.array.clone(geom.coords);
           if (geom.projection !== 'EPSG:4326') {
             geom.coords4326 = transformCoords(geom.coords, geom.projection, 'EPSG:4326');
           }
         };
-
-        var setUpCoordinates = function() {
+        var setUpCoordinates = function () {
           updateCoords4326(scope.geom);
           if (scope.coordDisplay.value === coordinateDisplays.DMS) {
             scope.coordinates = ol.coordinate.toStringHDMS(scope.geom.coords4326);
@@ -383,30 +326,22 @@
           } else if (scope.coordDisplay.value === coordinateDisplays.MGRS) {
             scope.coordinates = xyToMGRSFormat(scope.geom.coords4326);
           } else {
-            // it is the srs of the layer
             scope.coordinates = ol.coordinate.toStringXY(scope.geom.coords, settings.DDPrecision);
           }
         };
-
         setUpCoordinates();
-
-        // storing original coordinate value on latloneditor directive startup
         var origCoords = [];
-
-        var storeOrigCoordinates = function() {
+        var storeOrigCoordinates = function () {
           origCoords[0] = parseFloat(scope.geom.coords[0]);
           origCoords[1] = parseFloat(scope.geom.coords[1]);
         };
-
         storeOrigCoordinates();
-
-        scope.selectDisplay = function(display) {
+        scope.selectDisplay = function (display) {
           scope.coordDisplay.value = display;
           setUpCoordinates();
           scope.validate();
         };
-
-        var validateDMS = function(name, split) {
+        var validateDMS = function (name, split) {
           var upperBounds;
           var negateChar;
           var coordIndex;
@@ -428,8 +363,7 @@
           split[2] = split[2].substr(0, split[2].indexOf('.') + 1) + decimal;
           clean(split, '');
           if (split.length === 4) {
-            var newPos = parseInt(split[0], 10) + ((parseInt(split[1], 10) +
-                (parseFloat(split[2]) / 60)) / 60);
+            var newPos = parseInt(split[0], 10) + (parseInt(split[1], 10) + parseFloat(split[2]) / 60) / 60;
             if (newPos < 0 || newPos > upperBounds) {
               return false;
             }
@@ -442,8 +376,7 @@
           }
           return true;
         };
-
-        var validateCoords = function(name, value, checkBounds) {
+        var validateCoords = function (name, value, checkBounds) {
           var bounds;
           var coordIndex;
           var negate = value.indexOf('-') === 0;
@@ -467,19 +400,16 @@
           scope.geom.coords[coordIndex] = value;
           return true;
         };
-
-        var validateMGRS = function(mgrs) {
+        var validateMGRS = function (mgrs) {
           try {
             mgrs_coords = mgrsToXYFormat(mgrs);
             scope.geom.coords[0] = parseFloat(mgrs_coords[0].toFixed(settings.DDPrecision));
             scope.geom.coords[1] = parseFloat(mgrs_coords[1].toFixed(settings.DDPrecision));
             return true;
-          }
-          catch (ignore) {
+          } catch (ignore) {
           }
         };
-
-        scope.validate = function() {
+        scope.validate = function () {
           var valid = false;
           var split;
           if (scope.coordDisplay.value === coordinateDisplays.DMS) {
@@ -516,9 +446,6 @@
               }
             }
           }
-
-          // if the coordinate mode requires 4326 (DD or DMS), if projection is not 4326 already, we need to update the
-          // geom's coordinates to reflect any changes
           if (scope.geom.projection !== 'EPSG:4326') {
             scope.geom.coords = transformCoords(scope.geom.coords, 'EPSG:4326', scope.geom.projection);
             updateCoords4326(scope.geom);
@@ -530,15 +457,16 @@
       }
     };
   });
-
-  module.controller('modalToggle', function($scope) {
-    $scope.toggleModal = function(id) {
-      $(id).modal('toggle');
-    };
-  });
-
-  module.filter('reverse', function() {
-    return function(items) {
+  module.controller('modalToggle', [
+    '$scope',
+    function ($scope) {
+      $scope.toggleModal = function (id) {
+        $(id).modal('toggle');
+      };
+    }
+  ]);
+  module.filter('reverse', function () {
+    return function (items) {
       if (goog.isDefAndNotNull(items)) {
         return items.slice().reverse();
       } else {
@@ -546,9 +474,8 @@
       }
     };
   });
-
-  module.filter('stripWhiteSpace', function() {
-    return function(str) {
+  module.filter('stripWhiteSpace', function () {
+    return function (str) {
       if (goog.isDefAndNotNull(str)) {
         return goog.string.removeAll(goog.string.collapseWhitespace(str), ' ');
       } else {
@@ -556,9 +483,8 @@
       }
     };
   });
-
-  module.filter('removeCharacters', function() {
-    return function(str, subStr) {
+  module.filter('removeCharacters', function () {
+    return function (str, subStr) {
       if (goog.isDefAndNotNull(str) && goog.isDefAndNotNull(subStr)) {
         return goog.string.remove(str, subStr);
       } else {
@@ -566,4 +492,4 @@
       }
     };
   });
-})();
+}());

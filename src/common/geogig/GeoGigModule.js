@@ -1,3 +1,5 @@
-(function () {
-  angular.module('loom_geogig', ['loom_geogig_service']);
+(function() {
+  angular.module('loom_geogig', [
+    'loom_geogig_service'
+  ]);
 }());

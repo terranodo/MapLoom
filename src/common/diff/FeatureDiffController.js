@@ -1,25 +1,25 @@
-(function () {
+(function() {
   var module = angular.module('loom_feature_diff_controller', []);
-  module.controller('LoomFeatureDiffController', [
-    '$scope',
-    '$rootScope',
-    'featureDiffService',
-    function ($scope, $rootScope, featureDiffService) {
-      function assignScopeVariables() {
-        $scope.title = featureDiffService.title;
-        $scope.featureDiffService = featureDiffService;
-      }
-      function updateScopeVariables() {
-        if (!$scope.$$phase && !$rootScope.$$phase) {
-          $scope.$apply(function () {
-            assignScopeVariables();
-          });
-        } else {
-          assignScopeVariables();
+
+  module.controller('LoomFeatureDiffController',
+      function($scope, $rootScope, featureDiffService) {
+        function assignScopeVariables() {
+          $scope.title = featureDiffService.title;
+          $scope.featureDiffService = featureDiffService;
         }
-      }
-      assignScopeVariables();
-      $scope.$watch('featureDiffService.title', updateScopeVariables);
-    }
-  ]);
-}());
+
+        function updateScopeVariables() {
+          if (!$scope.$$phase && !$rootScope.$$phase) {
+            $scope.$apply(function() {
+              assignScopeVariables();
+            });
+          } else {
+            assignScopeVariables();
+          }
+        }
+
+        assignScopeVariables();
+
+        $scope.$watch('featureDiffService.title', updateScopeVariables);
+      });
+})();

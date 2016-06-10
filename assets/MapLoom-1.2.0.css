@@ -8118,7 +8118,7 @@ button.authors-shown {
 }
 
 .range-search rzslider {
-  margin-top: 20px;
+  margin-top: 6px;
 }
 
 rzslider .rz-pointer {
@@ -8162,6 +8162,10 @@ rzslider .rz-pointer.rz-active:after {
 
 .remove-button:hover span {
   visibility: visible;
+}
+
+.bar-graph svg {
+  margin-top: 10px;
 }
 
 .loom-arrangeable body.dragging,

@@ -122,11 +122,7 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "          </div>\n" +
     "\n" +
     "          <div class=\"bar-graph\" id=\"bars\">\n" +
-    "              <svg width=\"100%\" height=\"40\">\n" +
-    "                <g ng-repeat=\"(barKey, bar) in histogram.buckets\" style=\"transform:translate({{ (histogram.barsWidth/histogram.buckets.length)*barKey }}px, 0)\">\n" +
-    "                  <rect width=\"10\" style=\"height:{{40*bar.doc_count/histogram.maxValue}}px; y:{{40*(1-(bar.doc_count/histogram.maxValue))}}px\" fill=\"#E4E4E4\"></rect>\n" +
-    "                </g>\n" +
-    "              </svg>\n" +
+    "            <svg width=\"100%\" height=\"40\"></svg>\n" +
     "          </div>\n" +
     "\n" +
     "          <rzslider  rz-slider-model=\"slider.minValue\" rz-slider-high=\"slider.maxValue\" rz-slider-options=\"slider.options\"></rzslider>\n" +

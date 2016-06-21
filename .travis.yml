@@ -13,7 +13,7 @@ before_script:
   - bower install
   - grunt
   - grunt karmaconfig
-script: grunt karma
+script: grunt test
 env:
   matrix:
     - DEPLOY_BRANCH=hypermap

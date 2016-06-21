@@ -361,7 +361,6 @@
           service_.zoomToLayerExtent(layer);
           deferredResponse.resolve();
         });
-
       } else {
         // dealing with an non vector layer
         service_.zoomToLayerExtent(layer);

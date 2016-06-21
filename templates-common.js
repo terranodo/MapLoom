@@ -1,4 +1,4 @@
-angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addlayersfilter.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
+angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addlayersfilter.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerattributevisibility.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
 
 angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayers.tpl.html",
@@ -161,6 +161,7 @@ angular.module("addlayers/partials/addserver.tpl.html", []).run(["$templateCache
     "      <select ng-model=\"type\" class=\"form-control\">\n" +
     "        <option>WMS</option>\n" +
     "        <option>TMS</option>\n" +
+    "        <option>TileJSON</option>\n" +
     "      </select>\n" +
     "      </div>\n" +
     "    </div>\n" +
@@ -308,7 +309,7 @@ angular.module("diff/partial/featurediff.tpl.html", []).run(["$templateCache", f
     "\n" +
     "  <div class=\"panelContainer\">\n" +
     "    <div class=\"panelRow\">\n" +
-    "      <div ng-if=\"leftPanel\" class=\"loom-feature-panel\" mapid=\"0\" panel=\"featureDiffService.left\"\n" +
+    "      <div ng-show=\"leftPanel\" class=\"loom-feature-panel\" mapid=\"0\" panel=\"featureDiffService.left\"\n" +
     "           panel-title=\"leftTitle\"></div>\n" +
     "      <div ng-if=\"leftSeparator\" class=\"loom-panel-separator\" icon=\"glyphicon-chevron-right\"\n" +
     "           hover=\"editable\" clickfunction=\"leftSeparatorClick\"\n" +
@@ -318,7 +319,7 @@ angular.module("diff/partial/featurediff.tpl.html", []).run(["$templateCache", f
     "      <div ng-if=\"rightSeparator\" class=\"loom-panel-separator\" icon=\"glyphicon-chevron-left\"\n" +
     "           hover=\"editable\" clickfunction=\"rightSeparatorClick\"\n" +
     "           panel=\"featureDiffService.right\"></div>\n" +
-    "      <div ng-if=\"rightPanel\" class=\"loom-feature-panel\" mapid=\"2\" panel=\"featureDiffService.right\"\n" +
+    "      <div ng-show=\"rightPanel\" class=\"loom-feature-panel\" mapid=\"2\" panel=\"featureDiffService.right\"\n" +
     "           panel-title=\"rightTitle\"></div>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -800,6 +801,27 @@ angular.module("history/partial/historypanel.tpl.html", []).run(["$templateCache
     "");
 }]);
 
+angular.module("layers/partials/layerattributevisibility.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("layers/partials/layerattributevisibility.tpl.html",
+    "<div class=\"modal-body\">\n" +
+    "  <div id=\"attributeRow\" class=\"row\" ng-show=\"layer.get('metadata').editable\">\n" +
+    "    <ul class=\"list-group\">\n" +
+    "      <li class=\"list-group-item\" ng-repeat=\"attribute in getAttrList(layer)\">\n" +
+    "        <div class=\"attribute-value ellipsis\">{{attribute._name}}</div>\n" +
+    "        <div class=\"layer-buttons\">\n" +
+    "        <span ng-click=\"toggleAttributeVisibility(attribute)\"\n" +
+    "              class=\"btn btn-xs btn-default layer-visible-button\"\n" +
+    "              ng-class=\"{'layer-visible': attribute.visible}\">\n" +
+    "          <i class=\"glyphicon\" ng-class=\"{'glyphicon-eye-close': !attribute.visible, 'glyphicon-eye-open': attribute.visible}\"></i>\n" +
+    "        </span>\n" +
+    "        </div>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
 angular.module("layers/partials/layerinfo.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("layers/partials/layerinfo.tpl.html",
     "<div class=\"modal-body\">\n" +
@@ -921,6 +943,12 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "               class=\"btn btn-sm btn-default\">\n" +
     "              <i class=\"glyphicon glyphicon-info-sign\"></i>\n" +
     "            </a>\n" +
+    "             <a type=\"button\" ng-show=\"!layer.get('metadata').placeholder && layer.get('metadata').editable\"\n" +
+    "               tooltip-append-to-body=\"true\" ng-click=\"getLayerAttributeVisibility(layer)\"\n" +
+    "               tooltip-placement=\"top\" tooltip=\"{{'show_attribute_visibility_info' | translate}}\"\n" +
+    "               class=\"btn btn-sm btn-default\">\n" +
+    "              <i class=\"glyphicon glyphicon-eye-open\"></i>\n" +
+    "            </a>\n" +
     "            <a type=\"button\" ng-click=\"removeLayer(layer)\" id=\"remove-button\"\n" +
     "               class=\"btn btn-sm btn-default\" tooltip-append-to-body=\"true\"\n" +
     "               tooltip-placement=\"top\" tooltip=\"{{'remove_layer' | translate}}\">\n" +
@@ -928,7 +956,7 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "            </a>\n" +
     "          </div>\n" +
     "        </div>\n" +
-    "        <label id=\"attribute-label\" for=\"attributeRow\" ng-show=\"layer.get('metadata').editable\">{{'attributes' |\n" +
+    "        <!-- <label id=\"attribute-label\" for=\"attributeRow\" ng-show=\"layer.get('metadata').editable\">{{'attributes' |\n" +
     "          translate}}</label>\n" +
     "\n" +
     "        <div id=\"attributeRow\" class=\"row\" ng-show=\"layer.get('metadata').editable\">\n" +
@@ -944,7 +972,7 @@ angular.module("layers/partials/layers.tpl.html", []).run(["$templateCache", fun
     "              </div>\n" +
     "            </li>\n" +
     "          </ul>\n" +
-    "        </div>\n" +
+    "        </div>-->\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +

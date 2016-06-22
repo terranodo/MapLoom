@@ -26,8 +26,8 @@
               maxYear: null,
               mapPreviewCoordinatesBbox: []
             };
-            scope.previewCenter = [40, 30];
-            scope.previewZoom = 1;
+            scope.previewCenter = ol.proj.transform([-97.6114, 38.8403], 'EPSG:4326', 'EPSG:3857');
+            scope.previewZoom = 5;
             scope.previewLayers = [
               new ol.layer.Tile({
                 source: new ol.source.OSM()

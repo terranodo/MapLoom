@@ -85,6 +85,8 @@ module.exports = {
       'vendor/d3/d3.min.js',
       'vendor/proj4/dist/proj4-src.js',
       'vendor/mgrs/dist/mgrs.js',
+      'vendor/terraformer/terraformer.min.js',
+      'vendor/terraformer-arcgis-parser/terraformer-arcgis-parser.min.js',
 
       //-- files for image gallery
       //'vendor/blueimp-gallery/js/blueimp-gallery.js',

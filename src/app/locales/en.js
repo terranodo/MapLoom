@@ -6,6 +6,8 @@
     'notifications_tab': 'Notifications',
     'no_notifications': 'No notifications',
     'registry': 'Registry',
+    'registry_layers': 'Registry of layers',
+    'registry_layer_btn': 'Registry of layer',
     'map_layers': 'Layers',
     'add_layer_btn': 'Add Layer',
     'add_layers': 'Add Layers',

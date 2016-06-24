@@ -6,6 +6,8 @@
     'notifications_tab': 'Notificaciones',
     'no_notifications': 'Ninguna notificación',
     'registry': 'Registro',
+    'registry_layers': 'Registro de Capas',
+    'registry_layer_btn': 'Registro de Capa',
     'map_layers': 'Capas',
     'add_layer_btn': 'Añadir Capa',
     'add_layers': 'Añadir Capas',

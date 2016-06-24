@@ -123,7 +123,7 @@
             <div class="panel-heading" data-parent="#pulldown-content">
               <span translate="registry">Registry</span>
               <div ng-show="addLayers" stop-event='click' ng-controller="modalToggle" ng-click="toggleModal('#registry-layer-dialog')"
-                   tooltip-placement="top" tooltip="{{'add_layer_btn' | translate}}" tooltip-append-to-body="true"
+                   tooltip-placement="top" tooltip="{{'registry_layer_btn' | translate}}" tooltip-append-to-body="true"
                    class="glyphicon glyphicon-plus-sign panel-header-button pull-right"></div>
               <div id="server-loading" class="loom-loading pull-right" spinner-radius="20" spinner-width="3" spinner-hidden="!serversLoading"></div>
             </div>
@@ -211,11 +211,11 @@
   <div class="loom-timeline"></div>
 </div>
 <!--modal titles are in a lower case underscore separated format so that they can be translated-->
-<div loom-modal id="registry-layer-dialog" modal-title="add_layers">
+<div loom-modal id="registry-layer-dialog" modal-title="registry_layers">
   <div loom-addlayers id="registry-layers"></div>
 </div>
 <div loom-modal id="add-layer-dialog" modal-title="add_layers">
-
+  <div loom-addlayerss></div>
 </div>
 <div loom-modal id="add-server-dialog" modal-title="add_server">
   <div loom-add-server id="add-server">

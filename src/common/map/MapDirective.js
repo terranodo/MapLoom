@@ -41,7 +41,7 @@
               });
 
             };
-            $('#add-layer-dialog').on('shown.bs.modal', function() {
+            $('#registry-layer-dialog').on('shown.bs.modal', function() {
               if (map === undefined) {
                 createMap();
               }

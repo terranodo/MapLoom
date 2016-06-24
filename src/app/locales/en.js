@@ -5,6 +5,7 @@
     'projection_not_supported': 'Projection not supported',
     'notifications_tab': 'Notifications',
     'no_notifications': 'No notifications',
+    'registry': 'Registry',
     'map_layers': 'Layers',
     'add_layer_btn': 'Add Layer',
     'add_layers': 'Add Layers',

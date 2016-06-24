@@ -93,7 +93,7 @@
           }
         });
 
-        $('#add-layer-dialog').on('shown.bs.modal', function() {
+        $('#registry-layer-dialog').on('shown.bs.modal', function() {
           $timeout(function() {
             scope.$broadcast('rzSliderForceRender');
           });

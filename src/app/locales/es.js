@@ -5,6 +5,7 @@
     'projection_not_supported': 'Proyección no soportado',
     'notifications_tab': 'Notificaciones',
     'no_notifications': 'Ninguna notificación',
+    'registry': 'Registro',
     'map_layers': 'Capas',
     'add_layer_btn': 'Añadir Capa',
     'add_layers': 'Añadir Capas',

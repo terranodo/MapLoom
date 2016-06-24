@@ -6,9 +6,9 @@
   ]);
 
   module.directive('loomAddlayers',
-      function($rootScope, serverService, mapService, geogigService, $translate, dialogService, $timeout) {
+      function($rootScope, serverService, mapService, geogigService, $translate, dialogService, $timeout, addlayersService) {
         return {
-          templateUrl: 'addlayers/partials/addlayers.tpl.html',
+          templateUrl: 'addlayers/partials/registryLayers.tpl.html',
           link: function(scope, element) {
             var searchFavorites = false;
             var searchHyper = true;
@@ -172,7 +172,7 @@
               scope.histogram.barsWidth = $('#bars').width();
             };
 
-            $('#add-layer-dialog').on('shown.bs.modal', scope.search);
+            $('#registry-layer-dialog').on('shown.bs.modal', scope.search);
 
             scope.getCurrentServerName = function() {
               var server = serverService.getServerById(scope.currentServerId);
@@ -231,7 +231,7 @@
             };
             scope.addLayers = function() {
               scope.selectedLayer = {};
-              $('#add-layer-dialog').modal('hide');
+              $('#registry-layer-dialog').modal('hide');
               scope.cart.forEach(addLayer);
               scope.clearCart();
             };

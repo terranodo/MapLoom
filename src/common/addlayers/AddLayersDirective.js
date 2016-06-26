@@ -2,7 +2,7 @@
 
   var module = angular.module('loom_addlayers_directive', []);
 
-  module.directive('loomAddlayerss',
+  module.directive('loomAddlayers',
       function($rootScope, serverService, mapService, geogigService, $translate, dialogService) {
         return {
           templateUrl: 'addlayers/partials/addlayers.tpl.html',

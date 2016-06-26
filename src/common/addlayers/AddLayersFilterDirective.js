@@ -84,7 +84,7 @@
           }));
           renderingSvgBars();
         });
-        window.onresize = renderingSvgBars;
+        $(window).resize(renderingSvgBars);
 
         scope.$on('slideEnded', function() {
           if (changeSliderValues) {

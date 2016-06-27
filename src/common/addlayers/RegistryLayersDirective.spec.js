@@ -2,11 +2,11 @@ describe('StoryLegendDirective', function() {
   var element, scope, compiledElement, serverService, mapService;
   beforeEach(module('MapLoom'));
   beforeEach(module('loom_addlayers'));
-  beforeEach(module('addlayers/partials/addlayers.tpl.html'));
+  beforeEach(module('addlayers/partials/registryLayers.tpl.html'));
 
   beforeEach(inject(function($rootScope, $compile, $templateCache, _serverService_, _mapService_) {
     scope = $rootScope.$new();
-    element = angular.element('<div loom-addlayers></div>');
+    element = angular.element('<div loom-registrylayers></div>');
     compiledElement = $compile(element)(scope);
     scope.$digest();
     serverService = _serverService_;

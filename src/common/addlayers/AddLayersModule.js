@@ -5,6 +5,6 @@
     'loom_add_server_directive',
     'loom_layerinfo_popover_directive',
     'loom_server_service',
-    'loom_addLayers_service'
+    'loom_layers_service'
   ]);
 })();

@@ -6,7 +6,7 @@
   ]);
 
   module.directive('loomRegistrylayers',
-      function($rootScope, serverService, mapService, geogigService, $translate, dialogService, $timeout, addlayersService) {
+      function($rootScope, serverService, mapService, geogigService, $translate, dialogService, $timeout, LayersService) {
         return {
           templateUrl: 'addlayers/partials/registryLayers.tpl.html',
           link: function(scope, element) {
@@ -184,22 +184,9 @@
             };
 
             var addLayer = function(layerConfig) {
-              if (layerConfig.add) {
-                // NOTE: minimal config is the absolute bare minimum info that will be send to webapp containing
-                //       maploom such as geonode. At this point, only source (server id), and name are used. If you
-                //       find the need to add more parameters here, you need to put them in MapService.addLayer
-                //       instead. that's because MapService.addLayer may be invoked from here, when a saved
-                //       map is opened, or when a map is created from a layer in which case the logic here will be
-                //       skipped! note, when MapService.addLayer is called, server's getcapabilities (if applicable)
-                //       has already been resolved so you can used that info to append values to the layer.
-                var minimalConfig = {
-                  name: layerConfig.Name,
-                  source: scope.currentServerId
-                };
-                mapService.addLayer(minimalConfig);
-                mapService.zoomToExtentForProjection(layerConfig.extent, ol.proj.get(layerConfig.CRS[0]));
-              }
+              LayersService.addLayer(layerConfig, scope.currentServerId, true);
             };
+
             scope.addLayers = function() {
               scope.selectedLayer = {};
               $('#registry-layer-dialog').modal('hide');
@@ -253,22 +240,7 @@
             };
 
             scope.filterAddedLayers = function(layerConfig) {
-              var show = true;
-              var layers = mapService.getLayers(true, true);
-              for (var index = 0; index < layers.length; index++) {
-                var layer = layers[index];
-                if (goog.isDefAndNotNull(layer.get('metadata')) &&
-                    goog.isDefAndNotNull(layer.get('metadata').config)) {
-                  var conf = layer.get('metadata').config;
-                  if (conf.source === scope.currentServerId) {
-                    if (conf.name === layerConfig.Name) {
-                      show = false;
-                      break;
-                    }
-                  }
-                }
-              }
-              return show;
+              return LayersService.filterAddedLayers(layerConfig, scope.currentServerId, layerConfig.Name);
             };
 
             scope.$on('layers-loaded', function() {

@@ -84,7 +84,7 @@
           }));
           renderingSvgBars();
         });
-        window.onresize = renderingSvgBars;
+        $(window).resize(renderingSvgBars);
 
         scope.$on('slideEnded', function() {
           if (changeSliderValues) {
@@ -93,7 +93,7 @@
           }
         });
 
-        $('#add-layer-dialog').on('shown.bs.modal', function() {
+        $('#registry-layer-dialog').on('shown.bs.modal', function() {
           $timeout(function() {
             scope.$broadcast('rzSliderForceRender');
           });

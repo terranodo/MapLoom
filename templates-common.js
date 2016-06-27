@@ -1,103 +1,93 @@
-angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addlayersfilter.tpl.html', 'addlayers/partials/addserver.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerattributevisibility.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
+angular.module('templates-common', ['addlayers/partials/addlayers.tpl.html', 'addlayers/partials/addlayersfilter.tpl.html', 'addlayers/partials/addserver.tpl.html', 'addlayers/partials/registryLayers.tpl.html', 'diff/partial/difflist.tpl.html', 'diff/partial/diffpanel.tpl.html', 'diff/partial/featurediff.tpl.html', 'diff/partial/featurepanel.tpl.html', 'diff/partial/panelseparator.tpl.html', 'featuremanager/partial/attributeedit.tpl.html', 'featuremanager/partial/drawselect.tpl.html', 'featuremanager/partial/exclusivemode.tpl.html', 'featuremanager/partial/featureinfobox.tpl.html', 'history/partial/historydiff.tpl.html', 'history/partial/historypanel.tpl.html', 'layers/partials/layerattributevisibility.tpl.html', 'layers/partials/layerinfo.tpl.html', 'layers/partials/layers.tpl.html', 'legend/partial/legend.tpl.html', 'map/partial/savemap.tpl.html', 'merge/partials/merge.tpl.html', 'modal/partials/dialog.tpl.html', 'modal/partials/modal.tpl.html', 'modal/partials/password.tpl.html', 'notifications/partial/generatenotification.tpl.html', 'notifications/partial/notificationbadge.tpl.html', 'notifications/partial/notifications.tpl.html', 'search/partial/search.tpl.html', 'statistics/partial/statistics.tpl.html', 'sync/partials/addsync.tpl.html', 'sync/partials/syncconfig.tpl.html', 'sync/partials/synclinks.tpl.html', 'tableview/partial/filteroptions.tpl.html', 'tableview/partial/tableview.tpl.html', 'timeline/partials/timeline.tpl.html', 'updatenotification/partial/updatenotification.tpl.html', 'utils/partial/loading.tpl.html']);
 
 angular.module("addlayers/partials/addlayers.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayers.tpl.html",
-    "<div>\n" +
-    "    <div class=\"modal-body explorer\">\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-md-12\">\n" +
-    "            </div>\n" +
-    "            <div class=\"tab-content col-md-7 explorer-content\">\n" +
-    "                <div class=\"tab-pane active\" id=\"explore\">\n" +
-    "                  <div loom-addlayersfilter></div>\n" +
-    "                </div>\n" +
-    "                <div class=\"result-table\">\n" +
-    "                  <div class=\"clearfix search-results panel\">\n" +
-    "                    <table class=\"table table-hover list-results panel-body\">\n" +
-    "                      <tr>\n" +
-    "                        <th>Title</th>\n" +
-    "                        <th>Domain</th>\n" +
-    "                      </tr>\n" +
-    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': isInCart(layer)}\"\n" +
-    "                        ng-repeat=\"layer in layersConfig = getResults() | filter:filterLayers | filter:filterAddedLayers\">\n" +
-    "                        <td class=\"ellipsis\">{{ layer.Title }}</td>\n" +
-    "                        <td>{{ layer.domain }}</td>\n" +
-    "                      </tr>\n" +
-    "                    </table>\n" +
-    "                    <div class=\"actions\">\n" +
-    "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default\">Previous</button>\n" +
-    "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default\">Next</button>\n" +
-    "                      <span class=\"text-muted\">\n" +
-    "                        Showing {{pagination.showdocs}} of {{pagination.sizeDocuments}} - Page {{pagination.currentPage}} / {{pagination.pages}}\n" +
-    "                      </span>\n" +
-    "                    </div>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
+    "<div class=\"modal-body\">\n" +
+    "  <form class=\"form-horizontal col-md-12\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <div class=\"btn-group custom-width-100\">\n" +
+    "        <div class=\"btn-group custom-width-88\">\n" +
+    "          <button type=\"button\" class=\"btn btn-default dropdown-toggle custom-width-100\" data-toggle=\"dropdown\">\n" +
+    "            <span class=\"pull-left\"> {{getCurrentServerName()}} </span>\n" +
+    "            <span class=\"caret right-and-center\"></span>\n" +
+    "          </button>\n" +
+    "          <ul id=\"server-list\" class=\"dropdown-menu col-md-12\">\n" +
+    "            <li ng-repeat=\"server in servers = serverService.getServers()\">\n" +
+    "              <a ng-click=\"setCurrentServerId(server.id)\">{{server.name}}\n" +
+    "                <div ng-hide=\"server.defaultServer\" stop-event='click' ng-click=\"removeServer(server.id)\" class=\"glyphicon glyphicon-remove-circle pull-right\"></div>\n" +
+    "                <div ng-hide=\"server.defaultServer\" stop-event='click' ng-click=\"editServer(server)\" class=\"glyphicon glyphicon-pencil pull-right server-edit-icon\"></div>\n" +
+    "              </a>\n" +
     "\n" +
-    "                <div class=\"search-pagination\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-md-5 clearfix result-panel\">\n" +
-    "                <div class=\"panel panel-default\" id=\"mapreview\" name=\"loom-map-panel\">\n" +
-    "                  <div class=\"alert alert-title alert-layer-mp\">\n" +
-    "                      Limit the search to data that includes features in the displayed area.\n" +
-    "                  </div>\n" +
-    "                  <div class=\"panel-body\">\n" +
-    "                    <div class=\"loom-map\" zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"filter panel panel-default\" name=\"layer-information-panel\">\n" +
-    "                  <div class=\"alert alert-title alert-warning-mp\">\n" +
-    "                    <h3>{{currentLayer.Title}}</h3>\n" +
-    "                  </div>\n" +
-    "                    <div class=\"panel-body\">\n" +
-    "                      <div class=\"row\">\n" +
-    "                        <div class=\"col-md-8 col-sm-8\">\n" +
-    "                          <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"col-md-4 col-sm-4 row\">\n" +
-    "                          <div class=\"layer-info-left\">\n" +
-    "                            <div>{{currentLayer.LayerDate || 'Date' | date : 'd/MM/y'}}</div>\n" +
-    "                            <div>{{currentLayer.LayerCategory || 'Category'}}</div>\n" +
-    "                          </div>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"panel panel-cart\">\n" +
-    "                  <div class=\"panel-heading\">\n" +
-    "                    <h3 class=\"panel-title\">Cart</h3>\n" +
-    "                  </div>\n" +
-    "                  <div class=\"panel-body\">\n" +
-    "                    <table class=\"table table-hover list-results\">\n" +
-    "                      <tr class=\"result\" ng-repeat=\"layer in cart.slice().reverse()\">\n" +
-    "                        <td class=\"remove-button\">\n" +
-    "                          {{layer.Title}}\n" +
-    "                          <span ng-click=\"addToCart(layer)\" class=\"glyphicon glyphicon-remove pull-right\"></span>\n" +
-    "                        </td>\n" +
-    "                      </tr>\n" +
-    "                    </table>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"row actions\" style=\"\">\n" +
-    "                    <button type=\"button\" ng-click=\"clearCart();\" class=\"btn btn-cart\">CLEAR</button>\n" +
-    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!cart.length\" class=\"btn btn-cart\">ADD</button>\n" +
-    "                </div>\n" +
-    "\n" +
-    "            </div>\n" +
+    "            </li>\n" +
+    "            <li class=\"divider\"></li>\n" +
+    "            <li><a data-target=\"#add-server-dialog\" data-toggle=\"modal\" translate=\"add_new_server\">Add New Server</a></li>\n" +
+    "          </ul>\n" +
     "        </div>\n" +
+    "        <button tooltip-append-to-body=\"true\" tooltip-placement=\"top\" tooltip=\"{{'refresh_layers' | translate}}\"\n" +
+    "                type=\"button\"\n" +
+    "                ng-click=\"serverService.populateLayersConfig(serverService.getServerById(currentServerId), true)\" class=\"btn btn-default\">\n" +
+    "          <i class=\"glyphicon glyphicon-repeat\"></i>\n" +
+    "        </button>\n" +
+    "      </div>\n" +
     "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <div ng-class=\"{'input-group':filterLayers !== '' && filterLayers !== null && filterLayers !== undefined}\">\n" +
+    "        <input id=\"layer-filter\" ng-model=\"filterLayers\" type=\"text\" class=\"form-control filter-field\"\n" +
+    "               placeholder=\"{{'filter_layers' | translate}}\">\n" +
+    "        <span ng-if=\"filterLayers !== '' && filterLayers != null && filterLayers != undefined\" class=\"input-group-btn\">\n" +
+    "          <a class=\"btn btn-default\" ng-click=\"clearFilter()\" type=\"button\">\n" +
+    "            <i class=\"glyphicon glyphicon-remove\"></i>\n" +
+    "          </a>\n" +
+    "        </span>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\" ng-if=\"currentServer.username !== null && currentServer.username !== undefined\">\n" +
+    "      <div ng-class=\"{'input-group':!currentServer.isLocal}\">\n" +
+    "        <input type=\"text\" value=\"{{getConnectedString()}}\" disabled class=\"form-control logged-in-as-input\">\n" +
+    "        <span class=\"input-group-btn\" ng-if=\"!currentServer.isLocal\">\n" +
+    "          <a class=\"switch-user-btn btn btn-default\" tooltip-append-to-body=\"true\" tooltip-placement=\"top\"\n" +
+    "             tooltip=\"{{'connect_as' | translate}}\" ng-click=\"changeCredentials()\" type=\"button\">\n" +
+    "            <i class=\"glyphicon glyphicon-transfer\"></i>\n" +
+    "          </a>\n" +
+    "        </span>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <button type=\"button\" style=\"margin-left:-15px;\" ng-if=\"currentServer.lazy && currentServer.layersConfig.length===0 && !currentServer.populatingLayersConfig\"\n" +
+    "            tooltip=\"This server is configured to lazily load layers.\" tooltip-placement=\"right\"\n" +
+    "            class=\"btn btn-default\" ng-click=\"serverService.populateLayersConfig(serverService.getServerById(currentServerId), true)\">\n" +
+    "      <i class=\"glyphicon glyphicon-save\"></i>\n" +
+    "      <span>{{'fetch_layers_from_server' | translate}}</span>\n" +
+    "    </button>\n" +
+    "    <div class=\"add-layers-loading loom-loading\" spinner-hidden=\"!currentServer.populatingLayersConfig\"></div>\n" +
+    "    <div class=\"form-group layer-container\">\n" +
+    "      <ul id=\"layer-list\" class=\"list-group\">\n" +
+    "        <li ng-repeat=\"layer in layersConfig = serverService.getLayersConfig(currentServerId) | filter:filterLayers | filter:filterAddedLayers\"\n" +
+    "            class=\"list-group-item loom-layerinfo-popover\" data-placement=\"left\">\n" +
+    "          <div class=\"row\">\n" +
+    "            <div class=\"col-xs-2\">\n" +
+    "              <div class=\"loom-check-button btn btn-xs\" ng-model=\"layer.add\" btn-checkbox btn-checkbox-true=\"true\"\n" +
+    "                   btn-checkbox-false=\"false\">\n" +
+    "                <i class=\"glyphicon\" ng-class=\"{'glyphicon-unchecked': !layer.add, 'glyphicon-check': layer.add}\"></i>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"ellipsis\">{{layer.Title}}</div>\n" +
+    "          </div>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </div>\n" +
+    "  </form>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "  <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" translate=\"close_btn\">Close</button>\n" +
+    "  <button type=\"button\" class=\"btn btn-primary\" ng-click=\"addLayers(layersConfig)\" data-dismiss=\"modal\"\n" +
+    "    translate=\"add_btn\">Add</button>\n" +
     "</div>\n" +
     "");
 }]);
 
 angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("addlayers/partials/addlayersfilter.tpl.html",
-    "<nav class=\"filter panel panel-default\">\n" +
+    "<nav class=\"filter panel panel-default add-layer\">\n" +
     "    <div class=\"panel-body\">\n" +
     "      <form class=\"col-md-12\" ng-submit=\"search()\">\n" +
     "        <div class=\"row\">\n" +
@@ -187,6 +177,101 @@ angular.module("addlayers/partials/addserver.tpl.html", []).run(["$templateCache
     "  <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" translate=\"close_btn\" ng-click=\"reset()\">Close</button>\n" +
     "  <button ng-hide=\"editing\" type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!serverform.$valid\" ng-click=\"addServer({'type': type, 'name': name, 'url': url})\" translate=\"add_btn\">Add</button>\n" +
     "  <button ng-show=\"editing\" type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!serverform.$valid\" ng-click=\"editServer()\" translate=\"save_btn\">Save</button>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("addlayers/partials/registryLayers.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("addlayers/partials/registryLayers.tpl.html",
+    "<div>\n" +
+    "    <div class=\"modal-body explorer\">\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-md-12\">\n" +
+    "            </div>\n" +
+    "            <div class=\"tab-content col-md-7 explorer-content\">\n" +
+    "                <div class=\"tab-pane active\" id=\"explore\">\n" +
+    "                  <div loom-addlayersfilter></div>\n" +
+    "                </div>\n" +
+    "                <div class=\"result-table\">\n" +
+    "                  <div class=\"clearfix search-results panel add-layer\">\n" +
+    "                    <table class=\"table table-hover list-results panel-body\">\n" +
+    "                      <tr>\n" +
+    "                        <th>Title</th>\n" +
+    "                        <th>Domain</th>\n" +
+    "                      </tr>\n" +
+    "                      <tr class=\"result\" ng-mouseover=\"previewLayer(layer);\" ng-click=\"selectRow(layer)\" ng-class=\"{'preview-hover': isInCart(layer)}\"\n" +
+    "                        ng-repeat=\"layer in layersConfig = getResults() | filter:filterAddedLayers\">\n" +
+    "                        <td class=\"ellipsis\">{{ layer.Title }}</td>\n" +
+    "                        <td>{{ layer.domain }}</td>\n" +
+    "                      </tr>\n" +
+    "                    </table>\n" +
+    "                    <div class=\"actions\">\n" +
+    "                      <button type=\"button\" ng-disabled=\"!hasPrevious()\" ng-click=\"previousPage();\" class=\"btn btn-default\">Previous</button>\n" +
+    "                      <button type=\"button\" ng-disabled=\"!hasNext()\" ng-click=\"nextPage();\" class=\"btn btn-default\">Next</button>\n" +
+    "                      <span class=\"text-muted\">\n" +
+    "                        Showing {{pagination.showdocs}} of {{pagination.sizeDocuments}} - Page {{pagination.currentPage}} / {{pagination.pages}}\n" +
+    "                      </span>\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"search-pagination\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-md-5 clearfix result-panel\">\n" +
+    "                <div class=\"panel panel-default add-layer\" id=\"mapreview\" name=\"loom-map-panel\">\n" +
+    "                  <div class=\"alert alert-title alert-layer-mp\">\n" +
+    "                      Limit the search to data that includes features in the displayed area.\n" +
+    "                  </div>\n" +
+    "                  <div class=\"panel-body\">\n" +
+    "                    <div class=\"loom-map\" zoom=\"previewZoom\" center=\"previewCenter\" loom-map map-id=\"layer-map-preview\" layers=\"previewLayers\"></div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"filter panel panel-default add-layer\" name=\"layer-information-panel\">\n" +
+    "                  <div class=\"alert alert-title alert-warning-mp\">\n" +
+    "                    <h3>{{currentLayer.Title}}</h3>\n" +
+    "                  </div>\n" +
+    "                    <div class=\"panel-body\">\n" +
+    "                      <div class=\"row\">\n" +
+    "                        <div class=\"col-md-8 col-sm-8\">\n" +
+    "                          <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
+    "                        </div>\n" +
+    "\n" +
+    "                        <div class=\"col-md-4 col-sm-4 row\">\n" +
+    "                          <div class=\"layer-info-left\">\n" +
+    "                            <div>{{currentLayer.LayerDate || 'Date' | date : 'd/MM/y'}}</div>\n" +
+    "                            <div>{{currentLayer.LayerCategory || 'Category'}}</div>\n" +
+    "                          </div>\n" +
+    "                        </div>\n" +
+    "                      </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"panel panel-cart add-layer\">\n" +
+    "                  <div class=\"panel-heading\">\n" +
+    "                    <h3 class=\"panel-title\">Cart</h3>\n" +
+    "                  </div>\n" +
+    "                  <div class=\"panel-body\">\n" +
+    "                    <table class=\"table table-hover list-results\">\n" +
+    "                      <tr class=\"result\" ng-repeat=\"layer in cart.slice().reverse()\">\n" +
+    "                        <td class=\"remove-button\">\n" +
+    "                          {{layer.Title}}\n" +
+    "                          <span ng-click=\"addToCart(layer)\" class=\"glyphicon glyphicon-remove pull-right\"></span>\n" +
+    "                        </td>\n" +
+    "                      </tr>\n" +
+    "                    </table>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"row actions\" style=\"\">\n" +
+    "                    <button type=\"button\" ng-click=\"clearCart();\" class=\"btn btn-cart\">CLEAR</button>\n" +
+    "                    <button type=\"button\" ng-click = \"addLayers(selectedLayer)\" ng-disabled=\"!cart.length\" class=\"btn btn-cart\">ADD</button>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
 }]);

@@ -38,19 +38,24 @@
             scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
 
-            scope.setCurrentServerId = function(serverId) {
-              var server = serverService.getServerById(serverId);
-              if (goog.isDefAndNotNull(server)) {
-                scope.currentServerId = serverId;
-                scope.currentServer = server;
-              }
-            };
+            // scope.capas = {};
+
+            // scope.setCurrentServerId = function(serverId) {
+            //   var server = serverService.getServerById(serverId);
+            //   if (goog.isDefAndNotNull(server)) {
+            //     scope.currentServerId = serverId;
+            //     scope.currentServer = server;
+            //   }
+            // };
 
             // default to the Local Geoserver. Note that when a map is saved and loaded again,
             // the order of the servers might be different and MapLoom should be able to handle it accordingly
-            var server = serverService.getServerLocalGeoserver();
+            // var server = serverService.getServerLocalGeoserver();
+            var server = angular.copy(serverService.getServerLocalGeoserver());
             if (goog.isDefAndNotNull(server)) {
-              scope.setCurrentServerId(server.id);
+              // scope.setCurrentServerId(server.id);
+              scope.currentServerId = server.id;
+              scope.currentServer = server;
             }
 
             var resetText = function() {
@@ -104,8 +109,9 @@
             };
 
             scope.getResults = function() {
-              return serverService.getLayersConfigByName('Local Geoserver');
+              return server.layersConfig;
             };
+
 
             scope.nextPage = function() {
               if (scope.filterOptions.from !== null) {
@@ -138,7 +144,8 @@
               if (searchFavorites) {
                 serverService.addSearchResultsForFavorites(serverService.getServerLocalGeoserver(), scope.filterOptions);
               } else if (searchHyper) {
-                serverService.addSearchResultsForHyper(serverService.getServerLocalGeoserver(), scope.filterOptions, scope.catalogKey);
+                // serverService.addSearchResultsForHyper(serverService.getServerLocalGeoserver(), scope.filterOptions, scope.catalogKey);
+                serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalogKey);
               } else {
                 serverService.populateLayersConfigElastic(serverService.getServerLocalGeoserver(), scope.filterOptions);
               }

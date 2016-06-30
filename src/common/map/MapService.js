@@ -838,8 +838,17 @@
       return layer;
     };
 
+    this.addVirtualLayer = function(minimalConfig, layerConfig, server) {
+      var layer = service_.createLayerFull(minimalConfig, layerConfig, server);
+      service_.addLayerCore(minimalConfig, layer);
+    };
+
     this.addLayer = function(minimalConfig, opt_layerOrder) {
       var layer = service_.createLayer(minimalConfig, opt_layerOrder);
+      return service_.addLayerCore(minimalConfig, layer, opt_layerOrder);
+    };
+
+    this.addLayerCore = function(minimalConfig, layer, opt_layerOrder) {
       if (goog.isDefAndNotNull(layer)) {
         // convert source id to a number. even though geonode gives it as a string, it wants it back as number
         minimalConfig.source = parseInt(minimalConfig.source, 10);
@@ -871,6 +880,7 @@
         } else {
           this.map.getLayerGroup().getLayers().insertAt(insertIndex, layer);
         }
+
         if (goog.isDefAndNotNull(meta.projection)) {
           // ping proj4js to pre-download projection if we don't have it
           ol.proj.getTransform(meta.projection, 'EPSG:4326');

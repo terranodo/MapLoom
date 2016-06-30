@@ -185,18 +185,19 @@ describe('StoryLegendDirective', function() {
     });
   });
   describe('#addLayers', function() {
-    var layerConfig, minimalConfig, addLayerSpy, zoomToExtentForProjectionSpy;
+    var layerConfig, minimalConfig, addLayerSpy, zoomToExtentForProjectionSpy, server;
     beforeEach(function() {
       layerConfig = { add: true, Name: 'Test', extent: [], CRS: ['EPSG:4326'] };
+      server = angular.copy(serverService.getServerLocalGeoserver());
       compiledElement.scope().cart = [layerConfig];
       scope.$digest();
       minimalConfig = { source: 0, name: layerConfig.Name };
-      addLayerSpy = spyOn(mapService, 'addLayer');
+      addLayerSpy = spyOn(mapService, 'addVirtualLayer');
       zoomToExtentForProjectionSpy = spyOn(mapService, 'zoomToExtentForProjection');
     });
-    it('adds the layer via mapService addLayer', function() {
+    it('adds the layer via mapService addVirtualLayer', function() {
       compiledElement.scope().addLayers();
-      expect(addLayerSpy).toHaveBeenCalledWith(minimalConfig);
+      expect(addLayerSpy).toHaveBeenCalledWith(minimalConfig, layerConfig, server);
     });
     it('zooms to extent via mapService zoomToExtentForProjection', function() {
       compiledElement.scope().addLayers();
@@ -227,18 +228,21 @@ describe('StoryLegendDirective', function() {
       expect(compiledElement.scope().cart.length).toEqual(0);
     });
     describe('with results', function() {
+      var layerConfig = { Title: 'Test', add: true, extent: [], CRS: 'EPSG:4326' };
       beforeEach(function() {
-        var layerConfig = { Title: 'Test', add: true, extent: [], CRS: 'EPSG:4326' };
-        spyOn(serverService, 'getLayersConfigByName').and.returnValue([layerConfig]);
+        compiledElement.scope().currentServer = angular.copy(serverService.getServerLocalGeoserver());
+        compiledElement.scope().currentServer.layersConfig.push(layerConfig);
         scope.$digest();
       });
       it('click on a result adds it to cart', function() {
         compiledElement.find('tr.result').click();
         expect(compiledElement.scope().cart.length).toEqual(1);
       });
-      it('click on a result adds it to cart', function() {
-        compiledElement.find('tr.result').click();
-        expect(compiledElement.scope().cart.length).toEqual(1);
+      it('click on Cart remove layer', function() {
+        compiledElement.scope().addToCart(layerConfig);
+        scope.$digest();
+        compiledElement.find('tr.result span').click();
+        expect(compiledElement.scope().cart.length).toEqual(0);
       });
     });
   });

@@ -29,7 +29,7 @@
       return show;
     };
 
-    this.addLayer = function(layerConfig, currentServerId, zoomToExtentflag) {
+    this.addLayer = function(layerConfig, currentServerId, virtualServer) {
       if (layerConfig.add) {
         // NOTE: minimal config is the absolute bare minimum info that will be send to webapp containing
         //       maploom such as geonode. At this point, only source (server id), and name are used. If you
@@ -42,10 +42,15 @@
           name: layerConfig.Name,
           source: currentServerId
         };
-        mapService_.addLayer(minimalConfig);
+        if (virtualServer) {
+          mapService_.addVirtualLayer(minimalConfig, layerConfig, virtualServer);
+        }else {
+          mapService_.addLayer(minimalConfig, layerConfig);
+        }
+
         layerConfig.add = false;
 
-        if (layerConfig.CRS && layerConfig.extent && zoomToExtentflag === true) {
+        if (layerConfig.CRS && layerConfig.extent) {
           mapService_.zoomToExtentForProjection(layerConfig.extent, ol.proj.get(layerConfig.CRS[0]));
         }
       }

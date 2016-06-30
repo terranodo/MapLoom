@@ -131,7 +131,6 @@ var SERVER_SERVICE_USE_PROXY = true;
           break;
         }
       }
-
       return server;
     };
 

@@ -38,22 +38,10 @@
             scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
 
-            // scope.capas = {};
-
-            // scope.setCurrentServerId = function(serverId) {
-            //   var server = serverService.getServerById(serverId);
-            //   if (goog.isDefAndNotNull(server)) {
-            //     scope.currentServerId = serverId;
-            //     scope.currentServer = server;
-            //   }
-            // };
-
             // default to the Local Geoserver. Note that when a map is saved and loaded again,
             // the order of the servers might be different and MapLoom should be able to handle it accordingly
-            // var server = serverService.getServerLocalGeoserver();
             var server = angular.copy(serverService.getServerLocalGeoserver());
             if (goog.isDefAndNotNull(server)) {
-              // scope.setCurrentServerId(server.id);
               scope.currentServerId = server.id;
               scope.currentServer = server;
             }
@@ -109,7 +97,7 @@
             };
 
             scope.getResults = function() {
-              return server.layersConfig;
+              return scope.currentServer.layersConfig;
             };
 
 
@@ -191,7 +179,7 @@
             };
 
             var addLayer = function(layerConfig) {
-              LayersService.addLayer(layerConfig, scope.currentServerId, true);
+              LayersService.addLayer(layerConfig, scope.currentServerId, server);
             };
 
             scope.addLayers = function() {

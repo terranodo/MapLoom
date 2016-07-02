@@ -188,7 +188,7 @@ angular.module("addlayers/partials/registryLayers.tpl.html", []).run(["$template
     "        <div class=\"row\">\n" +
     "            <div class=\"col-md-12\">\n" +
     "            </div>\n" +
-    "            <div class=\"tab-content col-md-7 explorer-content\">\n" +
+    "            <div class=\"tab-content col-md-6 explorer-content\">\n" +
     "                <div class=\"tab-pane active\" id=\"explore\">\n" +
     "                  <div loom-addlayersfilter></div>\n" +
     "                </div>\n" +
@@ -218,7 +218,7 @@ angular.module("addlayers/partials/registryLayers.tpl.html", []).run(["$template
     "                <div class=\"search-pagination\">\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-md-5 clearfix result-panel\">\n" +
+    "            <div class=\"col-md-6 clearfix result-panel\">\n" +
     "                <div class=\"panel panel-default add-layer\" id=\"mapreview\" name=\"loom-map-panel\">\n" +
     "                  <div class=\"alert alert-title alert-layer-mp\">\n" +
     "                      Limit the search to data that includes features in the displayed area.\n" +
@@ -228,39 +228,40 @@ angular.module("addlayers/partials/registryLayers.tpl.html", []).run(["$template
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div class=\"filter panel panel-default add-layer\" name=\"layer-information-panel\">\n" +
-    "                  <div class=\"alert alert-title alert-warning-mp\">\n" +
-    "                    <h3>{{currentLayer.Title}}</h3>\n" +
-    "                  </div>\n" +
-    "                    <div class=\"panel-body\">\n" +
-    "                      <div class=\"row\">\n" +
-    "                        <div class=\"col-md-8 col-sm-8\">\n" +
-    "                          <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"col-md-4 col-sm-4 row\">\n" +
-    "                          <div class=\"layer-info-left\">\n" +
-    "                            <div>{{currentLayer.LayerDate || 'Date' | date : 'd/MM/y'}}</div>\n" +
-    "                            <div>{{currentLayer.LayerCategory || 'Category'}}</div>\n" +
+    "                <div class=\"row\">\n" +
+    "                  <div class=\"col-md-6 filter panel panel-default add-layer panel-abstract\" name=\"layer-information-panel\">\n" +
+    "                    <div class=\"alert alert-title alert-warning-mp\">\n" +
+    "                      <h3>{{currentLayer.Title}}</h3>\n" +
+    "                    </div>\n" +
+    "                      <div class=\"panel-body\">\n" +
+    "                        <div class=\"row\">\n" +
+    "                          <div class=\"col-md-12\">\n" +
+    "                            <div class=\"layer-info-left\">\n" +
+    "                              <div class=\"col-md-12\">{{currentLayer.LayerDate || 'Date' | date : 'd/MM/y'}}</div>\n" +
+    "                              <div class=\"col-md-12\">{{currentLayer.LayerCategory || 'Category'}}</div>\n" +
+    "                            </div>\n" +
+    "                          </div>\n" +
+    "                          <div class=\"col-md-12\">\n" +
+    "                            <p class=\"abstract\">{{currentLayer.Abstract}}</p>\n" +
     "                          </div>\n" +
     "                        </div>\n" +
     "                      </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"panel panel-cart add-layer\">\n" +
-    "                  <div class=\"panel-heading\">\n" +
-    "                    <h3 class=\"panel-title\">Cart</h3>\n" +
     "                  </div>\n" +
-    "                  <div class=\"panel-body\">\n" +
-    "                    <table class=\"table table-hover list-results\">\n" +
-    "                      <tr class=\"result\" ng-repeat=\"layer in cart.slice().reverse()\">\n" +
-    "                        <td class=\"remove-button\">\n" +
-    "                          {{layer.Title}}\n" +
-    "                          <span ng-click=\"addToCart(layer)\" class=\"glyphicon glyphicon-remove pull-right\"></span>\n" +
-    "                        </td>\n" +
-    "                      </tr>\n" +
-    "                    </table>\n" +
+    "\n" +
+    "                  <div class=\"col-md-6 panel panel-cart add-layer\">\n" +
+    "                    <div class=\"panel-heading\">\n" +
+    "                      <h3 class=\"panel-title\">Cart</h3>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"panel-body\">\n" +
+    "                      <table class=\"table table-hover list-results\">\n" +
+    "                        <tr class=\"result\" ng-repeat=\"layer in cart.slice().reverse()\">\n" +
+    "                          <td class=\"remove-button\">\n" +
+    "                            <div class=\"col-md-10 ellipsis\">{{layer.Title}}</div>\n" +
+    "                            <span ng-click=\"addToCart(layer)\" class=\"glyphicon glyphicon-remove pull-right\"></span>\n" +
+    "                          </td>\n" +
+    "                        </tr>\n" +
+    "                      </table>\n" +
+    "                    </div>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +

@@ -28,14 +28,14 @@ var SERVER_SERVICE_USE_PROXY = true;
       configService_ = configService;
       configService_.serverList = servers;
       q_ = $q;
+      catalogList = configService.configuration.catalogList;
 
       return this;
     };
 
-    this.catalogList = [
-      {name: 'hypersearch catalog 1', url: 'http://geoshape.geointservices.io/search/hypermap/'},
-      {name: 'hypersearch catalog 2', url: 'http://geoshape.geointservices.io/search/hypermap/'}
-    ];
+    this.getCatalogList = function() {
+      return catalogList;
+    };
 
     this.getServers = function() {
       return servers;
@@ -43,7 +43,6 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     this.getServerById = function(id) {
       var server = null;
-
       if (!goog.isDefAndNotNull(id)) {
         throw ({
           name: 'serverService',
@@ -731,7 +730,7 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     this.validateCatalogKey = function(catalogKey) {
       catalogKey = Number(catalogKey);
-      if (!isNaN(catalogKey) && service_.catalogList.length >= catalogKey + 1) {
+      if (!isNaN(catalogKey) && catalogList.length >= catalogKey + 1) {
         return catalogKey;
       }else {
         return false;
@@ -754,7 +753,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (catalogKey === false) {
         return false;
       }
-      searchUrl = service_.catalogList[catalogKey].url + '_search?';
+      searchUrl = catalogList[catalogKey].url + '_search?';
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);
         bodySearch = service_.applyBodyFilter(filterOptions);

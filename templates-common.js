@@ -97,7 +97,7 @@ angular.module("addlayers/partials/addlayersfilter.tpl.html", []).run(["$templat
     "          </div>\n" +
     "          <div class=\"form-group col-md-6 col-xs-6\">\n" +
     "            <select class=\"form-control search-input select-search\" ng-model=\"catalogKey\" ng-change=\"searchHyper()\">\n" +
-    "              <option ng-repeat=\"(catalogKey, catalog) in serverService.catalogList\" value=\"{{catalogKey}}\">{{catalog.name}}</option>\n" +
+    "              <option ng-repeat=\"(catalogKey, catalog) in serverService.getCatalogList()\" value=\"{{catalogKey}}\">{{catalog.name}}</option>\n" +
     "            </select>\n" +
     "          </div>\n" +
     "        </div>\n" +

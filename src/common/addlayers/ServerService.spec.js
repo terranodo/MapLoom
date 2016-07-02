@@ -5,13 +5,9 @@ describe('addLayers/ServerService', function() {
   beforeEach(module('MapLoom'));
   beforeEach(module('loom_addlayers'));
 
-  beforeEach(function() {
-    module(function($provide) {
-      $provide.value('configService', configService);
-    });
-  });
   beforeEach(inject(function(_serverService_, _configService_, _$httpBackend_) {
     serverService = _serverService_;
+    configService = _configService_;
     $httpBackend = _$httpBackend_;
   }));
 

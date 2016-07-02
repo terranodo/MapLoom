@@ -93,7 +93,11 @@
         proxy: '/proxy/?url=',
         nominatimUrl: 'http://nominatim.openstreetmap.org',
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
-        fileserviceUploadUrl: '/api/fileservice/'
+        fileserviceUploadUrl: '/api/fileservice/',
+        catalogList: [
+          {name: 'hypersearch catalog 1', url: 'http://geoshape.geointservices.io/search/hypermap/'},
+          {name: 'hypersearch catalog 2', url: 'http://geoshape.geointservices.io/search/hypermap/'}
+        ]
       };
 
       if (goog.isDefAndNotNull($window.config)) {

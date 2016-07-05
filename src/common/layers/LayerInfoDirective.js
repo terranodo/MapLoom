@@ -53,9 +53,12 @@
                 scope.repoName = repo.name;
                 scope.repoUUID = repo.uuid;
               }
-              var server = serverService.getServerById(scope.layer.get('metadata').serverId);
-              scope.serverName = server.name;
-              scope.serverURL = server.url;
+              if (goog.isDefAndNotNull(metadata.serverId)) {
+                var server = serverService.getServerById(metadata.serverId);
+                scope.serverName = server.name;
+                scope.serverURL = server.url;
+              }
+
               element.closest('.modal').modal('toggle');
             });
             function onResize() {

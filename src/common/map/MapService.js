@@ -399,7 +399,7 @@
       var extent900913;
       if (goog.isDefAndNotNull(layer.getSource().getExtent)) {
         extent900913 = shrinkExtent(layer.getSource().getExtent(), 0);
-      } else {
+      } else if (goog.isDefAndNotNull(metadata.bbox)) {
         extent900913 = shrinkExtent(metadata.bbox.extent, 0);
       }
 
@@ -415,7 +415,6 @@
           }
         }
       }
-
       service_.zoomToExtent(extent900913);
     };
 
@@ -606,7 +605,11 @@
               abstract: fullConfig.Abstract,
               readOnly: false,
               editable: false,
-              projection: service_.getCRSCode(fullConfig.CRS)
+              projection: service_.getCRSCode(fullConfig.CRS),
+              bbox: {
+                extent: fullConfig.extent,
+                crs: fullConfig.CRS[0]
+              }
             },
             visible: true,
             source: new ol.source.XYZ({

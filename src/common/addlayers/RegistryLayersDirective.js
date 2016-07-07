@@ -37,6 +37,7 @@
             cartLayerName = [];
             scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
+            scope.searchRangeFlag = false;
 
             // default to the Local Geoserver. Note that when a map is saved and loaded again,
             // the order of the servers might be different and MapLoom should be able to handle it accordingly
@@ -54,6 +55,13 @@
             };
             var resetFrom = function() {
               scope.filterOptions.from = null;
+            };
+            var resetDateRangueFilter = function() {
+              scope.slider = scope.defaultSliderValue();
+              scope.searchRangeFlag = false;
+              scope.filterOptions.minYear = null;
+              scope.filterOptions.maxYear = null;
+              scope.filterOptions.sliderValues = null;
             };
             var resetMapPreview = function() {
               if (mapPreviewChangeCount > 1) {
@@ -85,7 +93,7 @@
             scope.searchHyper = function() {
               clearFilters();
               resetMapPreview();
-              scope.slider = scope.defaultSliderValue();
+              resetDateRangueFilter();
               searchHyper = true;
               scope.search();
             };
@@ -132,7 +140,6 @@
               if (searchFavorites) {
                 serverService.addSearchResultsForFavorites(serverService.getServerLocalGeoserver(), scope.filterOptions);
               } else if (searchHyper) {
-                // serverService.addSearchResultsForHyper(serverService.getServerLocalGeoserver(), scope.filterOptions, scope.catalogKey);
                 serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalogKey);
               } else {
                 serverService.populateLayersConfigElastic(serverService.getServerLocalGeoserver(), scope.filterOptions);
@@ -149,6 +156,7 @@
             $('#registry-layer-dialog').on('shown.bs.modal', scope.search);
 
             scope.$on('slideEnded', function() {
+              scope.searchRangeFlag = true;
               resetFrom();
               scope.search();
             });
@@ -166,7 +174,7 @@
             });
 
             function searchRangeValues() {
-              if (goog.isDefAndNotNull(scope.sliderValues)) {
+              if (goog.isDefAndNotNull(scope.sliderValues) && scope.searchRangeFlag === true) {
                 scope.filterOptions.minYear = scope.sliderValues[scope.slider.minValue];
                 scope.filterOptions.maxYear = scope.sliderValues[scope.slider.maxValue];
                 scope.filterOptions.sliderValues = scope.sliderValues;

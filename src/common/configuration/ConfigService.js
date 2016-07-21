@@ -104,7 +104,6 @@
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
-        registryUrl: 'http://52.38.116.143',
         searchApiURL: 'http://52.53.235.149/registry/api/search/',
         catalogList: [
           {

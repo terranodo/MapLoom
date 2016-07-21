@@ -11,8 +11,9 @@
         var sliderValues = scope.sliderValues.slice();
         var changeSliderValues = false;
         var histogram = {};
+        var minIndex = 11;
 
-        scope.minValue = scope.sliderValues[10];
+        scope.minValue = scope.sliderValues[minIndex];
         scope.maxValue = scope.sliderValues[scope.sliderValues.length - 2];
 
         scope.sliderValues.getValue = function(key) {
@@ -21,10 +22,10 @@
 
         scope.defaultSliderValue = function() {
           return {
-            minValue: 10,
+            minValue: minIndex,
             maxValue: sliderValues.length - 2,
             options: {
-              floor: 10,
+              floor: minIndex,
               ceil: sliderValues.length - 2,
               step: 1,
               noSwitching: true, hideLimitLabels: true,

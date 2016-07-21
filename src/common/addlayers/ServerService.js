@@ -628,8 +628,8 @@ var SERVER_SERVICE_USE_PROXY = true;
         Abstract: layerInfo.abstract,
         Name: layerInfo.domain_name,
         Title: layerInfo.title,
-        LayerDate: layerInfo.LayerDate,
-        LayerCategory: layerInfo.LayerCategory,
+        LayerDate: layerInfo.layer_date,
+        LayerCategory: layerInfo.layer_category,
         CRS: ['EPSG:4326'],
         detail_url: catalogKey_ !== null ? catalogList[catalogKey_].registryUrl + '/layer/' + layerInfo.id : null,
         thumbnail_url: layerInfo.ThumbnailURL ? (catalogList[catalogKey_].registryUrl + layerInfo.ThumbnailURL) : null,
@@ -655,6 +655,8 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     var createHyperSearchLayerObjects = function(layerObjects, serverUrl) {
       var finalConfigs = [];
+      layerObjects = Array.isArray(layerObjects) ? layerObjects : [];
+
       //TODO: Update with handling multiple projections per layer if needed.
       for (var iLayer = 0; iLayer < layerObjects.length; iLayer += 1) {
         var layerInfo = layerObjects[iLayer];
@@ -728,6 +730,9 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.applyESFilter = function(url, filter_options) {
+      if (filter_options.text !== null) {
+        url = url + '&q_text=' + filter_options.text;
+      }
       if (filter_options.owner !== null) {
         url = url + '&owner__username__in=' + configService_.username;
       }
@@ -736,6 +741,10 @@ var SERVER_SERVICE_USE_PROXY = true;
       }
       if (filter_options.from !== null) {
         url = url + '&from=' + filter_options.from;
+      }
+
+      if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
+        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
       }
       return url;
     };
@@ -906,8 +915,9 @@ var SERVER_SERVICE_USE_PROXY = true;
         return false;
       }
 
-      searchUrl = configService_.configuration.searchApiURL + '?search_engine=' +
-          catalogList[catalogKey_].searchEngine + '&search_engine_endpoint=' + catalogList[catalogKey_].url;
+      searchUrl = configService_.configuration.searchApiURL +
+          '?search_engine=' + catalogList[catalogKey_].searchEngine +
+          '&search_engine_endpoint=' + encodeURIComponent(catalogList[catalogKey_].url);
 
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);

@@ -626,7 +626,7 @@
       } else {
         if (fullConfig.type && fullConfig.type == 'mapproxy_tms') {
           var layername = '';
-          if (fullConfig.Name.split(':').length > 1) {
+          if (goog.isDefAndNotNull(fullConfig.Name) && fullConfig.Name.split(':').length > 1) {
             layername = fullConfig.Name.split(':')[1];
           } else {
             layername = fullConfig.Name;

@@ -35,7 +35,7 @@
             scope.layerConfig = {Title: 'Title'};
             scope.selectedLayer = {};
             scope.cart = [];
-            cartLayerName = [];
+            cartLayerId = [];
             scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
 
@@ -131,7 +131,6 @@
               if (searchFavorites) {
                 serverService.addSearchResultsForFavorites(serverService.getRegistryLayerConfig(), scope.filterOptions);
               } else if (searchHyper) {
-                // serverService.addSearchResultsForHyper(serverService.getRegistryLayerConfig(), scope.filterOptions, scope.catalogKey);
                 serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalogKey);
               } else {
                 serverService.populateLayersConfigElastic(serverService.getRegistryLayerConfig(), scope.filterOptions);
@@ -214,24 +213,24 @@
             };
 
             scope.addToCart = function(layerConfig) {
-              var layerCopi = layerConfig.Name;
-              var configIndex = cartLayerName.indexOf(layerCopi);
+              var layerCopi = layerConfig.id;
+              var configIndex = cartLayerId.indexOf(layerCopi);
               if (configIndex === -1) {
-                cartLayerName.push(layerCopi);
+                cartLayerId.push(layerCopi);
                 scope.cart.push(layerConfig);
               } else {
-                cartLayerName.splice(configIndex, 1);
+                cartLayerId.splice(configIndex, 1);
                 scope.cart.splice(configIndex, 1);
               }
             };
 
             scope.isInCart = function(layerConfig) {
-              return cartLayerName.indexOf(layerConfig.Name) !== -1 ? true : false;
+              return cartLayerId.indexOf(layerConfig.Name) !== -1 ? true : false;
             };
 
             scope.clearCart = function() {
               scope.cart = [];
-              cartLayerName = [];
+              cartLayerId = [];
             };
 
             scope.filterAddedLayers = function(layerConfig) {

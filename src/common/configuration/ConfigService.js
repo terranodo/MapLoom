@@ -105,9 +105,26 @@
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
         registryUrl: 'http://52.38.116.143',
+        searchApiURL: 'http://52.53.235.149/registry/api/search/',
         catalogList: [
-          {name: 'hypersearch catalog 1', url: 'http://geoshape.geointservices.io/search/hypermap/'},
-          {name: 'hypersearch catalog 2', url: 'http://geoshape.geointservices.io/search/hypermap/'}
+          {
+            searchEngine: 'solr',
+            name: 'Swagger API',
+            url: 'http://54.221.223.91:8983/solr/hypermap/select/',
+            registryUrl: 'http://52.38.116.143'
+          },
+          {
+            searchEngine: 'elasticsearch',
+            name: 'hypersearch catalog 1',
+            url: 'http://52.41.158.6:9200/hypermap/_search',
+            registryUrl: 'http://52.38.116.143'
+          },
+          {
+            searchEngine: 'elasticsearch',
+            name: 'hypersearch old catalog 2',
+            url: 'http://geoshape.geointservices.io/search/hypermap/_search/',
+            registryUrl: 'http://52.38.116.143'
+          }
         ]
       };
 

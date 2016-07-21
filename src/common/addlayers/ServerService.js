@@ -16,6 +16,7 @@ var SERVER_SERVICE_USE_PROXY = true;
   var configService_ = null;
   var q_ = null;
   var serverCount = 0;
+  var catalogKey_ = null;
 
   module.provider('serverService', function() {
     this.$get = function($rootScope, $http, $q, $location, $translate, dialogService, configService) {
@@ -584,7 +585,7 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var domain = function(layerInfo) {
-      if (layerInfo.hasOwnProperty('DomainName')) {
+      if (layerInfo.hasOwnProperty('domain_name')) {
         return layerInfo.DomainName;
       }
       return '';
@@ -617,20 +618,21 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createExtentFromHyper = function(layerInfo) {
-      return [layerInfo.MinX, layerInfo.MinY, layerInfo.MaxX, layerInfo.MaxY];
+      return [layerInfo.min_x, layerInfo.min_y, layerInfo.max_x, layerInfo.max_y];
     };
 
     var createHyperSearchLayerObject = function(layerInfo, serverUrl) {
       return {
+        id: layerInfo.id,
         add: true,
-        Abstract: layerInfo.Abstract,
-        Name: layerInfo.LayerName,
-        Title: layerInfo.LayerTitle,
+        Abstract: layerInfo.abstract,
+        Name: layerInfo.domain_name,
+        Title: layerInfo.title,
         LayerDate: layerInfo.LayerDate,
         LayerCategory: layerInfo.LayerCategory,
         CRS: ['EPSG:4326'],
-        detail_url: configService_.configuration.registryUrl + '/layer/' + layerInfo.LayerId,
-        thumbnail_url: layerInfo.ThumbnailURL ? (configService_.configuration.registryUrl + layerInfo.ThumbnailURL) : null,
+        detail_url: catalogKey_ !== null ? catalogList[catalogKey_].registryUrl + '/layer/' + layerInfo.id : null,
+        thumbnail_url: layerInfo.ThumbnailURL ? (catalogList[catalogKey_].registryUrl + layerInfo.ThumbnailURL) : null,
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',
@@ -656,7 +658,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       //TODO: Update with handling multiple projections per layer if needed.
       for (var iLayer = 0; iLayer < layerObjects.length; iLayer += 1) {
         var layerInfo = layerObjects[iLayer];
-        var configTemplate = createHyperSearchLayerObject(layerInfo._source, serverUrl);
+        var configTemplate = createHyperSearchLayerObject(layerInfo, serverUrl);
 
         finalConfigs.push(configTemplate);
       }
@@ -691,7 +693,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       server.layersConfig = [];
       server.populatingLayersConfig = true;
       var config = createAuthorizationConfigForServer(server);
-      http_.post(searchUrl, body, config).then(function(xhr) {
+      http_.get(searchUrl, config).then(function(xhr) {
         if (xhr.status === 200) {
           server.layersConfig = layerConfigCallback(xhr.data, serverGeoserversearchUrl(searchUrl));
           rootScope_.$broadcast('layers-loaded', server.id);
@@ -709,11 +711,11 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.reformatLayerHyperConfigs = function(elasticResponse, serverUrl) {
-      rootScope_.$broadcast('totalOfDocs', elasticResponse.hits.total);
+      rootScope_.$broadcast('totalOfDocs', elasticResponse['a.matchDocs']);
       if (elasticResponse.aggregations) {
         rootScope_.$broadcast('dateRangeHistogram', elasticResponse.aggregations.range);
       }
-      return createHyperSearchLayerObjects(elasticResponse.hits.hits, serverUrl);
+      return createHyperSearchLayerObjects(elasticResponse['d.docs'], serverUrl);
     };
 
     this.reformatLayerConfigs = function(elasticResponse, serverUrl) {
@@ -730,7 +732,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         url = url + '&owner__username__in=' + configService_.username;
       }
       if (filter_options.size !== null) {
-        url = url + '&size=' + filter_options.size;
+        url = url + '&d_docs_limit=' + filter_options.size;
       }
       if (filter_options.from !== null) {
         url = url + '&from=' + filter_options.from;
@@ -831,7 +833,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (!isNaN(catalogKey) && catalogList.length >= catalogKey + 1) {
         return catalogKey;
       }else {
-        return false;
+        return null;
       }
     };
 
@@ -899,14 +901,17 @@ var SERVER_SERVICE_USE_PROXY = true;
     this.addSearchResultsForHyper = function(server, filterOptions, catalogKey) {
       var searchUrl;
       var bodySearch = {};
-      catalogKey = service_.validateCatalogKey(catalogKey);
-      if (catalogKey === false) {
+      catalogKey_ = service_.validateCatalogKey(catalogKey);
+      if (catalogKey_ === false) {
         return false;
       }
-      searchUrl = catalogList[catalogKey].url + '_search?';
+
+      searchUrl = configService_.configuration.searchApiURL + '?search_engine=' +
+          catalogList[catalogKey_].searchEngine + '&search_engine_endpoint=' + catalogList[catalogKey_].url;
+
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);
-        bodySearch = service_.applyBodyFilter(filterOptions);
+        // bodySearch = service_.applyBodyFilter(filterOptions);
       }
       return addSearchResults(searchUrl, bodySearch, server, service_.reformatLayerHyperConfigs);
     };

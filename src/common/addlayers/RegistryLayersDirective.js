@@ -19,7 +19,7 @@
             scope.filterOptions = {
               owner: null,
               text: null,
-              from: null,
+              docsPage: 1,
               size: 10,
               minYear: null,
               maxYear: null,
@@ -51,8 +51,8 @@
             var resetOwner = function() {
               scope.filterOptions.owner = null;
             };
-            var resetFrom = function() {
-              scope.filterOptions.from = null;
+            var resetDocsPage = function() {
+              scope.filterOptions.docsPage = 1;
             };
             var resetMapPreview = function() {
               if (mapPreviewChangeCount > 1) {
@@ -65,10 +65,12 @@
             var clearFilters = function() {
               resetText();
               resetOwner();
-              resetFrom();
+              resetDocsPage();
               searchFavorites = false;
               searchHyper = false;
             };
+
+            scope.resetDocsPage = resetDocsPage;
 
             scope.defaultSearch = function() {
               clearFilters();
@@ -101,27 +103,21 @@
 
 
             scope.nextPage = function() {
-              if (scope.filterOptions.from !== null) {
-                scope.filterOptions.from += scope.filterOptions.size;
-              } else {
-                scope.filterOptions.from = scope.filterOptions.size;
-              }
+              scope.filterOptions.docsPage++;
               scope.search();
             };
+
             scope.hasNext = function() {
-              if (scope.getResults()) {
-                return scope.getResults().length === scope.filterOptions.size;
+              if (scope.pagination.currentPage > 0) {
+                return scope.pagination.pages > scope.pagination.currentPage;
               }
             };
             scope.hasPrevious = function() {
-              return scope.filterOptions.from !== null;
+              return scope.filterOptions.docsPage > 1;
             };
             scope.previousPage = function() {
-              if (scope.filterOptions.from !== null) {
-                scope.filterOptions.from -= scope.filterOptions.size;
-                if (scope.filterOptions.from < 1) {
-                  scope.filterOptions.from = null;
-                }
+              if (scope.filterOptions.docsPage > 1) {
+                scope.filterOptions.docsPage--;
               }
               scope.search();
             };
@@ -140,18 +136,18 @@
             scope.$on('totalOfDocs', function(event, totalDocsCount) {
               scope.pagination.sizeDocuments = totalDocsCount;
               scope.pagination.showdocs = scope.pagination.sizeDocuments < 10 ? scope.pagination.sizeDocuments : scope.filterOptions.size;
-              scope.pagination.currentPage = scope.pagination.showdocs === 0 ? 0 : (scope.filterOptions.from / scope.pagination.showdocs) + 1;
+              scope.pagination.currentPage = scope.filterOptions.docsPage;
               scope.pagination.pages = Math.ceil(scope.pagination.sizeDocuments / scope.filterOptions.size);
             });
 
             $('#registry-layer-dialog').on('shown.bs.modal', scope.search);
 
             scope.$on('slideEnded', function() {
-              resetFrom();
+              resetDocsPage();
               scope.search();
             });
             scope.$on('changeSliderValues', function() {
-              resetFrom();
+              resetDocsPage();
               scope.search();
             });
 

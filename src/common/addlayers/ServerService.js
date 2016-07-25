@@ -586,7 +586,7 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     var domain = function(layerInfo) {
       if (layerInfo.hasOwnProperty('domain_name')) {
-        return layerInfo.DomainName;
+        return layerInfo.domain_name;
       }
       return '';
     };
@@ -625,11 +625,11 @@ var SERVER_SERVICE_USE_PROXY = true;
       return {
         id: layerInfo.id,
         add: true,
-        Abstract: layerInfo.abstract,
-        Name: layerInfo.domain_name,
-        Title: layerInfo.title,
-        LayerDate: layerInfo.layer_date,
-        LayerCategory: layerInfo.layer_category,
+        abstract: layerInfo.abstract,
+        name: layerInfo.domain_name,
+        title: layerInfo.title,
+        layerDate: layerInfo.layer_date,
+        layerCategory: Array.isArray(layerInfo.layer_category) ? layerInfo.layer_category.join(', ') : null,
         CRS: ['EPSG:4326'],
         detail_url: catalogKey_ !== null ? catalogList[catalogKey_].registryUrl + '/layer/' + layerInfo.id : null,
         thumbnail_url: layerInfo.ThumbnailURL ? (catalogList[catalogKey_].registryUrl + layerInfo.ThumbnailURL) : null,
@@ -739,12 +739,19 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (filter_options.size !== null) {
         url = url + '&d_docs_limit=' + filter_options.size;
       }
-      if (filter_options.from !== null) {
-        url = url + '&from=' + filter_options.from;
+      if (filter_options.docsPage > 0) {
+        url = url + '&d_docs_page=' + filter_options.docsPage;
       }
-
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
         url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
+      }
+      //[min_y, min_x TO max_y, max_x]
+      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length === 4) {
+        var spacialQuery = '[' + filter_options.mapPreviewCoordinatesBbox[0][1] + ',' +
+                             filter_options.mapPreviewCoordinatesBbox[0][0] +
+                             ' TO ' + filter_options.mapPreviewCoordinatesBbox[2][1] + ',' +
+                             filter_options.mapPreviewCoordinatesBbox[2][0] + ']';
+        url = url + '&q_geo=' + encodeURIComponent(spacialQuery);
       }
       return url;
     };

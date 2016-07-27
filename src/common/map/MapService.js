@@ -139,15 +139,26 @@
   })();
 
   function createBBoxFromCoordinatesFromProjectionIntoProjection(coordinates, fromProjection, toProjection) {
+
     if (!coordinates) {
       return [[]];
     }
+
     return [[
       ol.proj.transform([coordinates[0], coordinates[1]], fromProjection, toProjection),
       ol.proj.transform([coordinates[0], coordinates[3]], fromProjection, toProjection),
       ol.proj.transform([coordinates[2], coordinates[3]], fromProjection, toProjection),
       ol.proj.transform([coordinates[2], coordinates[1]], fromProjection, toProjection)
     ]];
+  }
+
+  function angleNormalize(angle) {
+    if (angle < -180) {
+      return 360 + angle;
+    }else if (angle > 180) {
+      return -360 + angle;
+    }
+    return angle;
   }
 
   function createGeoJSONLayerFromCoordinatesWithProjection(coordinates, projection) {
@@ -219,6 +230,7 @@
 
       this.createGeoJSONLayerFromCoordinatesWithProjection = createGeoJSONLayerFromCoordinatesWithProjection;
       this.createBBoxFromCoordinatesFromProjectionIntoProjection = createBBoxFromCoordinatesFromProjectionIntoProjection;
+      this.angleNormalize = angleNormalize;
 
       $rootScope.$on('conflict_mode', function() {
         editableLayers_ = service_.getLayers(true);

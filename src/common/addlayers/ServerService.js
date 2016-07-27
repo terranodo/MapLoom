@@ -744,13 +744,8 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
         url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
       }
-      //[min_y, min_x TO max_y, max_x]
-      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length === 4) {
-        var spacialQuery = '[' + filter_options.mapPreviewCoordinatesBbox[0][1] + ',' +
-                             filter_options.mapPreviewCoordinatesBbox[0][0] +
-                             ' TO ' + filter_options.mapPreviewCoordinatesBbox[2][1] + ',' +
-                             filter_options.mapPreviewCoordinatesBbox[2][0] + ']';
-        url = url + '&q_geo=' + encodeURIComponent(spacialQuery);
+      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox)) {
+        url = url + '&q_geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
       }
       if (filter_options.histogramFlag === true) {
         url = url + '&a_time_limit=1&a_time_gap=P1Y';

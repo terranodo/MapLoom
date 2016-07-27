@@ -34,7 +34,7 @@
               firstExtent = map.getView().calculateExtent(map.getSize());
 
               map.on('moveend', function(event) {
-                // $rootScope.$broadcast('moveendMap', event.frameState.extent);
+                $rootScope.$broadcast('moveendMap', event.frameState.extent);
               });
 
             };

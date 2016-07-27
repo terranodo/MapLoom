@@ -153,7 +153,13 @@
             scope.$on('moveendMap', function(event, coordinates) {
               mapPreviewChangeCount++;
               if (mapPreviewChangeCount > 1) {
-                scope.filterOptions.mapPreviewCoordinatesBbox = mapService.createBBoxFromCoordinatesFromProjectionIntoProjection(coordinates, mapService.getProjection(), 'EPSG:4326')[0];
+                coordinatesBbox = mapService.createBBoxFromCoordinatesFromProjectionIntoProjection(coordinates, mapService.getProjection(), 'EPSG:4326')[0];
+
+                //[min_y, min_x TO max_y, max_x]
+                scope.filterOptions.mapPreviewCoordinatesBbox = '[' + coordinatesBbox[0][1] + ',' +
+                    mapService.angleNormalize(coordinatesBbox[0][0]) + ' TO ' + coordinatesBbox[2][1] + ',' +
+                    mapService.angleNormalize(coordinatesBbox[2][0]) + ']';
+
                 scope.search();
               }
             });

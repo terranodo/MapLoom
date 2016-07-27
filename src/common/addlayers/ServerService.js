@@ -664,7 +664,6 @@ var SERVER_SERVICE_USE_PROXY = true;
 
         finalConfigs.push(configTemplate);
       }
-
       return finalConfigs;
     };
 
@@ -714,8 +713,8 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     this.reformatLayerHyperConfigs = function(elasticResponse, serverUrl) {
       rootScope_.$broadcast('totalOfDocs', elasticResponse['a.matchDocs']);
-      if (elasticResponse.aggregations) {
-        rootScope_.$broadcast('dateRangeHistogram', elasticResponse.aggregations.range);
+      if (elasticResponse['a.time']) {
+        rootScope_.$broadcast('dateRangeHistogram', elasticResponse['a.time']);
       }
       return createHyperSearchLayerObjects(elasticResponse['d.docs'], serverUrl);
     };
@@ -752,6 +751,9 @@ var SERVER_SERVICE_USE_PROXY = true;
                              ' TO ' + filter_options.mapPreviewCoordinatesBbox[2][1] + ',' +
                              filter_options.mapPreviewCoordinatesBbox[2][0] + ']';
         url = url + '&q_geo=' + encodeURIComponent(spacialQuery);
+      }
+      if (filter_options.histogramFlag === true) {
+        url = url + '&a_time_limit=1&a_time_gap=P1Y';
       }
       return url;
     };

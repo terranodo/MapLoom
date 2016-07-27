@@ -15,7 +15,6 @@
             var mapPreviewChangeCount = 0;
             var savedLayers = configService.configuration.map['layers'];
             scope.currentServerId = -1;
-            scope.currentServer = null;
             scope.filterOptions = {
               owner: null,
               text: null,
@@ -23,7 +22,8 @@
               size: 10,
               minYear: null,
               maxYear: null,
-              mapPreviewCoordinatesBbox: []
+              mapPreviewCoordinatesBbox: [],
+              histogramFlag: true
             };
             scope.previewCenter = [40, 30];
             scope.previewZoom = 1;
@@ -39,10 +39,9 @@
             scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
 
-            var server = angular.copy(serverService.getRegistryLayerConfig());
+            var server = serverService.getRegistryLayerConfig();
             if (goog.isDefAndNotNull(server)) {
-              scope.currentServerId = 0; //server.id;
-              scope.currentServer = server;
+              scope.currentServerId = 0;
             }
 
             var resetText = function() {
@@ -98,7 +97,7 @@
             };
 
             scope.getResults = function() {
-              return scope.currentServer.layersConfig;
+              return server.layersConfig;
             };
 
 
@@ -221,7 +220,7 @@
             };
 
             scope.isInCart = function(layerConfig) {
-              return cartLayerId.indexOf(layerConfig.Name) !== -1 ? true : false;
+              return cartLayerId.indexOf(layerConfig.id) !== -1 ? true : false;
             };
 
             scope.clearCart = function() {
@@ -230,7 +229,7 @@
             };
 
             scope.filterAddedLayers = function(layerConfig) {
-              return LayersService.filterAddedLayers(layerConfig, scope.currentServerId, layerConfig.Name);
+              return LayersService.filterAddedLayers(layerConfig, scope.currentServerId, layerConfig.name);
             };
 
             scope.$on('layers-loaded', function() {

@@ -13,7 +13,6 @@
           '100 BC', 0, 100, 500, 1000, 1500, 1600, 1700, 1800, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 1991,
           1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011,
           2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2050, 2100, 'Future'].slice(minIndex, topIndex);
-        // console.log(scope.sliderValues.slice(minIndex, topIndex));
         var sliderValues = scope.sliderValues.slice();
         var changeSliderValues = false;
 
@@ -84,7 +83,6 @@
             suma = suma + count.count;
             yearCount = Number(count.value.substring(0, 4));
             yearCountNext = counts[i + 1] === undefined ? null : Number(counts[i + 1].value.substring(0, 4));
-
             if (yearCount === sliderValue || (yearCount < sliderValue && yearCountNext > sliderValue)) {
               histogram.push({key: sliderValue, count: suma});
               suma = 0;
@@ -98,6 +96,7 @@
               histogram.push({key: sliderValue, count: 0});
               sliderIndex++;
               sliderValue = Number(sliderValues[sliderIndex]);
+              i = yearCount === sliderValue ? i - 1 : i;
             }
           }
           return histogram;
@@ -129,7 +128,6 @@
             return obj.count;
           }));
           histogram.counts = dateRangeHistogram(histogram.counts, scope.sliderValues);
-          console.log(histogram.counts);
           renderingSvgBars();
         }
 

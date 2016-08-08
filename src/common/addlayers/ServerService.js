@@ -16,6 +16,7 @@ var SERVER_SERVICE_USE_PROXY = true;
   var configService_ = null;
   var q_ = null;
   var serverCount = 0;
+  var catalogKey_ = null;
 
   module.provider('serverService', function() {
     this.$get = function($rootScope, $http, $q, $location, $translate, dialogService, configService) {
@@ -581,8 +582,8 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var domain = function(layerInfo) {
-      if (layerInfo.hasOwnProperty('DomainName')) {
-        return layerInfo.DomainName;
+      if (layerInfo.hasOwnProperty('domain_name')) {
+        return layerInfo.domain_name;
       }
       return '';
     };
@@ -614,19 +615,20 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createExtentFromHyper = function(layerInfo) {
-      return [layerInfo.MinX, layerInfo.MinY, layerInfo.MaxX, layerInfo.MaxY];
+      return [layerInfo.min_x, layerInfo.min_y, layerInfo.max_x, layerInfo.max_y];
     };
 
     var createHyperSearchLayerObject = function(layerInfo, serverUrl) {
       return {
         add: true,
-        Abstract: layerInfo.abstract,
-        Name: layerInfo.name,
-        Title: layerInfo.title,
-        LayerCategory: layerInfo.layer_category,
-        LayerId: layerInfo.id,
+        abstract: layerInfo.abstract,
+        name: layerInfo.domain_name,
+        title: layerInfo.title,
+        layerDate: layerInfo.layer_date,
+        layerCategory: Array.isArray(layerInfo.layer_category) ? layerInfo.layer_category.join(', ') : null,
+        layerId: layerInfo.id,
         CRS: ['EPSG:4326'],
-        detail_url: configService_.configuration.registryUrl + '/layer/' + layerInfo.id,
+        detail_url: catalogKey_ !== null ? catalogList[catalogKey_].registryUrl + '/layer/' + layerInfo.id : null,
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',
@@ -649,10 +651,12 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     var createHyperSearchLayerObjects = function(layerObjects, serverUrl) {
       var finalConfigs = [];
+      layerObjects = Array.isArray(layerObjects) ? layerObjects : [];
+
       //TODO: Update with handling multiple projections per layer if needed.
       for (var iLayer = 0; iLayer < layerObjects.length; iLayer += 1) {
         var layerInfo = layerObjects[iLayer];
-        var configTemplate = createHyperSearchLayerObject(layerInfo._source, serverUrl);
+        var configTemplate = createHyperSearchLayerObject(layerInfo, serverUrl);
 
         finalConfigs.push(configTemplate);
       }
@@ -687,7 +691,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       server.layersConfig = [];
       server.populatingLayersConfig = true;
       var config = createAuthorizationConfigForServer(server);
-      http_.get(searchUrl, body, config).then(function(xhr) {
+      http_.get(searchUrl, config).then(function(xhr) {
         if (xhr.status === 200) {
           server.layersConfig = layerConfigCallback(xhr.data, serverGeoserversearchUrl(searchUrl));
           rootScope_.$broadcast('layers-loaded', server.id);
@@ -705,11 +709,11 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.reformatLayerHyperConfigs = function(elasticResponse, serverUrl) {
-      rootScope_.$broadcast('totalOfDocs', elasticResponse.hits.total);
+      rootScope_.$broadcast('totalOfDocs', elasticResponse['a.matchDocs']);
       if (elasticResponse.aggregations) {
         rootScope_.$broadcast('dateRangeHistogram', elasticResponse.aggregations.range);
       }
-      return createHyperSearchLayerObjects(elasticResponse.hits.hits, serverUrl);
+      return createHyperSearchLayerObjects(elasticResponse['d.docs'], serverUrl);
     };
 
     this.reformatLayerConfigs = function(elasticResponse, serverUrl) {
@@ -722,186 +726,24 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.applyESFilter = function(url, filter_options) {
-      var queries = [];
       if (filter_options.text !== null) {
-        queries.push('q_text=' + filter_options.text);
+        url = url + '&q_text=' + filter_options.text;
       }
       if (filter_options.owner !== null) {
-        queries.push('owner__username__in=' + configService_.username);
+        url = url + '&owner__username__in=' + configService_.username;
       }
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
-        queries.push('q_time=' + encodeURIComponent('[' + filter_options.minYear +
-            '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]'));
-      }
-      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length === 4) {
-        console.log(filter_options.mapPreviewCoordinatesBbox);
-        //[min_y, min_x TO max_y, max_x]
-        var spatialQuery = '[' + filter_options.mapPreviewCoordinatesBbox[0][1] + ',' +
-                             filter_options.mapPreviewCoordinatesBbox[0][0] +
-                             ' TO ' + filter_options.mapPreviewCoordinatesBbox[2][1] + ',' +
-                             filter_options.mapPreviewCoordinatesBbox[2][0] + ']';
-        queries.push('q_geo=' + encodeURIComponent(spatialQuery));
-      }
-      if (queries.length > 0) {
-        url += 'q=';
-      }
-      for (var i = 0; i < queries.length; i++) {
-        if (i === 0) {
-          url += queries[i];
-        } else {
-          url += '&' + queries[i];
-        }
+        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
       }
 
       //`size` & `from` should be outside of the query, either at the begining or the end
       if (filter_options.size !== null) {
-        url += '&size=' + filter_options.size;
+        url += '&d_docs_limit=' + filter_options.size;
       }
-      if (filter_options.from !== null) {
-        url += '&from=' + filter_options.from;
+      if (filter_options.docsPage > 0) {
+        url = url + '&d_docs_page=' + filter_options.docsPage;
       }
-      dateRangeHistogram(undefined, filter_options.sliderValues);
       return url;
-    };
-
-    function dateRangeHistogram(counts, sliderValues) {
-      counts = counts || [
-        {
-          'count': 53,
-          'value': '1900-01-01T00:00:00Z'
-        },
-        {
-          'count': 10,
-          'value': '1901-01-01T00:00:00Z'
-        },
-        {
-          'count': 2,
-          'value': '1902-01-01T00:00:00Z'
-        },
-        {
-          'count': 4,
-          'value': '1903-01-01T00:00:00Z'
-        },{
-          'count': 4,
-          'value': '1913-01-01T00:00:00Z'
-        },{
-          'count': 5,
-          'value': '1916-01-01T00:00:00Z'
-        },{
-          'count': 10,
-          'value': '1966-01-01T00:00:00Z'
-        },{
-          'count': 10,
-          'value': '1996-01-01T00:00:00Z'
-        }];
-      if (!sliderValues || !counts) {
-        return [];
-      }
-      var suma = 0, sliderIndex = 0, histogram = [];
-
-      for (var i = 0; i < counts.length; i++) {
-        var count = counts[i];
-        var sliderValue = Number(sliderValues[sliderIndex]);
-        suma = suma + count.count;
-        yearCount = Number(count.value.substring(0, 4));
-        yearCountNext = counts[i + 1] === undefined ? null : Number(counts[i + 1].value.substring(0, 4));
-
-        while (sliderIndex < sliderValues.length && (isNaN(sliderValue) || yearCount > sliderValue)) {
-          sliderIndex++;
-          sliderValue = Number(sliderValues[sliderIndex]);
-          histogram.push({key: sliderValues[sliderIndex], doc_count: 0});
-        }
-        if (yearCount === sliderValue || yearCountNext > sliderValue) {
-          histogram.push({key: sliderValue, doc_count: suma});
-          suma = 0;
-          sliderIndex++;
-        }else if (i + 1 === counts.length) {
-          histogram.push({key: sliderValue, doc_count: suma});
-        }
-      }
-      return histogram;
-    }
-
-    this.applyBodyFilter = function(filter_options) {
-      var ranges = [];
-      var mapExtentFilter = [];
-      var textFilter = [];
-      var rangeSliderFilter = [];
-      var body = {
-                   'query': {
-                     'bool': {
-                       'must': []
-                     }
-                   }
-                 };
-      if (filter_options.sliderValues) {
-        for (var i = 10; i < filter_options.sliderValues.length - 2; i++) {
-          ranges.push({ 'from': filter_options.sliderValues[i].toString(), 'to': filter_options.sliderValues[i + 1].toString()});
-        }
-      }
-      if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
-        rangeSliderFilter = [{
-                              'range' : {
-                                'LayerDate' : {
-                                  'gte': filter_options.minYear + '-01-01T00:00:00',
-                                  'lte': filter_options.maxYear + '-01-01T00:00:00'
-                                 }
-                              }
-                             }];
-        body.query.bool.must.push.apply(body.query.bool.must, rangeSliderFilter);
-      }
-      if (filter_options.text !== null) {
-        textFilter = [{
-                        'query_string': {
-                          'query': filter_options.text
-                        }
-                      }];
-        body.query.bool.must.push.apply(body.query.bool.must, textFilter);
-      }
-      if (filter_options.mapPreviewCoordinatesBbox && filter_options.mapPreviewCoordinatesBbox.length === 4) {
-        mapExtentFilter = [
-          {
-            'range': {
-              'MinX': {
-                'gte': filter_options.mapPreviewCoordinatesBbox[0][0]
-              }
-            }
-          },
-          {
-            'range': {
-              'MaxX': {
-                'lte': filter_options.mapPreviewCoordinatesBbox[2][0]
-              }
-            }
-          },
-          {
-            'range': {
-              'MinY': {
-                'gte': filter_options.mapPreviewCoordinatesBbox[0][1]
-              }
-            }
-          },
-          {
-            'range': {
-              'MaxY': {
-                'lte': filter_options.mapPreviewCoordinatesBbox[2][1]
-              }
-            }
-          }];
-        body.query.bool.must.push.apply(body.query.bool.must, mapExtentFilter);
-      }
-      if (ranges.length > 0) {
-        body.aggs = {
-          'range': {
-            'date_range': {
-              'field': 'LayerDate',
-              'format': 'yyyy',
-              'ranges': ranges
-            }
-          }
-        };
-      }
-      return body;
     };
 
     this.applyFavoritesFilter = function(url, filterOptions) {
@@ -916,7 +758,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (!isNaN(catalogKey) && catalogList.length >= catalogKey + 1) {
         return catalogKey;
       }else {
-        return false;
+        return null;
       }
     };
 
@@ -984,14 +826,17 @@ var SERVER_SERVICE_USE_PROXY = true;
     this.addSearchResultsForHyper = function(server, filterOptions, catalogKey) {
       var searchUrl;
       var bodySearch = {};
-      catalogKey = service_.validateCatalogKey(catalogKey);
-      if (catalogKey === false) {
+      catalogKey_ = service_.validateCatalogKey(catalogKey);
+      if (catalogKey_ === false) {
         return false;
       }
-      searchUrl = catalogList[catalogKey].url + '_search?';
+
+      searchUrl = configService_.configuration.searchApiURL +
+          '?search_engine=' + catalogList[catalogKey_].searchEngine +
+          '&search_engine_endpoint=' + encodeURIComponent(catalogList[catalogKey_].url);
+
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);
-        bodySearch = service_.applyBodyFilter(filterOptions);
       }
       return addSearchResults(searchUrl, bodySearch, server, service_.reformatLayerHyperConfigs);
     };

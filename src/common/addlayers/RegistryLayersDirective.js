@@ -19,7 +19,7 @@
             scope.filterOptions = {
               owner: null,
               text: null,
-              from: null,
+              docsPage: 1,
               size: 10,
               minYear: null,
               maxYear: null,
@@ -51,8 +51,8 @@
             var resetOwner = function() {
               scope.filterOptions.owner = null;
             };
-            var resetFrom = function() {
-              scope.filterOptions.from = null;
+            var resetDocsPage = function() {
+              scope.filterOptions.docsPage = 1;
             };
             var resetMapPreview = function() {
               if (mapPreviewChangeCount > 1) {
@@ -65,10 +65,12 @@
             var clearFilters = function() {
               resetText();
               resetOwner();
-              resetFrom();
+              resetDocsPage();
               searchFavorites = false;
               searchHyper = false;
             };
+
+            scope.resetDocsPage = resetDocsPage;
 
             scope.defaultSearch = function() {
               clearFilters();
@@ -101,27 +103,20 @@
 
 
             scope.nextPage = function() {
-              if (scope.filterOptions.from !== null) {
-                scope.filterOptions.from += scope.filterOptions.size;
-              } else {
-                scope.filterOptions.from = scope.filterOptions.size;
-              }
+              scope.filterOptions.docsPage++;
               scope.search();
             };
             scope.hasNext = function() {
-              if (scope.getResults()) {
-                return scope.getResults().length === scope.filterOptions.size;
+              if (scope.pagination.currentPage > 0) {
+                return scope.pagination.pages > scope.pagination.currentPage;
               }
             };
             scope.hasPrevious = function() {
-              return scope.filterOptions.from !== null;
+              return scope.filterOptions.docsPage > 1;
             };
             scope.previousPage = function() {
-              if (scope.filterOptions.from !== null) {
-                scope.filterOptions.from -= scope.filterOptions.size;
-                if (scope.filterOptions.from < 1) {
-                  scope.filterOptions.from = null;
-                }
+              if (scope.filterOptions.docsPage > 1) {
+                scope.filterOptions.docsPage--;
               }
               scope.search();
             };
@@ -131,7 +126,6 @@
               if (searchFavorites) {
                 serverService.addSearchResultsForFavorites(serverService.getRegistryLayerConfig(), scope.filterOptions);
               } else if (searchHyper) {
-                // serverService.addSearchResultsForHyper(serverService.getRegistryLayerConfig(), scope.filterOptions, scope.catalogKey);
                 serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalogKey);
               } else {
                 serverService.populateLayersConfigElastic(serverService.getRegistryLayerConfig(), scope.filterOptions);
@@ -144,18 +138,18 @@
               scope.pagination.showdocs = scope.pagination.sizeDocuments < 10 ? scope.pagination.sizeDocuments : scope.filterOptions.size;
               scope.pagination.docsSoFar = goog.isDefAndNotNull(scope.filterOptions.from) ? scope.filterOptions.from + 10 : scope.filterOptions.size;
               scope.pagination.docsSoFar = scope.pagination.docsSoFar > totalDocsCount ? totalDocsCount : scope.pagination.docsSoFar;
-              scope.pagination.currentPage = scope.pagination.showdocs === 0 ? 0 : (scope.filterOptions.from / scope.pagination.showdocs) + 1;
+              scope.pagination.currentPage = scope.filterOptions.docsPage;
               scope.pagination.pages = Math.ceil(scope.pagination.sizeDocuments / scope.filterOptions.size);
             });
 
             $('#registry-layer-dialog').on('shown.bs.modal', scope.search);
 
             scope.$on('slideEnded', function() {
-              resetFrom();
+              resetDocsPage();
               scope.search();
             });
             scope.$on('changeSliderValues', function() {
-              resetFrom();
+              resetDocsPage();
               scope.search();
             });
 
@@ -181,6 +175,7 @@
             };
 
             var addLayer = function(layerConfig) {
+              console.log(layerConfig);
               layerConfig['registry'] = true;
               LayersService.addLayer(layerConfig, scope.currentServerId, server);
             };
@@ -217,7 +212,7 @@
             };
 
             scope.addToCart = function(layerConfig) {
-              var layerId = layerConfig.LayerId;
+              var layerId = layerConfig.layerId;
               var idIndex = cartLayerId.indexOf(layerId);
               if (idIndex === -1) {
                 cartLayerId.push(layerId);
@@ -229,7 +224,7 @@
             };
 
             scope.isInCart = function(layerConfig) {
-              var idInCart = cartLayerId.indexOf(layerConfig.LayerId) !== -1 ? true : false;
+              var idInCart = cartLayerId.indexOf(layerConfig.layerId) !== -1 ? true : false;
               return idInCart;
             };
 

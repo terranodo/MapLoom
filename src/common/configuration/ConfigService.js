@@ -104,10 +104,26 @@
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
-        registryUrl: 'http://exchange-dev.boundlessps.com/registry',
+        searchApiURL: 'http://52.53.235.149/registry/api/search/',
         catalogList: [
-          {name: 'hypersearch catalog 1', url: 'http://exchange-dev.boundlessps.com/hypermap/'},
-          {name: 'hypersearch catalog 2', url: 'http://exchange-dev.boundlessps.com/hypermap/'}
+          {
+            searchEngine: 'solr',
+            name: 'Solr catalog',
+            url: 'http://54.221.223.91:8983/solr/hypermap/select/',
+            registryUrl: 'http://52.38.116.143'
+          },
+          {
+            searchEngine: 'elasticsearch',
+            name: 'hypersearch catalog 1',
+            url: 'http://52.41.158.6:9200/hypermap/_search',
+            registryUrl: 'http://52.38.116.143'
+          },
+          {
+            searchEngine: 'elasticsearch',
+            name: 'exchange-dev catalog',
+            url: 'http://exchange-dev.boundlessps.com/hypermap/_search/',
+            registryUrl: 'http://exchange-dev.boundlessps.com/registry'
+          }
         ]
       };
 

@@ -20,7 +20,7 @@
           var conf = layer.get('metadata').config;
           if (conf.source === currentServerId) {
             if (conf.registry === true) {
-              if (conf.registryConfig.LayerId === layerConfig.LayerId) {
+              if (conf.registryConfig.layerId === layerConfig.layerId) {
                 show = false;
                 break;
               }

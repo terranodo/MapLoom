@@ -209,12 +209,12 @@ describe('registryLayersDirective', function() {
   describe('#addLayers', function() {
     var layerConfig, minimalConfig, addLayerSpy, zoomToExtentForProjectionSpy, server;
     beforeEach(function() {
-      layerConfig = { add: true, Name: 'Test', extent: [], CRS: ['EPSG:4326'] };
+      layerConfig = { add: true, Name: 'Test', Title: 'TestTitle', extent: [], CRS: ['EPSG:4326'] };
       server = angular.copy(serverService.getRegistryLayerConfig());
       compiledElement.scope().cart = [layerConfig];
       scope.$digest();
       minimalConfig = { source: 0,
-                        name: layerConfig.Name,
+                        name: layerConfig.Title,
                         registry: true,
                         registryConfig: layerConfig
                       };
@@ -284,10 +284,10 @@ describe('registryLayersDirective', function() {
       cartLayerId = [1];
     });
     it('returns true if in cart', function() {
-      expect(compiledElement.scope().isInCart({'LayerId':1})).toEqual(true);
+      expect(compiledElement.scope().isInCart({'layerId':1})).toEqual(true);
     });
     it('returns false if not in cart', function() {
-      expect(compiledElement.scope().isInCart({'LayerId':2})).toEqual(false);
+      expect(compiledElement.scope().isInCart({'layerId':2})).toEqual(false);
     });
   });
 });

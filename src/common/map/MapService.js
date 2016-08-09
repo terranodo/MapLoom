@@ -150,6 +150,15 @@
     ]];
   }
 
+  function angleNormalize(angle) {
+    if (angle < -180) {
+      return 360 + angle;
+    }else if (angle > 180) {
+      return -360 + angle;
+    }
+    return angle;
+  }
+
   function createGeoJSONLayerFromCoordinatesWithProjection(coordinates, projection) {
     var geojsonObject = {
       'type': 'Feature',
@@ -219,6 +228,7 @@
 
       this.createGeoJSONLayerFromCoordinatesWithProjection = createGeoJSONLayerFromCoordinatesWithProjection;
       this.createBBoxFromCoordinatesFromProjectionIntoProjection = createBBoxFromCoordinatesFromProjectionIntoProjection;
+      this.angleNormalize = angleNormalize;
 
       $rootScope.$on('conflict_mode', function() {
         editableLayers_ = service_.getLayers(true);

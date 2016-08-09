@@ -710,8 +710,8 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     this.reformatLayerHyperConfigs = function(elasticResponse, serverUrl) {
       rootScope_.$broadcast('totalOfDocs', elasticResponse['a.matchDocs']);
-      if (elasticResponse.aggregations) {
-        rootScope_.$broadcast('dateRangeHistogram', elasticResponse.aggregations.range);
+      if (elasticResponse['a.time']) {
+        rootScope_.$broadcast('dateRangeHistogram', elasticResponse['a.time']);
       }
       return createHyperSearchLayerObjects(elasticResponse['d.docs'], serverUrl);
     };
@@ -734,6 +734,14 @@ var SERVER_SERVICE_USE_PROXY = true;
       }
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
         url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
+      }
+
+      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox)) {
+        url = url + '&q_geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
+      }
+
+      if (filter_options.histogramFlag === true) {
+        url = url + '&a_time_limit=1&a_time_gap=P1Y';
       }
 
       //`size` & `from` should be outside of the query, either at the begining or the end

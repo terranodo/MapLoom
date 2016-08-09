@@ -15,7 +15,6 @@
             var mapPreviewChangeCount = 0;
             var savedLayers = configService.configuration.map['layers'];
             scope.currentServerId = -1;
-            scope.currentServer = null;
             scope.filterOptions = {
               owner: null,
               text: null,
@@ -23,7 +22,8 @@
               size: 10,
               minYear: null,
               maxYear: null,
-              mapPreviewCoordinatesBbox: []
+              mapPreviewCoordinatesBbox: [],
+              histogramFlag: true
             };
             scope.previewCenter = [40, 30];
             scope.previewZoom = 1;
@@ -39,10 +39,9 @@
             scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
 
-            var server = angular.copy(serverService.getRegistryLayerConfig());
+            var server = serverService.getRegistryLayerConfig();
             if (goog.isDefAndNotNull(server)) {
-              scope.currentServerId = 0; //server.id;
-              scope.currentServer = server;
+              scope.currentServerId = 0;
             }
 
             var resetText = function() {
@@ -98,7 +97,7 @@
             };
 
             scope.getResults = function() {
-              return scope.currentServer.layersConfig;
+              return server.layersConfig;
             };
 
 
@@ -156,7 +155,11 @@
             scope.$on('moveendMap', function(event, coordinates) {
               mapPreviewChangeCount++;
               if (mapPreviewChangeCount > 1) {
-                scope.filterOptions.mapPreviewCoordinatesBbox = mapService.createBBoxFromCoordinatesFromProjectionIntoProjection(coordinates, mapService.getProjection(), 'EPSG:4326')[0];
+                coordinatesBbox = mapService.createBBoxFromCoordinatesFromProjectionIntoProjection(coordinates, mapService.getProjection(), 'EPSG:4326')[0];
+                //[min_y, min_x TO max_y, max_x] from the lower-left to the upper-right.
+                scope.filterOptions.mapPreviewCoordinatesBbox = '[' + coordinatesBbox[0][1] + ',' +
+                    mapService.angleNormalize(coordinatesBbox[0][0]) + ' TO ' + coordinatesBbox[2][1] + ',' +
+                    mapService.angleNormalize(coordinatesBbox[2][0]) + ']';
                 scope.search();
               }
             });
@@ -234,7 +237,7 @@
             };
 
             scope.filterAddedLayers = function(layerConfig) {
-              return LayersService.filterAddedLayers(layerConfig, scope.currentServerId, layerConfig.Name);
+              return LayersService.filterAddedLayers(layerConfig, scope.currentServerId, layerConfig.name);
             };
 
             scope.$on('layers-loaded', function() {

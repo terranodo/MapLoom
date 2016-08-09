@@ -84,17 +84,17 @@ describe('registryLayersDirective', function() {
         expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
           text: null,
           owner: null,
-          from: 10,
+          docsPage: 2,
           size: 10
         }));
       });
       it('next page if from is set', function() {
-        compiledElement.scope().filterOptions.from = 10;
+        compiledElement.scope().filterOptions.docsPage = 2;
         compiledElement.scope().nextPage();
         expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
           text: null,
           owner: null,
-          from: 20,
+          docsPage: 3,
           size: 10
         }));
       });
@@ -105,51 +105,53 @@ describe('registryLayersDirective', function() {
     });
     describe('#hasNext', function() {
       it('returns true if has next', function() {
-        spyOn(compiledElement.scope(), 'getResults').and.returnValue([1,1,1,1,1,1,1,1,1,1]);
+        compiledElement.scope().pagination.pages = 2;
+        compiledElement.scope().pagination.currentPage = 1;
         expect(compiledElement.scope().hasNext()).toEqual(true);
       });
       it('returns false if result size is less than the search size', function() {
-        spyOn(compiledElement.scope(), 'getResults').and.returnValue([1]);
+        compiledElement.scope().pagination.pages = 1;
+        compiledElement.scope().pagination.currentPage = 1;
         expect(compiledElement.scope().hasNext()).toEqual(false);
       });
     });
     describe('#hasPrevious', function() {
       it('returns true if has previous', function() {
-        compiledElement.scope().filterOptions.from = 10;
+        compiledElement.scope().filterOptions.docsPage = 2;
         expect(compiledElement.scope().hasPrevious()).toEqual(true);
       });
       it('returns false if result is first page', function() {
-        compiledElement.scope().filterOptions.from = null;
+        compiledElement.scope().filterOptions.docsPage = 1;
         expect(compiledElement.scope().hasPrevious()).toEqual(false);
       });
     });
     describe('#previous page', function() {
-      it('sets from', function() {
+      it('sets docsPage', function() {
         compiledElement.scope().previousPage();
         expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
           text: null,
           owner: null,
-          from: null,
+          docsPage: 1,
           size: 10
         }));
       });
       it('previous page if from is set', function() {
-        compiledElement.scope().filterOptions.from = 20;
+        compiledElement.scope().filterOptions.docsPage = 20;
         compiledElement.scope().previousPage();
         expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
           text: null,
           owner: null,
-          from: 10,
+          docsPage: 19,
           size: 10
         }));
       });
-      it('previous is first page set to null', function() {
-        compiledElement.scope().filterOptions.from = 10;
+      it('previous is first page set to 1', function() {
+        compiledElement.scope().filterOptions.docsPage = 2;
         compiledElement.scope().previousPage();
         expect(compiledElement.scope().filterOptions).toEqual(jasmine.objectContaining({
           text: null,
           owner: null,
-          from: null,
+          docsPage: 1,
           size: 10
         }));
       });
@@ -256,8 +258,7 @@ describe('registryLayersDirective', function() {
     describe('with results', function() {
       var layerConfig = { Title: 'Test', add: true, extent: [], CRS: 'EPSG:4326' };
       beforeEach(function() {
-        compiledElement.scope().currentServer = angular.copy(serverService.getRegistryLayerConfig());
-        compiledElement.scope().currentServer.layersConfig.push(layerConfig);
+        spyOn(compiledElement.scope(), 'getResults').and.returnValue([layerConfig]);
         scope.$digest();
       });
       it('click on a result adds it to cart', function() {

@@ -618,11 +618,11 @@ var SERVER_SERVICE_USE_PROXY = true;
       return [layerInfo.min_x, layerInfo.min_y, layerInfo.max_x, layerInfo.max_y];
     };
 
-    var createHyperSearchLayerObject = function(layerInfo, serverUrl) {
+    var createHyperSearchLayerObject = function(layerInfo) {
       return {
         add: true,
         abstract: layerInfo.abstract,
-        name: layerInfo.domain_name,
+        name: layerInfo.name,
         title: layerInfo.title,
         layerDate: layerInfo.layer_date,
         layerCategory: Array.isArray(layerInfo.layer_category) ? layerInfo.layer_category.join(', ') : null,
@@ -649,14 +649,14 @@ var SERVER_SERVICE_USE_PROXY = true;
       return finalConfigs;
     };
 
-    var createHyperSearchLayerObjects = function(layerObjects, serverUrl) {
+    var createHyperSearchLayerObjects = function(layerObjects) {
       var finalConfigs = [];
       layerObjects = Array.isArray(layerObjects) ? layerObjects : [];
 
       //TODO: Update with handling multiple projections per layer if needed.
       for (var iLayer = 0; iLayer < layerObjects.length; iLayer += 1) {
         var layerInfo = layerObjects[iLayer];
-        var configTemplate = createHyperSearchLayerObject(layerInfo, serverUrl);
+        var configTemplate = createHyperSearchLayerObject(layerInfo);
 
         finalConfigs.push(configTemplate);
       }
@@ -685,8 +685,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       return '/geoserver/wms';
     };
 
-    var addSearchResults = function(searchUrl, body, server, layerConfigCallback) {
-      body = body || {};
+    var addSearchResults = function(searchUrl, server, layerConfigCallback) {
       var layers_loaded = false;
       server.layersConfig = [];
       server.populatingLayersConfig = true;
@@ -713,7 +712,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (elasticResponse['a.time']) {
         rootScope_.$broadcast('dateRangeHistogram', elasticResponse['a.time']);
       }
-      return createHyperSearchLayerObjects(elasticResponse['d.docs'], serverUrl);
+      return createHyperSearchLayerObjects(elasticResponse['d.docs']);
     };
 
     this.reformatLayerConfigs = function(elasticResponse, serverUrl) {
@@ -736,7 +735,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
       }
 
-      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox)) {
+      if (angular.isArray(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length) {
         url = url + '&q_geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
       }
 
@@ -766,7 +765,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (!isNaN(catalogKey) && catalogList.length >= catalogKey + 1) {
         return catalogKey;
       }else {
-        return null;
+        return false;
       }
     };
 
@@ -776,7 +775,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);
       }
-      return addSearchResults(searchUrl, {}, server, service_.reformatLayerConfigs);
+      return addSearchResults(searchUrl, server, service_.reformatLayerConfigs);
     };
 
     this.populateLayersConfigInelastic = function(server, deferredResponse) {
@@ -833,7 +832,6 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     this.addSearchResultsForHyper = function(server, filterOptions, catalogKey) {
       var searchUrl;
-      var bodySearch = {};
       catalogKey_ = service_.validateCatalogKey(catalogKey);
       if (catalogKey_ === false) {
         return false;
@@ -846,7 +844,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);
       }
-      return addSearchResults(searchUrl, bodySearch, server, service_.reformatLayerHyperConfigs);
+      return addSearchResults(searchUrl, server, service_.reformatLayerHyperConfigs);
     };
 
     this.addSearchResultsForFavorites = function(server, filterOptions) {
@@ -854,7 +852,7 @@ var SERVER_SERVICE_USE_PROXY = true;
       if (filterOptions !== null) {
         searchUrl = this.applyFavoritesFilter(searchUrl, filterOptions);
       }
-      return addSearchResults(searchUrl, {}, server, service_.reformatConfigForFavorites);
+      return addSearchResults(searchUrl, server, service_.reformatConfigForFavorites);
     };
 
     this.populateLayersConfig = function(server, force) {

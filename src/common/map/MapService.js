@@ -636,10 +636,10 @@
       } else {
         if (fullConfig.type && fullConfig.type == 'mapproxy_tms') {
           var layername = '';
-          if (fullConfig.name.split(':').length > 1) {
-            layername = fullConfig.Name.split(':')[1];
+          if (fullConfig.name && fullConfig.name.split(':').length > 1) {
+            layername = fullConfig.name.split(':')[1];
           } else {
-            layername = fullConfig.Name;
+            layername = fullConfig.name;
           }
 
           layer = new ol.layer.Tile({

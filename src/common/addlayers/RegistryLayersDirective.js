@@ -109,6 +109,7 @@
               if (scope.pagination.currentPage > 0) {
                 return scope.pagination.pages > scope.pagination.currentPage;
               }
+              return false;
             };
             scope.hasPrevious = function() {
               return scope.filterOptions.docsPage > 1;
@@ -178,7 +179,6 @@
             };
 
             var addLayer = function(layerConfig) {
-              console.log(layerConfig);
               layerConfig['registry'] = true;
               LayersService.addLayer(layerConfig, scope.currentServerId, server);
             };

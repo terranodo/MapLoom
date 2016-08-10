@@ -635,20 +635,13 @@
         });
       } else {
         if (fullConfig.type && fullConfig.type == 'mapproxy_tms') {
-          var layername = '';
-          if (fullConfig.name && fullConfig.name.split(':').length > 1) {
-            layername = fullConfig.name.split(':')[1];
-          } else {
-            layername = fullConfig.name;
-          }
-
           layer = new ol.layer.Tile({
             metadata: {
               name: minimalConfig.name,
               url: goog.isDefAndNotNull(mostSpecificUrl) ? mostSpecificUrl : undefined,
               title: fullConfig.Title,
               extent: fullConfig['extent'],
-              abstract: fullConfig.Abstract,
+              abstract: fullConfig.abstract,
               readOnly: false,
               editable: false,
               projection: service_.getCRSCode(fullConfig.CRS),
@@ -659,7 +652,7 @@
             },
             visible: true,
             source: new ol.source.XYZ({
-              url: fullConfig.detail_url + '/map/wmts/' + layername + '/default_grid/{z}/{x}/{y}.png'
+              url: fullConfig.detail_url
             })
           });
         } else if (server.ptype === 'gxp_osmsource') {

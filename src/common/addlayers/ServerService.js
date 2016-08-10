@@ -619,6 +619,7 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createHyperSearchLayerObject = function(layerInfo) {
+      console.log(layerInfo);
       return {
         add: true,
         abstract: layerInfo.abstract,
@@ -628,7 +629,8 @@ var SERVER_SERVICE_USE_PROXY = true;
         layerCategory: Array.isArray(layerInfo.layer_category) ? layerInfo.layer_category.join(', ') : null,
         layerId: layerInfo.id,
         CRS: ['EPSG:4326'],
-        detail_url: catalogKey_ !== null ? catalogList[catalogKey_].registryUrl + '/layer/' + layerInfo.id : null,
+        tile_url: layerInfo.tile_url,
+        detail_url: 'http://localhost/' + 'registry/hypermap/' + 'layer' + layerInfo.detail_url.split('layers')[1],
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',

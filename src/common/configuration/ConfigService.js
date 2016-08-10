@@ -48,7 +48,7 @@
 
     this.$get = function($window, $http, $cookies, $location, $translate) {
       service_ = this;
-
+      var serverLocation = $location.protocol() + '://' + $location.host();
       this.configuration = {
         about: {
           title: $translate.instant('new_map'),
@@ -104,25 +104,17 @@
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
-        searchApiURL: 'http://52.53.235.149/registry/api/search/',
+        searchApiURL: serverLocation + '/registry/api/search/hypermap/',
         catalogList: [
-          {
-            searchEngine: 'solr',
-            name: 'Solr catalog',
-            url: 'http://54.221.223.91:8983/solr/hypermap/select/',
-            registryUrl: 'http://52.38.116.143'
-          },
           {
             searchEngine: 'elasticsearch',
             name: 'hypersearch catalog 1',
-            url: 'http://52.41.158.6:9200/hypermap/_search',
-            registryUrl: 'http://52.38.116.143'
+            url: serverLocation + ':9200/'
           },
           {
-            searchEngine: 'elasticsearch',
-            name: 'exchange-dev catalog',
-            url: 'http://exchange-dev.boundlessps.com/hypermap/_search/',
-            registryUrl: 'http://exchange-dev.boundlessps.com/registry'
+            searchEngine: 'solr',
+            name: 'Solr catalog',
+            url: 'http://54.221.223.91:8983/solr/hypermap/select/'
           }
         ]
       };

@@ -16,6 +16,6 @@ COPY . /usr/src/app
 RUN bower install
 RUN grunt
 
-EXPOSE 9000
+EXPOSE 3000
 
 CMD [ "grunt", "serve" ]

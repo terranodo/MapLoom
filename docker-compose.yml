@@ -2,8 +2,4 @@ version: '2'
 services:
 
   maploom:
-    build: .
-    volumes:
-      - './src:/usr/src/app/src'
-    ports:
-      - "3000:3000"
+    image: terranodo/maploom

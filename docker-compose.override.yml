@@ -1,0 +1,10 @@
+version: '2'
+services:
+
+  maploom:
+    build: .
+    volumes:
+      - './src:/usr/src/app/src'
+      - 'Gruntfile.js:/usr/src/app/Gruntifle.js'
+    ports:
+      - "3000:3000"

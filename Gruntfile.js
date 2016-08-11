@@ -51,6 +51,18 @@ module.exports = function ( grunt ) {
         ' */\n'
     },
 
+    /**
+     * For development
+     */
+    connect: {
+      server: {
+        options: {
+          base: 'app',
+          keepalive: true
+        }
+      }
+    },
+
     gjslint: {
       options: {
         flags: [

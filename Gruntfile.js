@@ -571,7 +571,7 @@ module.exports = function ( grunt ) {
    */
   grunt.renameTask( 'watch', 'delta' );
   grunt.registerTask( 'watch', [ 'build', 'delta' ] );
-  grunt.registerTask('serve', [ 'watch', 'connect:server' ]);
+  grunt.registerTask('serve', [ 'connect:server', 'watch' ]);
   grunt.registerTask('test', ['karma:unit']);
 
   /**

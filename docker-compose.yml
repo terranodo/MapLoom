@@ -1,7 +1,7 @@
 version: '2'
 services:
 
-  ui:
+  maploom:
     build: .
     volumes:
       - './src:/usr/src/app/src'
@@ -46,6 +46,6 @@ services:
     image: terranodo/nginx:3k8k
     links:
       - django
-      - ui
+      - maploom
     ports:
       - "80:80"

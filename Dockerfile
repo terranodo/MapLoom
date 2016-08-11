@@ -11,11 +11,10 @@ COPY package.json /usr/src/app/
 COPY bower.json /usr/src/app/
 COPY bower-local /usr/src/app/bower-local
 
+COPY . /usr/src/app
+
 RUN npm install
 RUN bower install
-
-# Bundle app source
-COPY . /usr/src/app
 
 RUN grunt
 

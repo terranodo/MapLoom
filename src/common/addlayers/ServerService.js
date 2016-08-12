@@ -619,7 +619,6 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createHyperSearchLayerObject = function(layerInfo) {
-      console.log(layerInfo);
       return {
         add: true,
         abstract: layerInfo.abstract,
@@ -630,7 +629,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         layerId: layerInfo.id,
         CRS: ['EPSG:4326'],
         tile_url: layerInfo.tile_url,
-        detail_url: 'http://localhost/' + 'registry/hypermap/' + 'layer' + layerInfo.detail_url.split('layers')[1],
+        detail_url: 'http://localhost/' + 'registry/hypermap/' + 'layer' + layerInfo.tile_url.split('layers')[1],
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',

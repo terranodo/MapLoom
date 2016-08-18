@@ -104,7 +104,7 @@
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
-        searchApiURL: serverLocation + '/registry/api/search/hypermap/',
+        searchApiURL: serverLocation + '/registry/hypermap/api/',
         catalogList: [
           {
             searchEngine: 'elasticsearch',

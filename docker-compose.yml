@@ -45,7 +45,7 @@ services:
       - C_FORCE_ROOT=1
 
   nginx:
-    image: terranodo/nginx:3k8k
+    build: docker/nginx
     links:
       - django
       - maploom

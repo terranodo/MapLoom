@@ -49,6 +49,7 @@
     this.$get = function($window, $http, $cookies, $location, $translate) {
       service_ = this;
       var serverLocation = $location.protocol() + '://' + $location.host();
+
       this.configuration = {
         about: {
           title: $translate.instant('new_map'),
@@ -104,7 +105,9 @@
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
+        serverLocation: serverLocation,
         searchApiURL: serverLocation + '/registry/hypermap/api/',
+        searchApiURL2: serverLocation + '/registry/api/catalogs/',
         catalogList: [
           {
             searchEngine: 'elasticsearch',

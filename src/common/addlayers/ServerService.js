@@ -16,7 +16,6 @@ var SERVER_SERVICE_USE_PROXY = true;
   var configService_ = null;
   var q_ = null;
   var serverCount = 0;
-  var catalogKey_ = null;
 
   module.provider('serverService', function() {
     this.$get = function($rootScope, $http, $q, $location, $translate, dialogService, configService) {
@@ -29,12 +28,15 @@ var SERVER_SERVICE_USE_PROXY = true;
       configService_ = configService;
       configService_.serverList = servers;
       q_ = $q;
-      catalogList = configService.configuration.catalogList;
       return this;
     };
 
-    this.getCatalogList = function() {
-      return catalogList;
+    this.getCatalogList = function(callback) {
+      http_.get(configService_.configuration.searchApiURL2).then(function(data) {
+        if (data) {
+          return callback(data);
+        }
+      });
     };
 
     this.getServers = function() {
@@ -619,6 +621,21 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createHyperSearchLayerObject = function(layerInfo) {
+
+      /* Temporaly script to delete ":" extra info in layerInfo.tile_url
+      * before : http://localhost/registry/hypermap/layer/44/map/wmts/osm:placenames_capital/default_grid/1/1/0.png
+      * after: http://localhost/registry/hypermap/layer/44/map/wmts/placenames_capital/default_grid/1/1/0.png
+      */
+      if (layerInfo.tile_url) {
+        var tile_url_splited = layerInfo.tile_url.split(':');
+
+        if (tile_url_splited.length === 2) {
+          var middle = tile_url_splited[0].split('/');
+          middle[middle.length - 1] = '';
+          layerInfo.tile_url = middle.join('/') + tile_url_splited[1];
+        }
+      }
+
       return {
         add: true,
         abstract: layerInfo.abstract,
@@ -629,7 +646,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         layerId: layerInfo.id,
         CRS: ['EPSG:4326'],
         tile_url: layerInfo.tile_url,
-        detail_url: layerInfo.tile_url ? 'http://localhost/' + 'registry/hypermap/' + 'layer' + layerInfo.tile_url.split('layer')[1] : null,
+        detail_url: layerInfo.tile_url ? 'http://localhost' + layerInfo.tile_url : null,
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',
@@ -761,15 +778,6 @@ var SERVER_SERVICE_USE_PROXY = true;
       return url;
     };
 
-    this.validateCatalogKey = function(catalogKey) {
-      catalogKey = Number(catalogKey);
-      if (!isNaN(catalogKey) && catalogList.length >= catalogKey + 1) {
-        return catalogKey;
-      }else {
-        return false;
-      }
-    };
-
     this.populateLayersConfigElastic = function(server, filterOptions) {
       //var searchUrl = 'http://beta.mapstory.org/api/layers/search/?is_published=true&limit=100';
       var searchUrl = '/api/layers/search/?is_published=true&limit=100';
@@ -831,16 +839,9 @@ var SERVER_SERVICE_USE_PROXY = true;
       return deferredResponse;
     };
 
-    this.addSearchResultsForHyper = function(server, filterOptions, catalogKey) {
+    this.addSearchResultsForHyper = function(server, filterOptions, catalog) {
       var searchUrl;
-      catalogKey_ = service_.validateCatalogKey(catalogKey);
-      if (catalogKey_ === false) {
-        return false;
-      }
-
-      searchUrl = configService_.configuration.searchApiURL +
-          '?search_engine=' + catalogList[catalogKey_].searchEngine +
-          '&search_engine_endpoint=' + encodeURIComponent(catalogList[catalogKey_].url);
+      searchUrl = configService_.configuration.serverLocation + catalog + '?';
 
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);

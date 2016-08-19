@@ -325,11 +325,6 @@ describe('addLayers/ServerService', function() {
         expect(serverService.addSearchResultsForHyper('', filterOptions, 0)).toEqual(false);
       });
     });
-    describe('catalogKey is not a number', function() {
-      it('returns an empty array', function() {
-        expect(serverService.addSearchResultsForHyper({}, filterOptions, NaN)).toEqual(false);
-      });
-    });
     describe('server is available and returns results', function() {
       beforeEach(function() {
         var searchUrl = configService.configuration.searchApiURL + '?search_engine=' + catalogList[0].searchEngine +

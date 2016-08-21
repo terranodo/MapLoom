@@ -126,7 +126,7 @@
               if (searchFavorites) {
                 serverService.addSearchResultsForFavorites(serverService.getRegistryLayerConfig(), scope.filterOptions);
               } else if (searchHyper) {
-                serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalogUrl);
+                serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalog);
               } else {
                 serverService.populateLayersConfigElastic(serverService.getRegistryLayerConfig(), scope.filterOptions);
               }
@@ -144,6 +144,7 @@
             $('#registry-layer-dialog').on('shown.bs.modal', function() {
               serverService.getCatalogList(function(catalogList) {
                 scope.catalogList = catalogList.data;
+                scope.catalog = scope.catalogList[0];
                 scope.search();
               });
             });

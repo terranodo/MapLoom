@@ -327,8 +327,7 @@ describe('addLayers/ServerService', function() {
     });
     describe('server is available and returns results', function() {
       beforeEach(function() {
-        var searchUrl = configService.configuration.searchApiURL + '?search_engine=' + catalogList[0].searchEngine +
-            '&search_engine_endpoint=' + encodeURIComponent(catalogList[0].url);
+        var searchUrl = configService.configuration.searchApiURL;
         $httpBackend.expect('GET', searchUrl).respond(200, []);
       });
       it('reformats the Layer configs based on the server data', function() {

@@ -7,10 +7,8 @@
               ng-model="filterOptions.text" ng-change="resetDocsPage()" type="text" class="form-control search-input">
           </div>
           <div class="form-group col-md-6 col-xs-6">
-            <select class="form-control search-input select-search" ng-model="catalogUrl" ng-change="searchHyper()">
-              <option value="">Select a catalog</option>
-              <option ng-repeat="(catalogKey, catalog) in catalogList" ng-value="catalog.search_url">{{catalog.name}}</option>
-            <select>
+              <select class="form-control search-input select-search" ng-model="catalog" ng-change="searchHyper()"
+              ng-options="catalog.name for catalog in catalogList"></select>
           </div>
         </div>
         <div class="row range-search">

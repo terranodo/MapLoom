@@ -106,20 +106,7 @@
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
         serverLocation: serverLocation,
-        searchApiURL: serverLocation + '/registry/hypermap/api/',
-        searchApiURL2: serverLocation + '/registry/api/catalogs/',
-        catalogList: [
-          {
-            searchEngine: 'elasticsearch',
-            name: 'hypersearch catalog 1',
-            url: serverLocation + ':9200/'
-          },
-          {
-            searchEngine: 'solr',
-            name: 'Solr catalog',
-            url: 'http://54.221.223.91:8983/solr/hypermap/select/'
-          }
-        ]
+        searchApiURL: serverLocation + '/registry/api/catalogs/'
       };
 
       if (goog.isDefAndNotNull($window.config)) {

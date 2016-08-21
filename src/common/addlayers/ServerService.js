@@ -32,7 +32,7 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.getCatalogList = function(callback) {
-      http_.get(configService_.configuration.searchApiURL2).then(function(data) {
+      http_.get(configService_.configuration.searchApiURL).then(function(data) {
         if (data) {
           return callback(data);
         }
@@ -840,8 +840,7 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.addSearchResultsForHyper = function(server, filterOptions, catalog) {
-      var searchUrl;
-      searchUrl = configService_.configuration.serverLocation + catalog + '?';
+      var searchUrl = configService_.configuration.serverLocation + catalog.search_url + '?';
 
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);

@@ -327,12 +327,13 @@ describe('addLayers/ServerService', function() {
     });
     describe('server is available and returns results', function() {
       beforeEach(function() {
-        var searchUrl = configService.configuration.searchApiURL;
+        var searchUrl = configService.configuration.serverLocation + '/registry/catalogname/api/?';
         $httpBackend.expect('GET', searchUrl).respond(200, []);
       });
       it('reformats the Layer configs based on the server data', function() {
         spyOn(serverService, 'reformatLayerHyperConfigs');
-        serverService.addSearchResultsForHyper({}, null, 0);
+        var catalog = {search_url: '/registry/catalogname/api/'};
+        serverService.addSearchResultsForHyper({}, null, catalog);
         $httpBackend.flush();
         expect(serverService.reformatLayerHyperConfigs).toHaveBeenCalled();
       });

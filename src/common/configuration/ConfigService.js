@@ -49,6 +49,7 @@
     this.$get = function($window, $http, $cookies, $location, $translate) {
       service_ = this;
       var serverLocation = $location.protocol() + '://' + $location.host();
+
       this.configuration = {
         about: {
           title: $translate.instant('new_map'),
@@ -104,19 +105,8 @@
         fileserviceUrlTemplate: '/api/fileservice/view/{}',
         fileserviceUploadUrl: '/api/fileservice/',
         registryEnabled: true,
-        searchApiURL: serverLocation + '/registry/api/search/hypermap/',
-        catalogList: [
-          {
-            searchEngine: 'elasticsearch',
-            name: 'hypersearch catalog 1',
-            url: serverLocation + ':9200/'
-          },
-          {
-            searchEngine: 'solr',
-            name: 'Solr catalog',
-            url: 'http://54.221.223.91:8983/solr/hypermap/select/'
-          }
-        ]
+        serverLocation: serverLocation,
+        searchApiURL: serverLocation + '/registry/api/catalogs/'
       };
 
       if (goog.isDefAndNotNull($window.config)) {

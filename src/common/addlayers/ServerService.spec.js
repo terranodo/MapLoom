@@ -325,20 +325,15 @@ describe('addLayers/ServerService', function() {
         expect(serverService.addSearchResultsForHyper('', filterOptions, 0)).toEqual(false);
       });
     });
-    describe('catalogKey is not a number', function() {
-      it('returns an empty array', function() {
-        expect(serverService.addSearchResultsForHyper({}, filterOptions, NaN)).toEqual(false);
-      });
-    });
     describe('server is available and returns results', function() {
       beforeEach(function() {
-        var searchUrl = configService.configuration.searchApiURL + '?search_engine=' + catalogList[0].searchEngine +
-            '&search_engine_endpoint=' + encodeURIComponent(catalogList[0].url);
+        var searchUrl = configService.configuration.serverLocation + '/registry/catalogname/api/?';
         $httpBackend.expect('GET', searchUrl).respond(200, []);
       });
       it('reformats the Layer configs based on the server data', function() {
         spyOn(serverService, 'reformatLayerHyperConfigs');
-        serverService.addSearchResultsForHyper({}, null, 0);
+        var catalog = {search_url: '/registry/catalogname/api/'};
+        serverService.addSearchResultsForHyper({}, null, catalog);
         $httpBackend.flush();
         expect(serverService.reformatLayerHyperConfigs).toHaveBeenCalled();
       });

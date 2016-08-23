@@ -750,7 +750,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         url = url + '&owner__username__in=' + configService_.username;
       }
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
-        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
+        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + ' TO ' + filter_options.maxYear + ']');
       }
 
       if (angular.isArray(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length) {

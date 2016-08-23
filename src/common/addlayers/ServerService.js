@@ -646,7 +646,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         layerId: layerInfo.id,
         CRS: ['EPSG:4326'],
         tile_url: layerInfo.tile_url,
-        detail_url: layerInfo.tile_url ? 'http://localhost' + layerInfo.tile_url : null,
+        detail_url: layerInfo.tile_url ? configService_.configuration.serverLocation + layerInfo.tile_url : null,
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',

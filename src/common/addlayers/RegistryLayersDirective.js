@@ -172,12 +172,12 @@
 
             function searchRangeValues() {
               if (goog.isDefAndNotNull(scope.sliderValues)) {
-                if (scope.slider.minValue === 100 && scope.slider.maxValue === scope.sliderValues.length - 1) {
-                  scope.filterOptions.minYear = null;
-                  scope.filterOptions.maxYear = null;
+                if (scope.slider.minValue === 0 && scope.slider.maxValue === scope.sliderValues.length - 1) {
+                  scope.filterOptions.minYear = '*';
+                  scope.filterOptions.maxYear = '*';
                 } else {
-                  scope.filterOptions.minYear = scope.sliderValues[scope.slider.minValue];
-                  scope.filterOptions.maxYear = scope.sliderValues[scope.slider.maxValue];
+                  scope.filterOptions.minYear = scope.sliderValues[scope.slider.minValue] + '-01-01';
+                  scope.filterOptions.maxYear = scope.sliderValues[scope.slider.maxValue] + '-01-01T00:00:00';
                 }
                 scope.filterOptions.sliderValues = scope.sliderValues;
               }

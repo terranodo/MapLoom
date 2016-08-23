@@ -46,13 +46,13 @@
         //       skipped! note, when MapService.addLayer is called, server's getcapabilities (if applicable)
         //       has already been resolved so you can used that info to append values to the layer.
         var minimalConfig = {
-          name: layerConfig.Name,
+          name: layerConfig.name,
           source: currentServerId,
           registry: layerConfig['registry']
         };
 
         if (layerConfig['registry']) {
-          minimalConfig['name'] = layerConfig.Title;
+          minimalConfig['name'] = layerConfig.title;
           minimalConfig['registryConfig'] = layerConfig;
         }
 

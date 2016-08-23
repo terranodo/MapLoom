@@ -16,7 +16,6 @@ var SERVER_SERVICE_USE_PROXY = true;
   var configService_ = null;
   var q_ = null;
   var serverCount = 0;
-  var catalogKey_ = null;
 
   module.provider('serverService', function() {
     this.$get = function($rootScope, $http, $q, $location, $translate, dialogService, configService) {
@@ -29,12 +28,15 @@ var SERVER_SERVICE_USE_PROXY = true;
       configService_ = configService;
       configService_.serverList = servers;
       q_ = $q;
-      catalogList = configService.configuration.catalogList;
       return this;
     };
 
-    this.getCatalogList = function() {
-      return catalogList;
+    this.getCatalogList = function(callback) {
+      http_.get(configService_.configuration.searchApiURL).then(function(data) {
+        if (data) {
+          return callback(data);
+        }
+      });
     };
 
     this.getServers = function() {
@@ -619,7 +621,21 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createHyperSearchLayerObject = function(layerInfo) {
-      console.log(layerInfo);
+
+      /* Temporaly script to delete ":" extra info in layerInfo.tile_url
+      * before : http://localhost/registry/hypermap/layer/44/map/wmts/osm:placenames_capital/default_grid/1/1/0.png
+      * after: http://localhost/registry/hypermap/layer/44/map/wmts/placenames_capital/default_grid/1/1/0.png
+      */
+      if (layerInfo.tile_url) {
+        var tile_url_splited = layerInfo.tile_url.split(':');
+
+        if (tile_url_splited.length === 2) {
+          var middle = tile_url_splited[0].split('/');
+          middle[middle.length - 1] = '';
+          layerInfo.tile_url = middle.join('/') + tile_url_splited[1];
+        }
+      }
+
       return {
         add: true,
         abstract: layerInfo.abstract,
@@ -630,7 +646,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         layerId: layerInfo.id,
         CRS: ['EPSG:4326'],
         tile_url: layerInfo.tile_url,
-        detail_url: 'http://localhost/' + 'registry/hypermap/' + 'layer' + layerInfo.detail_url.split('layers')[1],
+        detail_url: layerInfo.tile_url ? configService_.configuration.serverLocation + layerInfo.tile_url : null,
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',
@@ -734,10 +750,10 @@ var SERVER_SERVICE_USE_PROXY = true;
         url = url + '&owner__username__in=' + configService_.username;
       }
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
-        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + '-01-01 TO ' + filter_options.maxYear + '-01-01T00:00:00]');
+        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + ' TO ' + filter_options.maxYear + ']');
       }
 
-      if (angular.isArray(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length) {
+      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox)) {
         url = url + '&q_geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
       }
 
@@ -760,15 +776,6 @@ var SERVER_SERVICE_USE_PROXY = true;
         url += '&title__contains=' + filterOptions.text;
       }
       return url;
-    };
-
-    this.validateCatalogKey = function(catalogKey) {
-      catalogKey = Number(catalogKey);
-      if (!isNaN(catalogKey) && catalogList.length >= catalogKey + 1) {
-        return catalogKey;
-      }else {
-        return false;
-      }
     };
 
     this.populateLayersConfigElastic = function(server, filterOptions) {
@@ -832,16 +839,8 @@ var SERVER_SERVICE_USE_PROXY = true;
       return deferredResponse;
     };
 
-    this.addSearchResultsForHyper = function(server, filterOptions, catalogKey) {
-      var searchUrl;
-      catalogKey_ = service_.validateCatalogKey(catalogKey);
-      if (catalogKey_ === false) {
-        return false;
-      }
-
-      searchUrl = configService_.configuration.searchApiURL +
-          '?search_engine=' + catalogList[catalogKey_].searchEngine +
-          '&search_engine_endpoint=' + encodeURIComponent(catalogList[catalogKey_].url);
+    this.addSearchResultsForHyper = function(server, filterOptions, catalog) {
+      var searchUrl = configService_.configuration.serverLocation + catalog.search_url + '?';
 
       if (filterOptions !== null) {
         searchUrl = service_.applyESFilter(searchUrl, filterOptions);

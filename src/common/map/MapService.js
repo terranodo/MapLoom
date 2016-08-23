@@ -544,7 +544,7 @@
     this.createLayerWithFullConfig = function(fullConfig, serverId) {
       var server = serverService_.getServerById(serverId);
       var minimalConfig = {
-        name: fullConfig.Name,
+        name: fullConfig.name,
         source: serverId
       };
       return service_.createLayerFull(minimalConfig, fullConfig, server);
@@ -639,7 +639,7 @@
             metadata: {
               name: minimalConfig.name,
               url: goog.isDefAndNotNull(mostSpecificUrl) ? mostSpecificUrl : undefined,
-              title: fullConfig.Title,
+              title: fullConfig.title,
               extent: fullConfig['extent'],
               abstract: fullConfig.abstract,
               readOnly: false,

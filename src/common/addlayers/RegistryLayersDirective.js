@@ -22,7 +22,7 @@
               size: 10,
               minYear: null,
               maxYear: null,
-              mapPreviewCoordinatesBbox: [],
+              mapPreviewCoordinatesBbox: null,
               histogramFlag: true
             };
             scope.previewCenter = [40, 30];
@@ -36,8 +36,8 @@
             scope.selectedLayer = {};
             scope.cart = [];
             cartLayerId = [];
-            scope.catalogKey = 0;
             scope.pagination = {sizeDocuments: 1, pages: 1};
+            scope.catalogList = [];
 
             var server = serverService.getRegistryLayerConfig();
             if (goog.isDefAndNotNull(server)) {
@@ -56,7 +56,7 @@
             var resetMapPreview = function() {
               if (mapPreviewChangeCount > 1) {
                 mapPreviewChangeCount = 0;
-                scope.filterOptions.mapPreviewCoordinatesBbox = [];
+                scope.filterOptions.mapPreviewCoordinatesBbox = null;
                 $rootScope.$broadcast('resetMap');
               }
             };
@@ -126,14 +126,13 @@
               if (searchFavorites) {
                 serverService.addSearchResultsForFavorites(serverService.getRegistryLayerConfig(), scope.filterOptions);
               } else if (searchHyper) {
-                serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalogKey);
+                serverService.addSearchResultsForHyper(server, scope.filterOptions, scope.catalog);
               } else {
                 serverService.populateLayersConfigElastic(serverService.getRegistryLayerConfig(), scope.filterOptions);
               }
             };
 
             scope.$on('totalOfDocs', function(event, totalDocsCount) {
-              console.log(scope.filterOptions); //!DJA xxx2
               scope.pagination.sizeDocuments = totalDocsCount;
               scope.pagination.showdocs = scope.pagination.sizeDocuments < 10 ? scope.pagination.sizeDocuments : scope.filterOptions.size;
               scope.pagination.docsSoFar = goog.isDefAndNotNull(scope.filterOptions.from) ? scope.filterOptions.from + 10 : scope.filterOptions.size;
@@ -142,7 +141,13 @@
               scope.pagination.pages = Math.ceil(scope.pagination.sizeDocuments / scope.filterOptions.size);
             });
 
-            $('#registry-layer-dialog').on('shown.bs.modal', scope.search);
+            $('#registry-layer-dialog').on('shown.bs.modal', function() {
+              serverService.getCatalogList(function(catalogList) {
+                scope.catalogList = catalogList.data;
+                scope.catalog = scope.catalogList[0];
+                scope.search();
+              });
+            });
 
             scope.$on('slideEnded', function() {
               resetDocsPage();
@@ -167,8 +172,13 @@
 
             function searchRangeValues() {
               if (goog.isDefAndNotNull(scope.sliderValues)) {
-                scope.filterOptions.minYear = scope.sliderValues[scope.slider.minValue];
-                scope.filterOptions.maxYear = scope.sliderValues[scope.slider.maxValue];
+                if (scope.slider.minValue === 0 && scope.slider.maxValue === scope.sliderValues.length - 1) {
+                  scope.filterOptions.minYear = '*';
+                  scope.filterOptions.maxYear = '*';
+                } else {
+                  scope.filterOptions.minYear = scope.sliderValues[scope.slider.minValue] + '-01-01';
+                  scope.filterOptions.maxYear = scope.sliderValues[scope.slider.maxValue] + '-01-01T00:00:00';
+                }
                 scope.filterOptions.sliderValues = scope.sliderValues;
               }
             }

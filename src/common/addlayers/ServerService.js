@@ -753,7 +753,7 @@ var SERVER_SERVICE_USE_PROXY = true;
         url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + ' TO ' + filter_options.maxYear + ']');
       }
 
-      if (angular.isArray(filter_options.mapPreviewCoordinatesBbox) && filter_options.mapPreviewCoordinatesBbox.length) {
+      if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox)) {
         url = url + '&q_geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
       }
 

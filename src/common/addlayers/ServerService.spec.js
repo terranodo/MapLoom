@@ -196,7 +196,7 @@ describe('addLayers/ServerService', function() {
           text: null,
           docsPage: 0,
           size: null,
-          mapPreviewCoordinatesBbox: [],
+          mapPreviewCoordinatesBbox: null,
           histogramFlag: false
         };
         expect(serverService.applyESFilter('mapstory', filterOptions)).toEqual('mapstory');

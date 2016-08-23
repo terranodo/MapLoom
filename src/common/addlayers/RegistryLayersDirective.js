@@ -22,7 +22,7 @@
               size: 10,
               minYear: null,
               maxYear: null,
-              mapPreviewCoordinatesBbox: [],
+              mapPreviewCoordinatesBbox: null,
               histogramFlag: true
             };
             scope.previewCenter = [40, 30];
@@ -56,7 +56,7 @@
             var resetMapPreview = function() {
               if (mapPreviewChangeCount > 1) {
                 mapPreviewChangeCount = 0;
-                scope.filterOptions.mapPreviewCoordinatesBbox = [];
+                scope.filterOptions.mapPreviewCoordinatesBbox = null;
                 $rootScope.$broadcast('resetMap');
               }
             };

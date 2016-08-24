@@ -17,7 +17,6 @@
         var changeSliderValues = false;
         var histogram = {};
 
-
         scope.minValue = scope.sliderValues[0];
         scope.maxValue = scope.sliderValues[scope.sliderValues.length - 1];
 

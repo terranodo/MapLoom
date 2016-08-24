@@ -128,7 +128,7 @@ describe('addLayers/ServerService', function() {
         ];
       });
       it('returns one formatted layer', function() {
-        expect(serverService.reformatLayerHyperConfigs(layers, '').length).toEqual(1);
+        expect(serverService.reformatLayerHyperConfigs(layers, '', 0).length).toEqual(1);
       });
       it('has a Title', function() {
         expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
@@ -136,22 +136,22 @@ describe('addLayers/ServerService', function() {
         }));
       });
       it('has a Domain', function() {
-        expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
+        expect(serverService.reformatLayerHyperConfigs(layers, '', 0)[0]).toEqual(jasmine.objectContaining({
           domain: 'harvard.org'
         }));
       });
       it('has a author', function() {
-        expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
+        expect(serverService.reformatLayerHyperConfigs(layers, '', 0)[0]).toEqual(jasmine.objectContaining({
           author: 'Admin'
         }));
       });
       it('has an extent', function() {
-        expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
+        expect(serverService.reformatLayerHyperConfigs(layers, '', 0)[0]).toEqual(jasmine.objectContaining({
           extent: [0, 0, 1, 1]
         }));
       });
       it('has a CRS', function() {
-        expect(serverService.reformatLayerHyperConfigs(layers, '')[0]).toEqual(jasmine.objectContaining({
+        expect(serverService.reformatLayerHyperConfigs(layers, '', 0)[0]).toEqual(jasmine.objectContaining({
           CRS: ['EPSG:4326']
         }));
       });

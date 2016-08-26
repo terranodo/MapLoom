@@ -48,14 +48,14 @@
                     <div class="alert alert-title alert-warning-mp">
                       <h3>{{currentLayer.title}}</h3>
                     </div>
-                      <div class="panel-body" style="padding: 4px;">
+                      <div class="panel-body">
                         <div class="row">
                           <div class="col-md-12">
                             <div class="col-md-12 status-block">
                               <div>
                                 Last status:
-                                <span ng-if="currentLayer.lastStatus === false" class="glyphicon glyphicon-remove" style="color: #bd2c00"></span>
-                                <span ng-if="currentLayer.lastStatus === true" class="glyphicon glyphicon-ok" style="color: #55a532"></span>
+                                <span ng-if="currentLayer.lastStatus === false" class="glyphicon glyphicon-remove text-red"></span>
+                                <span ng-if="currentLayer.lastStatus === true" class="glyphicon glyphicon-ok text-green"></span>
                               </div>
                               <div>
                                 Reliability: {{currentLayer.reliability}}

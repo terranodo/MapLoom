@@ -653,7 +653,10 @@ var SERVER_SERVICE_USE_PROXY = true;
         extent: createExtentFromHyper(layerInfo),
         reliability: layerInfo.reliability,
         recentReliability: layerInfo.recent_reliability,
-        lastStatus: layerInfo.last_status
+        lastStatus: layerInfo.last_status,
+        'ContactInformation/Phone': layerInfo['ContactInformation/Phone'] || 'Toll-free: 800-455-0899, DSN: 693-4864',
+        'classificationRecord/classification': layerInfo['classificationRecord/classification'] || 'Unclassified',
+        'license/copyright': layerInfo['license/copyright'] || 'Flanders Marine Institute (2014). Marineregions.org. Accessed at http://www.marineregions.org on yyyy-mm-dd.'
       };
     };
 

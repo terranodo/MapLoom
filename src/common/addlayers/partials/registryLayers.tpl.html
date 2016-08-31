@@ -53,15 +53,25 @@
                           <div class="col-md-12">
                             <div class="col-md-12 status-block">
                               <div>
-                                Last status:
+                                <strong>Last status:</strong>
                                 <span ng-if="currentLayer.lastStatus === false" class="glyphicon glyphicon-remove text-red"></span>
                                 <span ng-if="currentLayer.lastStatus === true" class="glyphicon glyphicon-ok text-green"></span>
                               </div>
                               <div>
-                                Reliability: {{currentLayer.reliability}}
+                                <strong>Reliability</strong>: {{currentLayer.reliability}}
                               </div>
                               <div>
-                                Recent-reliability: {{currentLayer.recentReliability}}
+                                <strong>Recent-reliability:</strong> {{currentLayer.recentReliability}}
+                              </div>
+
+                              <div>
+                                <strong>Contact information/Phone:</strong> {{currentLayer['ContactInformation/Phone']}}
+                              </div>
+                              <div>
+                                <strong>Classification record:</strong> {{currentLayer['classificationRecord/classification']}}
+                              </div>
+                              <div>
+                                <strong>License/copyright:</strong> {{currentLayer['license/copyright']}}
                               </div>
                             </div>
                             <div class="layer-info-left">

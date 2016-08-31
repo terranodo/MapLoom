@@ -650,7 +650,10 @@ var SERVER_SERVICE_USE_PROXY = true;
         author: author(layerInfo),
         domain: domain(layerInfo),
         type: 'mapproxy_tms',
-        extent: createExtentFromHyper(layerInfo)
+        extent: createExtentFromHyper(layerInfo),
+        reliability: layerInfo.reliability,
+        recentReliability: layerInfo.recent_reliability,
+        lastStatus: layerInfo.last_status
       };
     };
 
@@ -840,6 +843,11 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     this.addSearchResultsForHyper = function(server, filterOptions, catalog) {
+
+      if (!goog.isDefAndNotNull(catalog)) {
+        return;
+      }
+
       var searchUrl = configService_.configuration.serverLocation + catalog.search_url + '?';
 
       if (filterOptions !== null) {

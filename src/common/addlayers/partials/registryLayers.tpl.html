@@ -52,26 +52,26 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="col-md-12 status-block">
-                              <div>
+                              <div ng-if="currentLayer.lastStatus === true || currentLayer.lastStatus === false">
                                 <strong>Last status:</strong>
                                 <span ng-if="currentLayer.lastStatus === false" class="glyphicon glyphicon-remove text-red"></span>
                                 <span ng-if="currentLayer.lastStatus === true" class="glyphicon glyphicon-ok text-green"></span>
                               </div>
-                              <div>
+                              <div ng-if='currentLayer.reliability'>
                                 <strong>Reliability</strong>: {{currentLayer.reliability}}
                               </div>
-                              <div>
+                              <div ng-if='currentLayer.recentReliability'>
                                 <strong>Recent-reliability:</strong> {{currentLayer.recentReliability}}
                               </div>
 
-                              <div>
-                                <strong>Contact information/Phone:</strong> {{currentLayer['ContactInformation/Phone']}}
+                              <div ng-if='currentLayer.phone'>
+                                <strong>Contact information/Phone:</strong> {{currentLayer.phone}}
                               </div>
-                              <div>
-                                <strong>Classification record:</strong> {{currentLayer['classificationRecord/classification']}}
+                              <div ng-if='currentLayer.classification'>
+                                <strong>Classification record:</strong> {{currentLayer.classification}}
                               </div>
-                              <div>
-                                <strong>License/copyright:</strong> {{currentLayer['license/copyright']}}
+                              <div ng-if='currentLayer.license'>
+                                <strong>License/copyright:</strong> {{currentLayer.license}}
                               </div>
                             </div>
                             <div class="layer-info-left">

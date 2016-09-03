@@ -653,7 +653,10 @@ var SERVER_SERVICE_USE_PROXY = true;
         extent: createExtentFromHyper(layerInfo),
         reliability: layerInfo.reliability,
         recentReliability: layerInfo.recent_reliability,
-        lastStatus: layerInfo.last_status
+        lastStatus: layerInfo.last_status,
+        phone: layerInfo['ContactInformation/Phone'],
+        classification: layerInfo['classificationRecord/classification'],
+        license: layerInfo['license/copyright']
       };
     };
 

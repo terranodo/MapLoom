@@ -225,6 +225,7 @@
             };
 
             scope.addToCart = function(layerConfig) {
+              cartLayer(layerConfig);
               var layerId = layerConfig.layerId;
               var idIndex = cartLayerId.indexOf(layerId);
               if (idIndex === -1) {
@@ -269,6 +270,15 @@
 
             // load saved registry layers if they exist
             scope.addRegistryLayersFromSavedMap();
+
+            function cartLayer(layerConfig) {
+              layerConfig.CRS = ['EPSG:4326'];
+              var layer = mapService.createLayerWithFullConfig(layerConfig, scope.currentServerId);
+              layer.layerId = layerConfig.layerId;
+              scope.previewLayers = [
+                layer
+              ];
+            }
           }
         };
       }

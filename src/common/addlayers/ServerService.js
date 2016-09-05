@@ -621,7 +621,6 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createHyperSearchLayerObject = function(layerInfo) {
-
       /* Temporaly script to delete ":" extra info in layerInfo.tile_url
       * before : http://localhost/registry/hypermap/layer/44/map/wmts/osm:placenames_capital/default_grid/1/1/0.png
       * after: http://localhost/registry/hypermap/layer/44/map/wmts/placenames_capital/default_grid/1/1/0.png
@@ -656,7 +655,8 @@ var SERVER_SERVICE_USE_PROXY = true;
         lastStatus: layerInfo.last_status,
         phone: layerInfo['ContactInformation/Phone'],
         classification: layerInfo['classificationRecord/classification'],
-        license: layerInfo['license/copyright']
+        license: layerInfo['license/copyright'],
+        registry: layerInfo.registry
       };
     };
 

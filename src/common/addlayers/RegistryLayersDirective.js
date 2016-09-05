@@ -32,6 +32,7 @@
                 source: new ol.source.OSM()
               })
             ];
+            scope.mapHeight = Math.round(documentHeight / 2);
             scope.layerConfig = {Title: 'Title'};
             scope.selectedLayer = {};
             scope.cart = [];

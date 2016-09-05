@@ -95,7 +95,7 @@
                         <tr class="result" ng-repeat="layer in cart.slice().reverse()">
                           <td class="remove-button">
                             <div class="col-md-10 ellipsis">{{layer.title}}</div>
-                            <span ng-click="addToCart(layer)" class="glyphicon glyphicon-remove pull-right"></span>
+                            <span ng-click="toggleCart(layer)" class="glyphicon glyphicon-remove pull-right"></span>
                           </td>
                         </tr>
                       </table>

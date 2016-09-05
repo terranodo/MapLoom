@@ -87,10 +87,9 @@
                 if (angular.isDefined(layer.layerId) && mapLayers[i].layerId === layer.layerId) {
                   map.removeLayer(mapLayers[i]);
                   return true;
-                }else {
-                  return false;
                 }
               }
+              return false;
             }
 
           }

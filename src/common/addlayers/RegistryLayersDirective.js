@@ -183,9 +183,14 @@
               }
             }
 
+            scope.toggleCart = function(layerConfig) {
+              scope.addToCart(layerConfig);
+              cartLayer(layerConfig);
+            };
+
             scope.selectRow = function(layerConfig) {
               scope.selectedLayer = layerConfig;
-              scope.addToCart(layerConfig);
+              scope.toggleCart(layerConfig);
             };
 
             var addLayer = function(layerConfig) {
@@ -225,7 +230,6 @@
             };
 
             scope.addToCart = function(layerConfig) {
-              cartLayer(layerConfig);
               var layerId = layerConfig.layerId;
               var idIndex = cartLayerId.indexOf(layerId);
               if (idIndex === -1) {

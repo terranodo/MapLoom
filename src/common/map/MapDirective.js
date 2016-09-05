@@ -53,7 +53,6 @@
 
             scope.$watch('layers', function(layers) {
               if (layers && map) {
-
                 deleteNoCartLayers();
                 addAlllayers(layers);
               }

@@ -229,6 +229,10 @@
               ];
             };
 
+            scope.cleanMapPreview = function() {
+              scope.previewLayers = [];
+            };
+
             scope.addToCart = function(layerConfig) {
               var layerId = layerConfig.layerId;
               var idIndex = cartLayerId.indexOf(layerId);

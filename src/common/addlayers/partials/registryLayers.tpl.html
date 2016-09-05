@@ -14,8 +14,8 @@
                         <th>Title</th>
                         <th>Domain</th>
                       </tr>
-                      <tr class="result" ng-mouseover="previewLayer(layer);" ng-click="selectRow(layer)" ng-class="{'preview-hover': isInCart(layer)}"
-                        ng-repeat="layer in layersConfig = getResults() | filter:filterAddedLayers">
+                      <tr class="result" ng-mouseover="previewLayer(layer);" ng-mouseleave="cleanMapPreview();" ng-click="selectRow(layer)" 
+                      ng-class="{'preview-hover': isInCart(layer)}" ng-repeat="layer in layersConfig = getResults() | filter:filterAddedLayers">
                         <td class="ellipsis">{{ layer.title }}</td>
                         <td>{{ layer.domain }}</td>
                       </tr>

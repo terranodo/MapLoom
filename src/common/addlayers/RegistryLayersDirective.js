@@ -19,7 +19,7 @@
               owner: null,
               text: null,
               docsPage: 1,
-              size: 10,
+              size: 5,
               minYear: null,
               maxYear: null,
               mapPreviewCoordinatesBbox: null,
@@ -33,6 +33,7 @@
               })
             ];
             scope.mapHeight = Math.round(documentHeight / 2);
+            scope.filterOptions.size = Math.max(calculateNumberofItems(), 5);
             scope.layerConfig = {Title: 'Title'};
             scope.selectedLayer = {};
             scope.cart = [];

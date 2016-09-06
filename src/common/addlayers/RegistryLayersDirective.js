@@ -19,7 +19,7 @@
               owner: null,
               text: null,
               docsPage: 1,
-              size: 10,
+              size: 5,
               minYear: null,
               maxYear: null,
               mapPreviewCoordinatesBbox: null,
@@ -32,6 +32,19 @@
                 source: new ol.source.OSM()
               })
             ];
+            var documentHeight = function() {
+              var D = document;
+              return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight, D.body.offsetHeight, D.documentElement.offsetHeight, D.body.clientHeight, D.documentElement.clientHeight);
+            };
+            var calculateNumberofItems = function() {
+              var itemHeight = 35;
+              var otherHeights = 377; //time search field, padding, table header, pagination
+              var availableHeight = documentHeight() - otherHeights;
+              return Math.round(availableHeight / itemHeight);
+            };
+            var mapHeight = Math.round(documentHeight() / 2) + 'px';
+            scope.mapStyle = {height: mapHeight};
+            scope.filterOptions.size = Math.max(calculateNumberofItems(), 5);
             scope.layerConfig = {Title: 'Title'};
             scope.selectedLayer = {};
             scope.cart = [];
@@ -183,9 +196,14 @@
               }
             }
 
+            scope.addLayersAndMapPreviewToCart = function(layerConfig) {
+              scope.addToCart(layerConfig);
+              addCartLayersInMapPreview(layerConfig);
+            };
+
             scope.selectRow = function(layerConfig) {
               scope.selectedLayer = layerConfig;
-              scope.addToCart(layerConfig);
+              scope.addLayersAndMapPreviewToCart(layerConfig);
             };
 
             var addLayer = function(layerConfig) {
@@ -222,6 +240,10 @@
                 layer,
                 bboxLayer
               ];
+            };
+
+            scope.cleanMapPreview = function() {
+              scope.previewLayers = [];
             };
 
             scope.addToCart = function(layerConfig) {
@@ -269,6 +291,15 @@
 
             // load saved registry layers if they exist
             scope.addRegistryLayersFromSavedMap();
+
+            function addCartLayersInMapPreview(layerConfig) {
+              layerConfig.CRS = ['EPSG:4326'];
+              var layer = mapService.createLayerWithFullConfig(layerConfig, scope.currentServerId);
+              layer.layerId = layerConfig.layerId;
+              scope.previewLayers = [
+                layer
+              ];
+            }
           }
         };
       }

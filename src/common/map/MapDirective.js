@@ -53,12 +53,12 @@
 
             scope.$watch('layers', function(layers) {
               if (layers && map) {
-                deleteNoCartLayers();
-                addAlllayers(layers);
+                removeLayersWithNoId();
+                addNewAndRemoveRepeatedLayers(layers);
               }
             });
 
-            function deleteNoCartLayers() {
+            function removeLayersWithNoId() {
               var layerLength = map.getLayers().getLength();
               var mapLayers = map.getLayers().getArray();
               var rmIndex = 1;
@@ -71,7 +71,7 @@
               }
             }
 
-            function addAlllayers(layers) {
+            function addNewAndRemoveRepeatedLayers(layers) {
               for (var j = 0; j < layers.length; j++) {
                 var deletedLayer = compareAndDeleteLayer(layers[j]);
                 if (!deletedLayer) {

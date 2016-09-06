@@ -196,9 +196,14 @@
               }
             }
 
+            scope.addLayersAndMapPreviewToCart = function(layerConfig) {
+              scope.addToCart(layerConfig);
+              addCartLayersInMapPreview(layerConfig);
+            };
+
             scope.selectRow = function(layerConfig) {
               scope.selectedLayer = layerConfig;
-              scope.addToCart(layerConfig);
+              scope.addLayersAndMapPreviewToCart(layerConfig);
             };
 
             var addLayer = function(layerConfig) {
@@ -235,6 +240,10 @@
                 layer,
                 bboxLayer
               ];
+            };
+
+            scope.cleanMapPreview = function() {
+              scope.previewLayers = [];
             };
 
             scope.addToCart = function(layerConfig) {
@@ -282,6 +291,15 @@
 
             // load saved registry layers if they exist
             scope.addRegistryLayersFromSavedMap();
+
+            function addCartLayersInMapPreview(layerConfig) {
+              layerConfig.CRS = ['EPSG:4326'];
+              var layer = mapService.createLayerWithFullConfig(layerConfig, scope.currentServerId);
+              layer.layerId = layerConfig.layerId;
+              scope.previewLayers = [
+                layer
+              ];
+            }
           }
         };
       }

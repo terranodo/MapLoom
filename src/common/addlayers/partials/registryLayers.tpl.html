@@ -14,8 +14,8 @@
                         <th>Title</th>
                         <th>Domain</th>
                       </tr>
-                      <tr class="result" ng-mouseover="previewLayer(layer);" ng-click="selectRow(layer)" ng-class="{'preview-hover': isInCart(layer)}"
-                        ng-repeat="layer in layersConfig = getResults() | filter:filterAddedLayers">
+                      <tr class="result" ng-mouseover="previewLayer(layer);" ng-mouseleave="cleanMapPreview();" ng-click="selectRow(layer)"
+                      ng-class="{'preview-hover': isInCart(layer)}" ng-repeat="layer in layersConfig = getResults() | filter:filterAddedLayers">
                         <td class="ellipsis">{{ layer.title }}</td>
                         <td>{{ layer.domain }}</td>
                       </tr>
@@ -63,7 +63,6 @@
                               <div ng-if='currentLayer.recentReliability'>
                                 <strong>Recent-reliability:</strong> {{currentLayer.recentReliability}}
                               </div>
-
                               <div ng-if='currentLayer.phone'>
                                 <strong>Contact information/Phone:</strong> {{currentLayer.phone}}
                               </div>
@@ -163,7 +162,7 @@
                         <tr class="result" ng-repeat="layer in cart.slice().reverse()">
                           <td class="remove-button">
                             <div class="col-md-10 ellipsis">{{layer.title}}</div>
-                            <span ng-click="addToCart(layer)" class="glyphicon glyphicon-remove pull-right"></span>
+                            <span ng-click="addLayersAndMapPreviewToCart(layer)" class="glyphicon glyphicon-remove pull-right"></span>
                           </td>
                         </tr>
                       </table>

@@ -42,7 +42,8 @@
               var availableHeight = documentHeight() - otherHeights;
               return Math.round(availableHeight / itemHeight);
             };
-            scope.mapHeight = Math.round(documentHeight / 2);
+            var mapHeight = Math.round(documentHeight() / 2) + 'px';
+            scope.mapStyle = {height: mapHeight};
             scope.filterOptions.size = Math.max(calculateNumberofItems(), 5);
             scope.layerConfig = {Title: 'Title'};
             scope.selectedLayer = {};

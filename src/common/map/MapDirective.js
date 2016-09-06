@@ -5,11 +5,12 @@
   module.directive('loomMap',
       function($rootScope, serverService, mapService, geogigService, $translate, dialogService) {
         return {
-          template: '<div id="{{mapId}}"></div>',
+          template: '<div id="{{mapId}}" ng-style="style"></div>',
           scope: {
             mapId: '@',
             layers: '=',
             center: '=',
+            style: '=',
             zoom: '='
           },
           link: function(scope, element) {

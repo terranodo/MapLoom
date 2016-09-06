@@ -621,7 +621,6 @@ var SERVER_SERVICE_USE_PROXY = true;
     };
 
     var createHyperSearchLayerObject = function(layerInfo) {
-
       /* Temporaly script to delete ":" extra info in layerInfo.tile_url
       * before : http://localhost/registry/hypermap/layer/44/map/wmts/osm:placenames_capital/default_grid/1/1/0.png
       * after: http://localhost/registry/hypermap/layer/44/map/wmts/placenames_capital/default_grid/1/1/0.png
@@ -656,7 +655,8 @@ var SERVER_SERVICE_USE_PROXY = true;
         lastStatus: layerInfo.last_status,
         phone: layerInfo['ContactInformation/Phone'],
         classification: layerInfo['classificationRecord/classification'],
-        license: layerInfo['license/copyright']
+        license: layerInfo['license/copyright'],
+        registry: layerInfo.registry
       };
     };
 
@@ -750,29 +750,29 @@ var SERVER_SERVICE_USE_PROXY = true;
 
     this.applyESFilter = function(url, filter_options) {
       if (filter_options.text !== null) {
-        url = url + '&q_text=' + filter_options.text;
+        url = url + '&q.text=' + filter_options.text;
       }
       if (filter_options.owner !== null) {
         url = url + '&owner__username__in=' + configService_.username;
       }
       if (goog.isDefAndNotNull(filter_options.minYear) && goog.isDefAndNotNull(filter_options.maxYear)) {
-        url = url + '&q_time=' + encodeURIComponent('[' + filter_options.minYear + ' TO ' + filter_options.maxYear + ']');
+        url = url + '&q.time=' + encodeURIComponent('[' + filter_options.minYear + ' TO ' + filter_options.maxYear + ']');
       }
 
       if (goog.isDefAndNotNull(filter_options.mapPreviewCoordinatesBbox)) {
-        url = url + '&q_geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
+        url = url + '&q.geo=' + encodeURIComponent(filter_options.mapPreviewCoordinatesBbox);
       }
 
       if (filter_options.histogramFlag === true) {
-        url = url + '&a_time_limit=1&a_time_gap=P1Y';
+        url = url + '&a.time.limit=1&a.time.gap=P1Y';
       }
 
       //`size` & `from` should be outside of the query, either at the begining or the end
       if (filter_options.size !== null) {
-        url += '&d_docs_limit=' + filter_options.size;
+        url += '&d.docs.limit=' + filter_options.size;
       }
       if (filter_options.docsPage > 0) {
-        url = url + '&d_docs_page=' + filter_options.docsPage;
+        url = url + '&d.docs.page=' + filter_options.docsPage;
       }
       return url;
     };

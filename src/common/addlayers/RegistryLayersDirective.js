@@ -32,6 +32,16 @@
                 source: new ol.source.OSM()
               })
             ];
+            var documentHeight = function() {
+              var D = document;
+              return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight, D.body.offsetHeight, D.documentElement.offsetHeight, D.body.clientHeight, D.documentElement.clientHeight);
+            };
+            var calculateNumberofItems = function() {
+              var itemHeight = 35;
+              var otherHeights = 377; //time search field, padding, table header, pagination
+              var availableHeight = documentHeight() - otherHeights;
+              return Math.round(availableHeight / itemHeight);
+            };
             scope.mapHeight = Math.round(documentHeight / 2);
             scope.filterOptions.size = Math.max(calculateNumberofItems(), 5);
             scope.layerConfig = {Title: 'Title'};
